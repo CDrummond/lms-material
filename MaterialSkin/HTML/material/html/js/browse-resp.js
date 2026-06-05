@@ -2522,7 +2522,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 if (isFav) {
                                     header.morecmd = {command:lists[s].command, params:lists[s].params};
                                 } else {
-                                    header.morecmd = {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1"]};
+                                    header.morecmd = {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1", "count:"+LMS_BATCH_SIZE]};
                                 }
                             }
 

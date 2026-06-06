@@ -1949,7 +1949,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (force || sz.nc != this.grid.numColumns || (this.isTop && sz.h != this.grid.szh) || type!=this.grid.type) { // Need to re-layout...
                 changed = true;
                 this.grid.rows = [];
-                this.grid.multiSize = false;
+                this.grid.multiSize = this.numHeaders>0;
                 let items = [];
                 let topExtraItems = [];
                 let haveExploreInScrolledList = false;

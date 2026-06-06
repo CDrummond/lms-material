@@ -139,7 +139,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
             var numTracks = 0;
-            var numHeaders = 0;
 
             // LMS 9.1 enhanced meta-data
             let parentType = LMS_VERSION>=90100 && undefined!=data.result.hasMetadata
@@ -265,7 +264,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.title=i.title.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
                     if (i.type=="header") {
                         i.header = true;
-                        numHeaders++;
+                        resp.numHeaders++;
                     }
                 }
 
@@ -292,10 +291,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.image = resolveImage("music/0/cover" + LMS_LIST_IMAGE_SIZE);
                 }
 
-                if (i.image) {
-                    haveWithIcons = true;
-                } else {
-                    haveWithoutIcons = true;
+                if (i.type!="header") {
+                    if (i.image) {
+                        haveWithIcons = true;
+                    } else {
+                        haveWithoutIcons = true;
+                    }
                 }
                 i.menu=[];
 
@@ -902,7 +903,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.items.sort(weightSort);
             }
             if (numImages>0 && numImages==resp.items.length) {
-                resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length-numHeaders);
+                resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length-resp.numHeaders);
                 resp.canUseGrid = resp.forceGrid = true;
             } else {
                 if (data.result.window && data.result.window.textarea && resp.items.length<LMS_MAX_NON_SCROLLER_ITEMS) {
@@ -918,7 +919,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 if (resp.isMusicMix) {
                     resp.items.shift();
-                    resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length-numHeaders);
+                    resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length-resp.numHeaders);
                     resp.listSize=resp.items.length;
                 } else {
                     if (resp.items.length>0 &&
@@ -998,7 +999,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     // TODO: If using paging/infinite-scroll and pervious chunk had headers then itemCount wil be wrong!
                     //       Likewise if this was all tracks/albums/artists this will also be broken.
-                    let itemCount = startIndex + (resp.items.length-((categories.size>1 ? categories.size : 0) + numHeaders));
+                    let itemCount = startIndex + (resp.items.length-((categories.size>1 ? categories.size : 0) + resp.numHeaders));
                     if (0==itemCount) {
                         resp.subtitle=i18n("Empty");
                     } else if (isAppsTop) {
@@ -1036,7 +1037,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (resp.listSize==-1) {
                         resp.listSize = LMS_BATCH_SIZE + 1000;
                     }
-                    if (0!=itemCount && (itemCount+numHeaders)<resp.listSize) {
+                    if (0!=itemCount && (itemCount+resp.numHeaders)<resp.listSize) {
                         resp.subtitle+='<obj style="opacity:0.7">&nbsp;' + i18n("(Scroll for more)")+"</obj>";
                     }
                 }

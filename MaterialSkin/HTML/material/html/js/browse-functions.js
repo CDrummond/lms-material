@@ -112,6 +112,7 @@ function browseAddHistory(view) {
     prev.listSize = view.listSize;
     prev.allTracksItem = view.allTracksItem;
     prev.jumplist = view.jumplist;
+    prev.numHeaders = view.numHeaders;
     prev.baseActions = view.baseActions;
     prev.current = view.current;
     prev.currentLibId = view.currentLibId;
@@ -346,6 +347,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 view.headerSubTitle=0==view.listSize ? i18n("Empty") : i18np("1 Item", "%1 Items", view.listSize);
             }
             view.listSize=resp.listSize;
+            view.numHeaders += resp.numHeaders;
             view.$nextTick(function () {
                 view.filterJumplist();
                 view.layoutGrid(true);
@@ -397,6 +399,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.canDrop = resp.canDrop;
         view.searchActive = item.id.startsWith(SEARCH_ID) ? 1 : 0;
         view.command = command;
+        view.numHeaders = resp.numHeaders;
         view.currentBaseActions = view.baseActions;
         view.currentItemImage = resp.image;
         let wasSearch = (item.type=="search" || item.type=="entry") && undefined!=view.enteredTerm;
@@ -2270,6 +2273,7 @@ function browseGoBack(view, refresh) {
     view.listSize = prev.listSize;
     view.allTracksItem = prev.allTracksItem;
     view.jumplist = prev.jumplist;
+    view.numHeaders = prev.numHeaders;
     view.filteredJumplist = [];
     let gridWillBeActive = view.grid.allowed && view.grid.use ? true : false;
     let gridWasActive = prev.grid.allowed && prev.grid.use ? true : false;

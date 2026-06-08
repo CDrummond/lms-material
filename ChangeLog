@@ -8,6 +8,7 @@
 5. Fix browse search button showin over now-playing and MAI in desktop layout.
 6. Fix hidden 'Search' icon in Sven's Qobuz plugin when use 'More' entry of
    scroled list item.
+7. Use artist details from album_header of titles response, if present.
 
 6.4.2
 -----

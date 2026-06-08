@@ -817,7 +817,11 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 browseReplaceAction(view, SERVICES_PLACEHOLDER, actions, i18n("Browse on %1"), i18n("Browse on"), "browse-on");
             }
         }
-
+        // Issue #1231 Clicking on album link in queue, or now-playing, will browse tracks - but only show
+        // current artist. LMS9.2 /might/ send an album_header with titles_loop - if so use that.
+        if (undefined!=resp.listHeader && undefined!=view.current && view.current.stdItem==STD_ITEM_ALBUM) {
+            view.current.subtitle = resp.listHeader;
+        }
         view.$nextTick(function () {
             view.setBgndCover();
             view.filterJumplist();

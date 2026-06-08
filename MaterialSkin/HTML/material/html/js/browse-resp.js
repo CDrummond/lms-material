@@ -1483,7 +1483,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             let splitIntoGroupings = undefined==parent || MULTI_DISC_ALBUM!=parent.multi;
 
             if (undefined!=data.result.album_header && undefined!=data.result.album_header.title_names && data.result.album_header.title_names.length>1) {
-                resp.listHeader = data.result.album_header.title_names.join(SEPARATOR);
+                resp.listHeader = data.result.album_header;
             }
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);

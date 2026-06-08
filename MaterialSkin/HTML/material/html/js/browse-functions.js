@@ -820,7 +820,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         // Issue #1231 Clicking on album link in queue, or now-playing, will browse tracks - but only show
         // current artist. LMS9.2 /might/ send an album_header with titles_loop - if so use that.
         if (undefined!=resp.listHeader && undefined!=view.current && view.current.stdItem==STD_ITEM_ALBUM) {
-            view.current.subtitle = resp.listHeader;
+            view.current.subtitle = resp.listHeader.title_names.join(SEPARATOR)
+            view.current.artists = resp.listHeader.title_names;
+            view.current.artist_ids = resp.listHeader.title_ids;
         }
         view.$nextTick(function () {
             view.setBgndCover();

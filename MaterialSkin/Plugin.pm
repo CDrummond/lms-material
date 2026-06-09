@@ -2114,10 +2114,13 @@ sub _cliCommand {
 sub _handleHomeExtraCmd {
     my $request = shift;
     $request->setStatusProcessing();
+    my $index = $request->getParam('_index');
     my $count = $request->getParam('count');
     my $libId = $request->getParam('library_id');
     my $userId = $request->getParam('user_id');
-
+    if (!$index) {
+        $index = 0;
+    }
     my @albumsorts = ();
     if (!$count || $count<NUM_HOME_ITEMS) {
         $count = NUM_HOME_ITEMS;
@@ -2161,7 +2164,7 @@ sub _handleHomeExtraCmd {
         foreach my $srt ( @albumsorts ) {
             my $isRandom = $srt eq "random" ? 1 : 0;
             my $reqCount = $isRandom ? 300 : $count;
-            my @cmd = ("albums", 0, $reqCount, "tags:aajlqswyKSS24WE", "sort:${srt}");
+            my @cmd = ("albums", $index, $reqCount, "tags:aajlqswyKSS24WE", "sort:${srt}");
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
             }
@@ -2190,7 +2193,7 @@ sub _handleHomeExtraCmd {
         }
         my $rolesParam = "role_id:" . join(',', @roles);
         foreach my $srt ( @artistsorts ) {
-            my @cmd = ("artists", 0, $count, "tags:4s", "sort:${srt}", "include_online_only_artists:1", $rolesParam);
+            my @cmd = ("artists", $index, $count, "tags:4s", "sort:${srt}", "include_online_only_artists:1", $rolesParam);
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
             }
@@ -2210,7 +2213,7 @@ sub _handleHomeExtraCmd {
         }
     }
     if ($request->getParam('radios')) {
-        my @cmd = ("material-skin-query", "radios", 0, $count+1);
+        my @cmd = ("material-skin-query", "radios", $index, $count+1);
         if ($userId) {
             push(@cmd, "user_id:${userId}");
         }
@@ -2225,7 +2228,7 @@ sub _handleHomeExtraCmd {
         $request->addResult("material_home_radios_loop_len", $cnt);
     }
     if ($request->getParam('favorites')) {
-        my @cmd = ("favorites", "items", 0, $count, "menu:favorites", "menu:1");
+        my @cmd = ("favorites", "items", $index, $count, "menu:favorites", "menu:1");
         if ($userId) {
             push(@cmd, "user_id:${userId}");
         }
@@ -2233,7 +2236,7 @@ sub _handleHomeExtraCmd {
         $request->addResult("material_home_favorites_obj", $req->getResults());
     }
     if ($request->getParam('playlists')) {
-        my @cmd = ("material-skin-query", "playlists", 0, $count+1, "tags:suxE", "menu:1");
+        my @cmd = ("material-skin-query", "playlists", $index, $count+1, "tags:suxE", "menu:1");
         if ($userId) {
             push(@cmd, "user_id:${userId}");
         }

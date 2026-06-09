@@ -970,7 +970,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }.bind(this));
         }
         bus.$on('advSearchResults', function(item, command, resp) {
-            this.handleListResponse(item, command, resp);
+            browseHandleListResponse(this, item, command, resp);
             this.tbarActions.unshift(ADV_SEARCH_ACTION);
             if (this.items.length>0) {
                 this.tbarActions.unshift(SAVE_VLIB_ACTION);
@@ -1131,11 +1131,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.isCurrentReq(data)) {
                     var resp = parseBrowseResp(data, item, this.options, item.cancache && browseCanUseCache(this) ? cacheKey(command.command, command.params, 0, count) : undefined);
                     this.fetchingItem = undefined;
-                    this.handleListResponse(item, command, resp, prevPage, startIndex>0);
+                    browseHandleListResponse(this, item, command, resp, prevPage, startIndex>0);
                 }
             }).catch(err => {
                 this.fetchingItem = undefined;
-                this.handleListResponse(item, command, {items: []});
+                browseHandleListResponse(this, item, command, {items: []});
                 logError(err, command.command, command.params, 0, count);
                 logNoPlayerError(this);
             });
@@ -1339,7 +1339,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     let command = JSON.parse(JSON.stringify(item.morecmd));
                     browseReplaceCommandTerms(this, command, item);
                     command.params.push("features:hi");
-                    this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:item.limit, section:item.section, isFavFolder:item.isFavFolder});
+                    this.fetchItems(command, {cancache:false, slimbrowse:item.slimbrowse, id:item.id, title: item.title, limit:item.limit, section:item.section, isFavFolder:item.isFavFolder});
                 }
             } else if (item.allItems) {
                 browseAddHistory(this);

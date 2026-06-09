@@ -2512,7 +2512,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         if (undefined!=obj) { // 3rd party => slimbrowse...
                             let header = {title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
                                           morecmd:undefined, baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined,
-                                          section:lists[s].section, isFavFolder:lists[s].isFavFolder}
+                                          section:lists[s].section, isFavFolder:lists[s].isFavFolder, slimbrowse:true}
                             mapIcon(header);
                             if (undefined==header.icon && undefined==header.svg) {
                                 if (undefined!=lists[s].svg) {

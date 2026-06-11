@@ -11,28 +11,23 @@ sub initPlugin {
     my $extra = delete $args{extra};
 
     $class->SUPER::initPlugin(%args);
+    
+    $extra->{handler} = sub { $class->handleExtra(@_) }; 
 
-    Plugins::MaterialSkin::Plugin->registerHomeExtra($args{tag}, {
-        title => $extra->{title},
-        subtitle => $extra->{subtitle},
-        icon  => $extra->{icon},
-        needsPlayer => $extra->{needsPlayer},
-
-        handler => sub { $class->handleExtra(@_) },
-    });
-}
+    Plugins::MaterialSkin::Plugin->registerHomeExtra($args{tag}, $extra); }
 
 #  we don't want these menus to be shown anywhere but as Home Extras
 sub initJive {[]}
 sub modeName {}
 
 sub handleExtra {
-    my ($class, $client, $cb, $count, $userId) = @_;
+    my ($class, $client, $cb, $args) = @_;
 
-    my @cmd = ($class->tag, 'items', 0, $count || Plugins::MaterialSkin::Plugin::NUM_HOME_ITEMS(), 'menu:1');
-    if ($userId) {
-        push(@cmd, "user_id:${userId}");
-    }
+    my @cmd = ($class->tag, 'items', $args->{index}, $args->{quantity}, 'menu:1');
+    push(@cmd, "user_id:$args->{userId}") if $args->{userId};
+    push(@cmd, "features:$args->{features}") if $args->{features};
+
+    $log->error('handleExtra ', Data::Dump::dump(\@cmd), Data::Dump::dump($args));
 
     Slim::Control::Request::executeRequest($client, \@cmd,
         sub {

@@ -538,14 +538,10 @@ sub registerHomeExtra {
 
     $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
 
-    $HOME_EXTRAS->{'3rdparty_' . $id} = {
-        id          => $id,
-        title       => $args->{title},
-        subtitle    => $args->{subtitle},
-        icon        => $args->{icon} || '',
-        handler     => $args->{handler},
-        needsPlayer => $args->{needsPlayer},
-    };
+    my $extras = { id => $id };
+    foreach (keys %$args) { $extras->{$_} = $args->{$_} }
+
+    $HOME_EXTRAS->{'3rdparty_' . $id} = $extras;
 }
 
 sub getHomeExtra {
@@ -2114,13 +2110,14 @@ sub _cliCommand {
 sub _handleHomeExtraCmd {
     my $request = shift;
     $request->setStatusProcessing();
-    my $index = $request->getParam('_index');
-    my $count = $request->getParam('count');
+    my $index = $request->getParam('_p2'); # _index
+    my $count = $request->getParam('_p3'); # _quantity (count)
     my $libId = $request->getParam('library_id');
     my $userId = $request->getParam('user_id');
-    if (!$index) {
-        $index = 0;
-    }
+    
+    $index = 0 unless $index;
+    $count = NUM_HOME_ITEMS unless $count;
+
     my @albumsorts = ();
     if (!$count || $count<NUM_HOME_ITEMS) {
         $count = NUM_HOME_ITEMS;
@@ -2260,9 +2257,17 @@ sub _handleHomeExtraCmd {
                 my ($extra, $acb) = @_;
                 my $id = $extra->{id};
 
+                my $args = { 
+                    index    => $request->getParam('_p2') || 0,
+                    quantity => $extra->{count} && $extra->{count} > $count ? $extra->{count} : $count || NUM_HOME_ITEMS,
+                };
+                $args->{user_id} = $userId if $userId;
+                my $features = $request->getParam('features');
+                $args->{features} = $features if $features;
+
                 $extra->{handler}->($request->client, sub {
                     $acb->({ $id => (shift || []) });
-                }, $count, $userId);
+                }, $args); 
             },
             cb => sub {
                 my ($resultsList, $err) = @_;

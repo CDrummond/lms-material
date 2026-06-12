@@ -2500,6 +2500,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (undefined!=obj) {
                         new_data.result['base']=obj['base'];
                         new_data.result['count']=obj['count'];
+                        new_data.result['offset']=obj['offset'];
                     }
                     let newResp = parseBrowseResp(new_data, parent, opts, undefined);
                     if (ismore) {

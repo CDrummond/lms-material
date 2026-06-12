@@ -27,8 +27,6 @@ sub handleExtra {
     push(@cmd, "user_id:$args->{userId}") if $args->{userId};
     push(@cmd, "features:$args->{features}") if $args->{features};
 
-    $log->error('handleExtra ', Data::Dump::dump(\@cmd), Data::Dump::dump($args));
-
     Slim::Control::Request::executeRequest($client, \@cmd,
         sub {
             my $response = shift;

@@ -2111,7 +2111,10 @@ sub _handleHomeExtraCmd {
     my $request = shift;
     $request->setStatusProcessing();
     my $index = $request->getParam('_p2'); # _index
-    my $count = $request->getParam('_p3'); # _quantity (count)
+    my $count = $request->getParam('count');
+    if (!$count) {
+        $count = $request->getParam('_p3'); # _quantity (count)
+    }
     my $libId = $request->getParam('library_id');
     my $userId = $request->getParam('user_id');
     

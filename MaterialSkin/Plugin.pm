@@ -2261,8 +2261,8 @@ sub _handleHomeExtraCmd {
                 my $id = $extra->{id};
 
                 my $args = { 
-                    index    => $request->getParam('_p2') || 0,
-                    quantity => $extra->{count} && $extra->{count} > $count ? $extra->{count} : $count || NUM_HOME_ITEMS,
+                    index    => $index,
+                    quantity => $extra->{count} && $extra->{count} > $count ? $extra->{count} : $count,
                 };
                 $args->{user_id} = $userId if $userId;
                 my $features = $request->getParam('features');

@@ -265,6 +265,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (i.type=="header") {
                         i.header = true;
                         resp.numHeaders++;
+                    } else if (i.type=="header-basic") {
+                        i.header = true;
+                        resp.numHeaders++;
+                        i.actions = undefined;
                     }
                 }
 

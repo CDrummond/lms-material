@@ -295,7 +295,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.image = resolveImage("music/0/cover" + LMS_LIST_IMAGE_SIZE);
                 }
 
-                if (i.type!="header") {
+                if (!i.header) {
                     if (i.image) {
                         haveWithIcons = true;
                     } else {
@@ -803,7 +803,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             item.image = defAlbumCover;
                         } else if (item.type=="artist") {
                             item.image = defArtistImage;
-                        } else {
+                        } else if (!item.header) {
                             // Found an item without and image and not marked as an artist or album, no
                             // default image set - so disable grid usage.
                             // See: https://forums.lyrion.org/showthread.php?109624-Announce-Material-Skin&p=944597&viewfull=1#post944597

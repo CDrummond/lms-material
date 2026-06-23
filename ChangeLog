@@ -1,3 +1,7 @@
+6.4.4
+-----
+1. Allow service specific custom actions - thanks to crystalgipsy.
+
 6.4.3
 -----
 1. Set `-webkit-backdrop-filter` for 'frosted' queue.

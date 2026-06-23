@@ -77,7 +77,9 @@ function performCustomAction(action, player, item) {
     }
 }
 
-const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'PLAYLISTID', 'PLAYLISTNAME', 'COMPOSER', 'CONDUCTOR', 'BAND', 'LANG', 'FAVURL', 'TITLE', 'ITEMID',];
+const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME',
+                     'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'PLAYLISTID', 'PLAYLISTNAME', 'COMPOSER',
+                     'CONDUCTOR', 'BAND', 'LANG', 'FAVURL', 'TITLE', 'ITEMID', 'SERVICE', 'SUBTITLE'];
 
 function doReplacements(string, player, item) {
     let val = ''+string;
@@ -161,6 +163,14 @@ function doReplacements(string, player, item) {
         }
         if (undefined!=item.presetParams && undefined!=item.presetParams.favorites_url) {
             val=val.replaceAll("$FAVURL", item.presetParams.favorites_url);
+        }
+        // Online/app browse items: the service the item was browsed from, and the raw
+        // second line (e.g. "Artist (Year)") - see browse-resp.js item_loop handling.
+        if (undefined!=item.service) {
+            val=val.replaceAll("$SERVICE", item.service);
+        }
+        if (undefined!=item.subtitle) {
+            val=val.replaceAll("$SUBTITLE", item.subtitle);
         }
     }
     val=val.replaceAll("$HOST", window.location.hostname);

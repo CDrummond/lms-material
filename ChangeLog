@@ -2,6 +2,7 @@
 -----
 1. Allow service specific custom actions - thanks to crystalgipsy.
 2. Fix add/play all for 'spoton' - thanks to stiefenm.
+3. Only update lyrics times, etc, if displayed track is current track.
 
 6.4.3
 -----

@@ -312,12 +312,14 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.performance!=view.playerStatus.current.performance) {
         view.playerStatus.current.performance = playerStatus.current.performance;
     }
-    if (trackChanged && view.info.sync) {
-        view.setInfoTrack();
-        view.showInfo();
-        bus.$emit('npTrackChanged', view.playerStatus.current);
-        if (!IS_MOBILE && (queryParams.setTitle || queryParams.dontTrapBack)) {
-            nowplayingSetWindowTitle(view);
+    if (trackChanged) {
+        view.setInfoTrack(view.info.sync);
+        if (view.info.sync) {
+            view.showInfo();
+            bus.$emit('npTrackChanged', view.playerStatus.current);
+            if (!IS_MOBILE && (queryParams.setTitle || queryParams.dontTrapBack)) {
+                nowplayingSetWindowTitle(view);
+            }
         }
     }
 

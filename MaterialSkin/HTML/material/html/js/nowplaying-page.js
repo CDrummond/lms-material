@@ -422,7 +422,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                               { title:undefined, items:[], min:1, more:undefined } ] },
                                  { value: TRACK_TAB, title:undefined, ctitle:undefined, text:undefined, lines:undefined, scroll:false, highlight:false, reqId:0, image: undefined,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
-                 infoTrack: {current: false, empty:true, album_id:undefined, track_id:undefined, work_id:undefined, path:undefined},
+                 infoTrack: {empty:true, album_id:undefined, track_id:undefined, work_id:undefined, path:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined, randomMix:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                           play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined, browse:undefined,
@@ -783,7 +783,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.updateLyricsPosition();
         },
         updateLyricsPosition() {
-            if (this.info.show && this.info.tabs[TRACK_TAB].lines && this.lyricsTimesValid && this.info.tabs[TRACK_TAB].scroll) {
+            if (this.info.show && this.info.sync && this.info.tabs[TRACK_TAB].lines && this.lyricsTimesValid && this.info.tabs[TRACK_TAB].scroll) {
                 let pos = undefined;
                 for (let i=0, loop=this.info.tabs[TRACK_TAB].lines, len=loop.length; i<len; ++i) {
                     if (loop[i].time<=this.playerStatus.current.time) {
@@ -877,13 +877,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             this.touchStartPos = undefined;
         },
-        setInfoTrack(isCurrent) {
-            if (!isCurrent && !this.infoTrack.empty) {
-                this.infoTrack.current = false;
-                return;
-            }
-            this.infoTrack={ current: true,
-                             title: this.playerStatus.current.title,
+        setInfoTrack() {
+            this.infoTrack={ title: this.playerStatus.current.title,
                              track_id: this.playerStatus.current.id,
                              artist: this.playerStatus.current.artist,
                              artists: this.playerStatus.current.artists,
@@ -1418,7 +1413,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             // Indicate that dialog is/isn't shown, so that swipe is controlled
             bus.$emit('infoDialog', val);
             this.$store.commit('dialogOpen', {name:'info-dialog', shown:val});
-            this.setInfoTrack(this.info.sync);
+            this.setInfoTrack();
             this.showInfo();
         },
         'info.tab': function(tab) {
@@ -1430,7 +1425,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         'info.sync': function() {
             setLocalStorageVal("syncInfo", this.info.sync);
             if (this.info.sync) {
-                this.setInfoTrack(this.info.sync);
+                this.setInfoTrack();
+                this.updateLyricsPosition();
                 this.showInfo();
             }
         },
@@ -1604,7 +1600,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         lyricsTimesValid() {
             // Lyrics timing positions are only valid if time of first line >= 0
             // ...see comment in nowplayingFetchTrackInfo
-            return this.info.current &&
+            return this.info.sync &&
                    this.info.tabs[TRACK_TAB]
                    this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].lines[0].time>=0 &&
                    undefined!=this.playerStatus.current && undefined!=this.playerStatus.current.time && undefined!=this.playerStatus.current.duration &&

@@ -312,14 +312,12 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.performance!=view.playerStatus.current.performance) {
         view.playerStatus.current.performance = playerStatus.current.performance;
     }
-    if (trackChanged) {
-        view.setInfoTrack(view.info.sync);
-        if (view.info.sync) {
-            view.showInfo();
-            bus.$emit('npTrackChanged', view.playerStatus.current);
-            if (!IS_MOBILE && (queryParams.setTitle || queryParams.dontTrapBack)) {
-                nowplayingSetWindowTitle(view);
-            }
+    if (trackChanged && view.info.sync) {
+        view.setInfoTrack();
+        view.showInfo();
+        bus.$emit('npTrackChanged', view.playerStatus.current);
+        if (!IS_MOBILE && (queryParams.setTitle || queryParams.dontTrapBack)) {
+            nowplayingSetWindowTitle(view);
         }
     }
 
@@ -659,7 +657,7 @@ function nowplayingFetchTrackInfo(view) {
                         let lastTime=view.info.tabs[TRACK_TAB].lines[view.info.tabs[TRACK_TAB].lines.length-1].time;
                         if (undefined==view.playerStatus.current.duration || undefined==view.playerStatus.current.time || view.playerStatus.current.time>(lastTime+900)) {
                             view.info.tabs[TRACK_TAB].lines[0].time=-1;
-                        } else if (view.info.tabs[TRACK_TAB].lines.length>3) {
+                        } else if (view.info.tabs[TRACK_TAB].lines.length>3 && view.info.sync) {
                             setTimeout(function () { view.updateLyricsPosition(); }.bind(view), 100);
                         }
                     }
@@ -1201,7 +1199,7 @@ function nowPlayingConfigMenu(view, event) {
         view.menu.items.push({title:i18n("Show in tabs"), act:NP_SHOW_IN_TABS_ACT, check:view.info.showTabs});
     }
     view.menu.items.push({title:i18n("Update on track change"), act:NP_SYNC_ACT, check:view.info.sync});
-    if (view.info.tabs[TRACK_TAB].lines && (!view.info.showTabs || view.info.tab==TRACK_TAB)) {
+    if (view.info.sync && view.info.tabs[TRACK_TAB].lines && (!view.info.showTabs || view.info.tab==TRACK_TAB)) {
         view.menu.items.push({title:i18n("Auto-scroll lyrics"), act:NP_LYRICS_SCROLL_ACT, check:view.info.tabs[TRACK_TAB].scroll});
         view.menu.items.push({title:i18n("Highlight current lyric line"), act:NP_LYRICS_HIGHLIGHT_ACT, check:view.info.tabs[TRACK_TAB].highlight});
     }

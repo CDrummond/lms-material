@@ -211,12 +211,15 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.items.push(i);
                     } else {
                         data.result.count--;
+                        resp.listSize--;
                     }
                     continue;
                 }
 
                 // If combining apps and radio, then *only* want TuneIn items in radios list
                 if (isRadiosTop && lmsOptions.combineAppsAndRadio && i["icon-id"] && !i["icon-id"].startsWith("/plugins/TuneIn")) {
+                    data.result.count--;
+                    resp.listSize--;
                     continue;
                 }
 
@@ -226,6 +229,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (playAction && loopLen>1) { // Save as special entry, so browse page can use for add/play all buttons
                         resp.allTracksItem = i;
                     }
+                    resp.listSize--;
                     continue;
                 }
                 var addedPlayAction = false;
@@ -249,6 +253,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                           (idx<10 && idx>0 && idx<loopLen-1 && loop[idx-1].style && loop[idx+1].style && loop[idx-1].style=='item_add' && loop[idx+1].style=='itemplay' &&
                             i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.cmd && i.actions.go.params.cmd=='insert')) {
                         data.result.count--;
+                        resp.listSize--;
                         continue;
                     }
                     i.title = replaceNewLines(i.text);
@@ -483,6 +488,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.id = "apps."+i.actions.go.params.menu;
 
                     if (queryParams.party && HIDE_APPS_FOR_PARTY.has(i.id)) {
+                        data.result.count--;
+                        resp.listSize--;
                         continue;
                     }
                     if (allowPinning && !i.header) {
@@ -529,6 +536,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 } else if (isBmf) {
                     if (i.style=="itemNoAction") {
+                        data.result.count--;
+                        resp.listSize--;
                         continue;
                     }
                     i.bmf = true;
@@ -543,6 +552,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 : "crop_portrait";
                 } else if (isDisksAndFolders) {
                     if (i.style=="itemNoAction") {
+                        data.result.count--;
+                        resp.listSize--;
                         continue;
                     }
                     if (!i.icon) {
@@ -1078,6 +1089,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (resp.listSize==-1) {
                         resp.listSize = LMS_BATCH_SIZE + 1000;
                     }
+                    console.log(itemCount, resp.listSize);
                     if (0!=itemCount && (itemCount+resp.numHeaders)<resp.listSize) {
                         resp.subtitle+='<obj style="opacity:0.7">&nbsp;' + i18n("(Scroll for more)")+"</obj>";
                     }

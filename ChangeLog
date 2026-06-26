@@ -5,6 +5,7 @@
 3. Only update lyrics times, etc, if displayed track is current track.
 4. Only highlight lyrics line and auto-scroll if set to sync MAI view with
    current track.
+5. Fix 'Scroll for more' showing where it should not.
 
 6.4.3
 -----

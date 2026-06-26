@@ -86,6 +86,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
     try {
     if (data && data.result) {
         logJsonMessage("RESP", data);
+        var origCount = data.result.count;
         resp.listSize = data.result.count;
 
         var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
@@ -211,7 +212,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.items.push(i);
                     } else {
                         data.result.count--;
-                        resp.listSize--;
+                        // Sven's Qobuz seems to send an empty last item. But if we reduce the count for that then
+                        // 'Scroll for more' is not shown. So, only adjust listSize if this empty entry is not the
+                        // last, or its showBigArtwork...
+                        if (idx!=loopLen-1 || i.showBigArtwork==1) {
+                            resp.listSize--;
+                        }
                     }
                     continue;
                 }
@@ -1085,11 +1091,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     } else {
                         resp.subtitle=i18np("1 Item", "%1 Items", itemCount);
                     }
-                    // Id we receive -1 as count, then pretend its a really high number...
-                    if (resp.listSize==-1) {
+                    // If we receive -1 as count, then pretend its a really high number...
+                    if (origCount==-1) {
                         resp.listSize = LMS_BATCH_SIZE + 1000;
                     }
-                    console.log(itemCount, resp.listSize);
                     if (0!=itemCount && (itemCount+resp.numHeaders)<resp.listSize) {
                         resp.subtitle+='<obj style="opacity:0.7">&nbsp;' + i18n("(Scroll for more)")+"</obj>";
                     }

@@ -1601,7 +1601,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             // Lyrics timing positions are only valid if time of first line >= 0
             // ...see comment in nowplayingFetchTrackInfo
             return this.info.sync &&
-                   this.info.tabs[TRACK_TAB]
                    this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].lines[0].time>=0 &&
                    undefined!=this.playerStatus.current && undefined!=this.playerStatus.current.time && undefined!=this.playerStatus.current.duration &&
                    this.playerStatus.current.duration<=MAX_LYRICS_DURATION

@@ -22,6 +22,7 @@ function show_artist(event, id, title, page) {
 function showAlbum(event, album_id, artist_id, title, page, subtitle) {
     browseItem(event, ["tracks"], ["album_id:"+album_id, "material_skin_artist_id:"+artist_id, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page, undefined==subtitle ? subtitle : unescape(subtitle));
 }
+
 function showWork(event, workid, work, performance, composer, page) {
     var cmd = ["work_id:"+workid, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER];
     if (undefined!=performance && performance.length>0) {

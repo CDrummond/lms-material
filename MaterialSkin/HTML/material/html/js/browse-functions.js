@@ -1720,7 +1720,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             if (view.allTracksItem) {
                 view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_SHUFFLE_ALL_ACTION==act ? PLAY_SHUFFLE_ACTION : PLAY_ACTION, view.allTracksItem);
             } else {
-                view.doList(view.items, act);
+                browseDoList(view, view.items, act);
                 bus.$emit('showMessage', i18n("Adding tracks..."));
             }
         } else { // Need to filter items...
@@ -1745,7 +1745,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             }
 
             if (itemList.length>0) {
-                view.doList(itemList, act, itemIndex);
+                browseDoList(view, itemList, act, itemIndex);
                 bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
             }
         }
@@ -1964,11 +1964,15 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
                                 tracks = loop[i].allItems;
                                 break;
                             } else if (!loop[i].header && (undefined==choice.id || loop[i].filter==choice.id)) {
-                                tracks.push(loop[i]);
+                                if (INSERT_ACTION==act) {
+                                    tracks.unshift(loop[i]);
+                                } else {
+                                    tracks.push(loop[i]);
+                                }
                             }
                         }
                         if (tracks.length>0) {
-                            view.doList(tracks, act);
+                            browseDoList(view, tracks, act);
                             bus.$emit('showMessage', i18n("Adding tracks..."));
                         }
                     }

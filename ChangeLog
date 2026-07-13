@@ -1,3 +1,7 @@
+6.4.5
+-----
+1. Don't pass artist_id when clicking on album link in now-playing or queue.
+
 6.4.4
 -----
 1. Allow service specific custom actions - thanks to crystalgipsy.

@@ -2,6 +2,7 @@
 -----
 1. Don't pass artist_id when clicking on album link in now-playing or queue.
 2. Fix track order when appnding a disc/group using album cover action.
+3. Fix MAI info when called from artist, or album, scrolled list.
 
 6.4.4
 -----

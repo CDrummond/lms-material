@@ -150,26 +150,26 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
                 actions.push({title:i18n('Information'), icon:'album', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['album_id']
-                                                ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+args['album_id']]
+                                                ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+originalId(args['album_id'])]
                                                 : undefined!=args['artist_id']
-                                                    ? ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist_id:'+args['artist_id']]
+                                                    ? ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist_id:'+originalId(args['artist_id'])]
                                                     : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
                                    params:[]},
                               weight:100});
             } else if (undefined!=args['work_id']) {
                 actions.push({title:i18n('Information'), svg:'classical-work', stdItem:STD_ITEM_MAI,
-                              do:{ command: ['musicartistinfo', 'workreview', 'html:1', 'work_id:'+args['work_id']], params:[]},
+                              do:{ command: ['musicartistinfo', 'workreview', 'html:1', 'work_id:'+originalId(args['work_id'])], params:[]},
                               weight:100});
             } else if (undefined!=args['artist_id'] || undefined!=args['artist']) {
                 actions.push({title:i18n('Information'), svg:'artist', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['artist_id']
-                                                ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+args['artist_id']]
+                                                ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+originalId(args['artist_id'])]
                                                 : ['musicartistinfo', 'biography', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
                               weight:100});
                 actions.push({title:i18n('Pictures'), icon:'insert_photo',
                               do:{ command: undefined!=args['artist_id']
-                                                ? ['musicartistinfo', 'artistphotos', 'html:1', 'artist_id:'+args['artist_id']]
+                                                ? ['musicartistinfo', 'artistphotos', 'html:1', 'artist_id:'+originalId(args['artist_id'])]
                                                 : ['musicartistinfo', 'artistphotos', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
                               weight:101});

@@ -150,26 +150,26 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
                 actions.push({title:i18n('Information'), icon:'album', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['album_id']
-                                                ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+originalId(args['album_id'])]
+                                                ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+args['album_id']]
                                                 : undefined!=args['artist_id']
-                                                    ? ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist_id:'+originalId(args['artist_id'])]
+                                                    ? ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist_id:'+args['artist_id']]
                                                     : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
                                    params:[]},
                               weight:100});
             } else if (undefined!=args['work_id']) {
                 actions.push({title:i18n('Information'), svg:'classical-work', stdItem:STD_ITEM_MAI,
-                              do:{ command: ['musicartistinfo', 'workreview', 'html:1', 'work_id:'+originalId(args['work_id'])], params:[]},
+                              do:{ command: ['musicartistinfo', 'workreview', 'html:1', 'work_id:'+args['work_id']], params:[]},
                               weight:100});
             } else if (undefined!=args['artist_id'] || undefined!=args['artist']) {
                 actions.push({title:i18n('Information'), svg:'artist', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['artist_id']
-                                                ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+originalId(args['artist_id'])]
+                                                ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+args['artist_id']]
                                                 : ['musicartistinfo', 'biography', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
                               weight:100});
                 actions.push({title:i18n('Pictures'), icon:'insert_photo',
                               do:{ command: undefined!=args['artist_id']
-                                                ? ['musicartistinfo', 'artistphotos', 'html:1', 'artist_id:'+originalId(args['artist_id'])]
+                                                ? ['musicartistinfo', 'artistphotos', 'html:1', 'artist_id:'+args['artist_id']]
                                                 : ['musicartistinfo', 'artistphotos', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
                               weight:101});
@@ -492,13 +492,13 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 actParams[currentId[0]]=currentId[1];
             }
             if (undefined!=artist_id && artist_id.indexOf(".")<0) {
-                actParams["artist_id"] = artist_id;
+                actParams["artist_id"] = originalId(artist_id);
             }
             if (undefined!=work_id && work_id.indexOf(".")<0) {
-                actParams["work_id"] = work_id;
+                actParams["work_id"] = originalId(work_id);
             }
             if (undefined!=album_id && album_id.indexOf(".")<0) {
-                actParams["album_id"] = album_id;
+                actParams["album_id"] = originalId(album_id);
             }
             if (listingArtistAlbums) {
                 actParams['artist']=title;
@@ -525,7 +525,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 actParams['count']=resp.items.length;
                 var field = getField(view.command, "composer_id:");
                 if (field>=0) {
-                    actParams['composer_id']=view.command.params[field];
+                    actParams['composer_id']=originalId(view.command.params[field]);
                 }
                 field = getField(view.command, "performance:");
                 if (field>=0) {

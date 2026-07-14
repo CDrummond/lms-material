@@ -89,6 +89,7 @@
     "/youtube.png":{"svg":"youtube"},
     "/deezer.png":{"svg":"deezer"},
     "plugins/Pyrrha/html/images/icon.png":{"svg":"pandora"},
+    "plugins/RadioBrowser/html/images/icon.png":{"svg":"radio-browser"},
 
     "PLUGIN_MULTILIBRARY":{"icon":"library_music"},
     "PLUGIN_SQLPLAYLIST":{"icon":"list"},

@@ -49,6 +49,11 @@
     "bgnd":"#e61d23",
     "color":"#fff"
   },
+  "ytm":{
+    "name":"youtube-music",
+    "bgnd":"#e61d23",
+    "color":"#fff"
+  },
   "radioparadise":{
     "name":"radioparadise",
     "bgnd":"#963a21",

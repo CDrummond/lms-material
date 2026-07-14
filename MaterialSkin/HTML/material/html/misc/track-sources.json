@@ -68,6 +68,14 @@
         },
         "extid":"youtube"
     },
+    "ytm:":{
+        "name":"YouTube",
+        "url":{
+            "from":"ytm://",
+            "to":"https://music.youtube.com/watch?v="
+        },
+        "extid":"ytm"
+    },
     "pandora:":{
         "name":"Pandora",
         "extid":"pandora"

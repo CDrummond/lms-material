@@ -19,6 +19,15 @@
         "context":true,
         "extid":"spotify"
     },
+    "spoton:":{
+        "name":"Spotify",
+        "url":{
+            "from":"spoton://track:",
+            "to":"https://open.spotify.com/track/"
+        },
+        "context":true,
+        "extid":"spoton"
+    },
     "wimp:":{
         "name":"Tidal",
         "url":{

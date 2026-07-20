@@ -148,6 +148,9 @@ function buildArtistLine(i, page, plain, existing, useBandTag, useComposerTag, u
     if (!lmsOptions.artistFirst) {
         [line, used] = buildArtists(i, line, page, used, plain);
     }
+    if (undefined!=line && line.startsWith(" | ")) {
+        line=line.substr(3);
+    }
     try {
         return undefined==line ? line : line.replaceAll('|', '\u2022');
     } catch (e) {
@@ -230,6 +233,9 @@ function buildAlbumLine(i, page, plain, addSubtitle) {
         line=addPart(line, album);
     } else if (remoteTitle && remoteTitle!=i.title) {
         line=addPart(line, remoteTitle);
+    }
+    if (undefined!=line && line.startsWith(" | ")) {
+        line=line.substr(3);
     }
     try {
         return undefined==line ? line : line.replaceAll('|', '\u2022');

@@ -4,6 +4,8 @@
 2. Fix track order when appnding a disc/group using album cover action.
 3. Fix MAI info when called from artist, or album, scrolled list.
 4. Add 'ytm' and 'spoton' to emblems and track sources code.
+5. Fix double-encoding of non-ASCII titles in scrolled lists - thanks to
+   stiefenm.
 
 6.4.4
 -----

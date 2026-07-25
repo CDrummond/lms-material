@@ -554,7 +554,7 @@ sub getHomExtrasIDs {
 }
 
 sub getHomeExtra3rdPartyItems {
-    return to_json([ map {
+    return Encode::decode_utf8(to_json([ map {
         my $item = $HOME_EXTRAS->{$_};
         {
             id          => $_,
@@ -563,7 +563,7 @@ sub getHomeExtra3rdPartyItems {
             icon        => $item->{icon},
             needsPlayer => $item->{needsPlayer}
         }
-    } keys %$HOME_EXTRAS ]);
+    } keys %$HOME_EXTRAS ]));
 }
 
 sub setHomeExtraTitle {

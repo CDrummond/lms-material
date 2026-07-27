@@ -20,7 +20,7 @@ use Slim::Utils::Log;
 use Slim::Utils::Network;
 use Slim::Utils::Prefs;
 use Slim::Utils::Strings;
-use JSON::XS::VersionOneAndTwo;
+use JSON::XS qw(decode_json encode_json);
 use Slim::Utils::Strings qw(string cstring);
 use HTTP::Status qw(RC_NOT_FOUND RC_OK);
 use File::Basename;
@@ -554,7 +554,7 @@ sub getHomExtrasIDs {
 }
 
 sub getHomeExtra3rdPartyItems {
-    return Encode::decode_utf8(to_json([ map {
+    return Encode::decode_utf8(encode_json([ map {
         my $item = $HOME_EXTRAS->{$_};
         {
             id          => $_,
@@ -1168,7 +1168,7 @@ sub _cliCommand {
         my $json = $request->getParam('plugins');
         if ($json) {
             my $updating = 0;
-            my $plugins = eval { from_json( $json ) };
+            my $plugins = eval { decode_json( $json ) };
             for my $plugin (@{$plugins}) {
                 Slim::Utils::PluginDownloader->install({ name => $plugin->{'name'}, url => $plugin->{'url'}, sha => $plugin->{'sha'} });
                 $updating++;
@@ -1311,7 +1311,7 @@ sub _cliCommand {
                             require XML::Simple;
                             $request->addResult("content", XML::Simple::XMLin($content));
                         } elsif ( ($response->headers->content_type =~ /json/) || ($format && $format eq 'json') ) {
-                            $request->addResult("content", from_json($content));
+                            $request->addResult("content", decode_json($content));
                         } else {
                             $request->addResult("content", $content);
                         }
@@ -2482,7 +2482,7 @@ sub _handleSimilarArtists {
     my $key = shift;
     my $cacheDir = shift;
     my $ignoreAge = shift;
-    my $decoded = eval { from_json( $content ) };
+    my $decoded = eval { decode_json( $content ) };
     my @artists = ();
     my $cnt = 0;
     my $now = time();
@@ -2621,7 +2621,7 @@ sub _cliClientCommand {
     if ($cmd eq 'command-list') {
         my $json = $request->getParam('commands');
         if ($json) {
-            my $commands = eval { from_json( $json ) };
+            my $commands = eval { decode_json( $json ) };
             my $actioned = 0;
             $request->setStatusProcessing();
             for my $command (@{$commands}) {

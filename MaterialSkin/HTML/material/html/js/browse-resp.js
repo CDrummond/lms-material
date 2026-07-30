@@ -825,7 +825,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.type="other"; // ???
                 }
                 types.add(i.type);
-                images.add(i.image ? i.image : i.icon ? i.icon : i.svg);
+                let itemImage = i.image ? i.image : i.icon ? i.icon : i.svg;
+                if (itemImage) {
+                    images.add(itemImage);
+                }
             }
             /* ...continuation of favourited album add/play track issue... */
             if (!isFavorites && parent && parent.section == SECTION_FAVORITES && resp.items.length>0 && resp.items[0].stdItem == STD_ITEM_TRACK) {
@@ -1104,6 +1107,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     if (0!=itemCount && (itemCount+resp.numHeaders)<resp.listSize) {
                         resp.subtitle+='<obj style="opacity:0.7">&nbsp;' + i18n("(Scroll for more)")+"</obj>";
+                    }
+                    if (resp.canUseGrid && images.size==0) {
+                        resp.canUseGrid = false;
                     }
                 }
             }

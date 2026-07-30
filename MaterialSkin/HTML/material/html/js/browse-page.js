@@ -8,8 +8,10 @@
 
 var B_ALBUM_SORTS=[ ];
 var B_TRACK_SORTS=[ ];
-const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'spoton', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
-const ALLOW_FAKE_ALL_TRACKS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 'fake' add all item
+// Control which apps can have add/play/append entries in toolbar
+const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'youtubemusic', 'spotty', 'spoton', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+// Add a fake 'all tracks' entry in track list response, allowing a single command to add all tracks - rather than adding 1 by 1
+const ALLOW_FAKE_ALL_TRACKS_ITEM = new Set(['youtube', 'youtubemusic', 'qobuz']); // Allow using 'fake' add all item
 const MIN_WIDTH_FOR_DETAILED_SUB = 350;
 const MIN_WIDTH_FOR_HBTNS = 500;
 const MIN_WIDTH_INDENT_LEFT = 550;

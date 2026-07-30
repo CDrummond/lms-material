@@ -625,6 +625,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                  i.presetParams.favorites_url.startsWith("qobuz://") ||
                                  i.presetParams.favorites_url.startsWith("tidal://") ||
                                  i.presetParams.favorites_url.startsWith("deezer://") ||
+                                 i.presetParams.favorites_url.startsWith("ytm://") || // YouTube Music
                                  /*i.presetParams.favorites_url.startsWith("youtube://") || YouTube only shows URL if saved to playlist? */
                                  ( i.presetParams.favorites_url.startsWith("https:") && command=="bandcamp"))) {
                         numTracks++;

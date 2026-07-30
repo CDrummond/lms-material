@@ -1,3 +1,7 @@
+6.4.6
+-----
+1. Fix add/play buttons missing in toolbar for YouTube Music plugin.
+
 6.4.5
 -----
 1. Don't pass artist_id when clicking on album link in now-playing or queue.

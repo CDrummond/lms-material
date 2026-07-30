@@ -14,6 +14,7 @@ const SEARCH_OTHER = {
     "spotty":{svg:"spotify"},
     "tidal":{svg:"tidal"},
     "youtube":{svg:"youtube"},
+    "youtubemusic":{svg:"youtubemusic"},
     "wefunk radio":{svg:"radio-station"}
 }
 

@@ -709,17 +709,23 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     // suppresses the generic actions on that app's items).
                     let appCat = (undefined!=command) ? command+"-"+btype : undefined;
                     let oca = (undefined!=appCat && undefined!=customActions && (appCat in customActions))
-                              ? getCustomActions(appCat, false, ocFilter)
-                              : getCustomActions("online-"+btype, false, ocFilter);
+                                  ? getCustomActions(appCat, false, ocFilter, true)
+                                  : getCustomActions("online-"+btype, false, ocFilter, true);
                     if (undefined!=oca && oca.length>0) {
                         if (isAppItem) {
-                            if (undefined==i.album)  { i.album   = i.title; }
-                            if (undefined==i.artist) { i.artist  = i.subtitle; }
+                            if (undefined==i.album) {
+                                i.album   = i.title;
+                            }
+                            if (undefined==i.artist) {
+                                i.artist  = i.subtitle;
+                            }
                             i.service = command;
                         }
                         addedDivider = addDivider(i, addedDivider);
                         i.menu.push(CUSTOM_ACTIONS);
-                        if (undefined==resp.itemCustomActions) { resp.itemCustomActions = oca; }
+                        if (undefined==resp.itemCustomActions) {
+                            resp.itemCustomActions = oca;
+                        }
                     }
                 }
 
@@ -1043,7 +1049,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                     }
                     if (parent && parent.presetParams && parent.presetParams.favorites_url) {
-                        let parentActs = getCustomActions(command, false, parent.presetParams.favorites_url);
+                        let parentActs = getCustomActions(command, false, parent.presetParams.favorites_url, true);
                         if (undefined!=parentActs && parentActs.length>0) {
                             if (undefined==resp.actionItems) {
                                 resp.actionItems = [];

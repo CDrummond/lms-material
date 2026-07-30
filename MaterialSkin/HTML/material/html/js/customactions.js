@@ -48,7 +48,7 @@ function getSectionActions(section, actions, lockedActions, filter) {
 
 const NO_ALL_PLAYER_ACTIONS = new Set(['item', 'artist', 'album', 'track', 'queue-track', 'year', 'genre', 'settings', 'playlist', 'playlist-track', 'album-track']);
 
-function getCustomActions(id, lockedActions, filter) {
+function getCustomActions(id, lockedActions, filter, ignoreAllPlayerActions) {
     let actions = [];
     if (customActions) {
         if (undefined==id) {
@@ -57,7 +57,7 @@ function getCustomActions(id, lockedActions, filter) {
             getSectionActions(id, actions, lockedActions);
         } else {
             if (!NO_ALL_PLAYER_ACTIONS.has(id)) {
-                getSectionActions('allplayers', actions, lockedActions);
+                getSectionActions('allplayers', actions, lockedActions && !ignoreAllPlayerActions);
             }
             getSectionActions(id, actions, lockedActions, filter);
         }

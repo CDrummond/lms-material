@@ -1671,9 +1671,9 @@ sub _cliCommand {
 
     if ($cmd eq 'protocols') {
         my $allPlugs =  Slim::Utils::PluginManager->allPlugins();
-        my %handlers = Slim::Player::ProtocolHandlers->registeredHandlers();
+        my @handlers = Slim::Player::ProtocolHandlers->registeredHandlers();
         my $count = 0;
-        foreach my $prot (keys %handlers) {
+        foreach my $prot (@handlers) {
             if (not exists($IGNORE_PROTOCOLS{$prot})) {
                 my $handler = Slim::Player::ProtocolHandlers->handlerForProtocol($prot);
                 if ($handler) {

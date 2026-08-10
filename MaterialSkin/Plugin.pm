@@ -168,6 +168,7 @@ my $CATEGORIES_MAP = {
 };
 
 my $HOME_EXTRAS = {};
+my $PLUGIN_CUSTOM_ACTIONS = {};
 
 sub initPlugin {
     my $class = shift;
@@ -539,9 +540,19 @@ sub registerHomeExtra {
     $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
 
     my $extras = { id => $id };
-    foreach (keys %$args) { $extras->{$_} = $args->{$_} }
+    foreach (keys %$args) {
+        $extras->{$_} = $args->{$_}
+    }
 
     $HOME_EXTRAS->{'3rdparty_' . $id} = $extras;
+}
+
+sub registerCustomAction {
+    my ($section, $action) = @_;
+    if (! exists($PLUGIN_CUSTOM_ACTIONS->{$section})) {
+        $PLUGIN_CUSTOM_ACTIONS->{$section} = [];
+    }
+    push(@{$PLUGIN_CUSTOM_ACTIONS->{$section}}, $action);
 }
 
 sub getHomeExtra {
@@ -753,7 +764,7 @@ sub _cliCommand {
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
                                                   'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra',
-                                                  'home-extra-3rdparty', 'player-list']) ) {
+                                                  'home-extra-3rdparty', 'player-list', 'plugin-actions']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -2104,6 +2115,13 @@ sub _cliCommand {
         return;
     }
 
+    if ($cmd eq 'plugin-actions') {
+        if (scalar(keys(%{$PLUGIN_CUSTOM_ACTIONS}))>0) {
+            $request->addResult("actions", Encode::decode_utf8(encode_json($PLUGIN_CUSTOM_ACTIONS)));
+        }
+        $request->setStatusDone();
+        return;
+    }
     $request->setStatusBadParams();
 }
 

@@ -7,6 +7,7 @@
 'use strict';
 
 var customActions = undefined;
+var pluginCustomActions = undefined;
 
 function translate(s) {
     let lang = undefined==lmsOptions.lang ? 'en' : lmsOptions.lang;
@@ -22,6 +23,14 @@ function translate(s) {
 }
 
 function initCustomActions() {
+    lmsCommand("", ["material-skin", "plugin-actions"]).then(({data}) => {
+        if (data && data.result && data.result.actions) {
+            pluginCustomActions = JSON.parse(data.result.actions);
+        }
+    }).catch(err => {
+        window.console.error(err);
+    });
+
     axios.get("/material/customactions.json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
         customActions = eval(resp.data);
         bus.$emit('customActions');
@@ -31,16 +40,20 @@ function initCustomActions() {
 }
 
 function getSectionActions(section, actions, lockedActions, filter) {
-    if (customActions[section]) {
-        for (let i=0, sect=customActions[section], len=sect.length; i<len; ++i) {
-            if ((lockedActions || !sect[i].locked) && (!sect[i].command || !sect[i].localonly || 'localhost'==location.hostname || '127.0.0.1'==location.hostname) && (undefined==filter || undefined==sect[i].filter || filter.startsWith(sect[i].filter))) {
-                if (undefined!=sect[i].title) {
-                    translate(sect[i])
+    let lists = [customActions, pluginCustomActions];
+    for (let l=0, llen=lists.length; l<llen; ++l) {
+        let list = lists[l];
+        if (list && list[section]) {
+            for (let i=0, sect=list[section], len=sect.length; i<len; ++i) {
+                if ((lockedActions || !sect[i].locked) && (!sect[i].command || !sect[i].localonly || 'localhost'==location.hostname || '127.0.0.1'==location.hostname) && (undefined==filter || undefined==sect[i].filter || filter.startsWith(sect[i].filter))) {
+                    if (undefined!=sect[i].title) {
+                        translate(sect[i])
+                    }
+                    if (undefined!=sect[i].toolbar && undefined!=sect[i].toolbar.title) {
+                        translate(sect[i].toolbar);
+                    }
+                    actions.push(sect[i]);
                 }
-                if (undefined!=sect[i].toolbar && undefined!=sect[i].toolbar.title) {
-                    translate(sect[i].toolbar);
-                }
-                actions.push(sect[i]);
             }
         }
     }
@@ -54,7 +67,7 @@ function getCustomActions(id, lockedActions, filter, ignoreAllPlayerActions) {
     }
 
     let actions = [];
-    if (customActions) {
+    if (customActions || pluginCustomActions) {
         if (undefined==id) {
             getSectionActions('system', actions, lockedActions);
         } else if (id.endsWith('-dialog')) {

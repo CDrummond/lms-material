@@ -6,6 +6,7 @@
 4. Fix track sources protocols list handling - thanks to bungh0110
 5. Use iOS style back icons for Apple platforms.
 6. Fetch custom actions for toolbar menu when clicking on search results.
+7. Allow plugins to register custom actions.
 
 6.4.5
 -----

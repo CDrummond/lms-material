@@ -549,6 +549,7 @@ sub registerHomeExtra {
 
 sub registerCustomAction {
     my ($section, $action) = @_;
+    main::DEBUGLOG && $log->debug("Registering " . Data::Dump::dump($action) . " for ${section} section");
     if (! exists($PLUGIN_CUSTOM_ACTIONS->{$section})) {
         $PLUGIN_CUSTOM_ACTIONS->{$section} = [];
     }

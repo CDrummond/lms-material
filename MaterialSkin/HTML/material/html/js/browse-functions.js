@@ -2231,6 +2231,7 @@ function browseGoHome(view, refresh) {
     view.subtitleClickable = false;
     view.inGenre = undefined;
     view.canDrop = true;
+    view.itemCustomActions = undefined;
 
     if (undefined!=view.homeTimeout) {
         clearTimeout(view.homeTimeout);

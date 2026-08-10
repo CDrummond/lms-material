@@ -1,14 +1,15 @@
 6.4.6
 -----
-1. Fix add/play buttons missing in toolbar for YouTube Music plugin.
-2. Don't allow grid for YouTube Music track lists.
-3. Fix 'allplayers' custom actions appearing in app menus.
-4. Fix track sources protocols list handling - thanks to bungh0110
-5. Use iOS style back icons for Apple platforms.
-6. Fetch custom actions for toolbar menu when clicking on search results.
-7. Allow plugins to register custom actions.
-8. Fix getting custom actions for cached artist and albums lists.
-9. Fix custom actions for search result items.
+ 1. Fix add/play buttons missing in toolbar for YouTube Music plugin.
+ 2. Don't allow grid for YouTube Music track lists.
+ 3. Fix 'allplayers' custom actions appearing in app menus.
+ 4. Fix track sources protocols list handling - thanks to bungh0110
+ 5. Use iOS style back icons for Apple platforms.
+ 6. Fetch custom actions for toolbar menu when clicking on search results.
+ 7. Allow plugins to register custom actions.
+ 8. Fix getting custom actions for cached artist and albums lists.
+ 9. Fix custom actions for search result items.
+10. Reset custom actions when browe back from 'More' on scrolled list.
 
 6.4.5
 -----

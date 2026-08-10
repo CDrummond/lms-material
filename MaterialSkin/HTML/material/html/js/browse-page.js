@@ -475,7 +475,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(action, index) in menu.itemMenu">
     <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(action)) || (isTop && action==SELECT_ACTION) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(action)) || ((PLAY_SHUFFLE_ACTION==action || PLAY_SHUFFLE_ALL_ACTION==action) && !allowShuffle(menu.item)) || (SELECT_ACTION==action && searchActive)"></div>
     <v-divider v-else-if="DIVIDER==action"></v-divider>
-    <template v-for="(cact, cindex) in itemCustomActions" v-else-if="CUSTOM_ACTIONS==action">
+    <template v-for="(cact, cindex) in itemCustomActs(menu.item)" v-else-if="CUSTOM_ACTIONS==action">
      <v-list-tile role="menuitem" @click="itemCustomAction(cact, menu.item, menu.index)">
       <v-list-tile-avatar>
        <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
@@ -2367,6 +2367,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.saveTopList();
                 }
             }
+        },
+        itemCustomActs(item) {
+            if (this.itemCustomActions && this.itemCustomActions instanceof Array) {
+                return this.itemCustomActions;
+            }
+            // Custom actions for search results...
+            if (item && item.id && item.id.includes("_id:")) {
+                let id = item.id.split(":")[0];
+                let type = id.substring(0, id.length-3);
+                return this.itemCustomActions[type];
+            }
+            return undefined;
         }
     },
     mounted() {

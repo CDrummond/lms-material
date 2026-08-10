@@ -227,7 +227,7 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
             if (CUSTOM_ACTIONS==loop[i]) {
                 let itemCustomActions = view.itemCustomActions;
-                if (undefined==itemCustomActions || itemCustomActions.length<1) {
+                if (undefined==itemCustomActions || (itemCustomActions instanceof Array && itemCustomActions.length<1)) {
                     itemCustomActions = getCustomActions(STD_ITEM_ARTIST==item.stdItem || STD_ITEM_WORK_COMPOSER==item.stdItem
                                                  ? "artist"
                                               : STD_ITEM_ALBUM==item.stdItem

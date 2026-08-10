@@ -8,6 +8,7 @@
 6. Fetch custom actions for toolbar menu when clicking on search results.
 7. Allow plugins to register custom actions.
 8. Fix getting custom actions for cached artist and albums lists.
+9. Fix custom actions for search result items.
 
 6.4.5
 -----

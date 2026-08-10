@@ -10,6 +10,7 @@
  8. Fix getting custom actions for cached artist and albums lists.
  9. Fix custom actions for search result items.
 10. Reset custom actions when browe back from 'More' on scrolled list.
+11. Allow custom actions on scrolled list items.
 
 6.4.5
 -----

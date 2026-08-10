@@ -475,7 +475,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(action, index) in menu.itemMenu">
     <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(action)) || (isTop && action==SELECT_ACTION) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(action)) || ((PLAY_SHUFFLE_ACTION==action || PLAY_SHUFFLE_ALL_ACTION==action) && !allowShuffle(menu.item)) || (SELECT_ACTION==action && searchActive)"></div>
     <v-divider v-else-if="DIVIDER==action"></v-divider>
-    <template v-for="(cact, cindex) in itemCustomActs(menu.item)" v-else-if="CUSTOM_ACTIONS==action">
+    <template v-for="(cact, cindex) in itemCustomActs(menu.item, menu.index)" v-else-if="CUSTOM_ACTIONS==action">
      <v-list-tile role="menuitem" @click="itemCustomAction(cact, menu.item, menu.index)">
       <v-list-tile-avatar>
        <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
@@ -2368,12 +2368,20 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
         },
-        itemCustomActs(item) {
-            if (undefined!=this.itemCustomActions && !(this.itemCustomActions instanceof Array) && item && item.id && item.id.includes("_id:")) {
+        itemCustomActs(item, itemIndex) {
+            if (undefined!=this.itemCustomActions && !(this.itemCustomActions instanceof Array) && undefined!=item && undefined!=item.id && item.id.includes("_id:")) {
                 // Custom actions for search results...
                 let id = item.id.split(":")[0];
                 let type = id.substring(0, id.length-3);
                 return this.itemCustomActions[type];
+            }
+            // Home extra items...
+            if ((undefined==this.itemCustomActions || (this.itemCustomActions instanceof Array && this.itemCustomActions.length<1)) && itemIndex>0 && itemIndex<this.items.length && undefined!=item && !item.header && item.ihe && this.isTop) {
+                for (let idx=itemIndex-1; idx>=0; idx--) {
+                    if (this.items[idx].header) {
+                        return this.items[idx].itemCustomActions;
+                    }
+                }
             }
             return this.itemCustomActions;
         }

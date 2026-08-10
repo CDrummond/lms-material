@@ -2369,16 +2369,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemCustomActs(item) {
-            if (this.itemCustomActions && this.itemCustomActions instanceof Array) {
-                return this.itemCustomActions;
-            }
-            // Custom actions for search results...
-            if (item && item.id && item.id.includes("_id:")) {
+            if (undefined!=this.itemCustomActions && !(this.itemCustomActions instanceof Array) && item && item.id && item.id.includes("_id:")) {
+                // Custom actions for search results...
                 let id = item.id.split(":")[0];
                 let type = id.substring(0, id.length-3);
                 return this.itemCustomActions[type];
             }
-            return undefined;
+            return this.itemCustomActions;
         }
     },
     mounted() {

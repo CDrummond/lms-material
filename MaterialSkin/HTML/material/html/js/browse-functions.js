@@ -226,12 +226,22 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
         var weight = 200;
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
             if (CUSTOM_ACTIONS==loop[i]) {
-                if (undefined!=view.itemCustomActions) {
-                    for (var c=0, clen=view.itemCustomActions.length; c<clen; ++c) {
+                let itemCustomActions = view.itemCustomActions;
+                if (undefined==itemCustomActions || itemCustomActions.length<1) {
+                    itemCustomActions = getCustomActions(STD_ITEM_ARTIST==item.stdItem || STD_ITEM_WORK_COMPOSER==item.stdItem
+                                                 ? "artist"
+                                              : STD_ITEM_ALBUM==item.stdItem
+                                                 ? "album"
+                                              : STD_ITEM_PLAYLIST==item.stdItem
+                                                 ? "playlist"
+                                              : undefined);
+                }
+                if (undefined!=itemCustomActions) {
+                    for (var c=0, clen=itemCustomActions.length; c<clen; ++c) {
                         weight++;
-                        view.itemCustomActions[c].weight=weight;
-                        view.itemCustomActions[c].custom=true;
-                        actions.push(view.itemCustomActions[c]);
+                        itemCustomActions[c].weight=weight;
+                        itemCustomActions[c].custom=true;
+                        actions.push(itemCustomActions[c]);
                     }
                 }
             } else if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {

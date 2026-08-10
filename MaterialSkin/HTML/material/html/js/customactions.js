@@ -49,6 +49,10 @@ function getSectionActions(section, actions, lockedActions, filter) {
 const NO_ALL_PLAYER_ACTIONS = new Set(['item', 'artist', 'album', 'track', 'queue-track', 'year', 'genre', 'settings', 'playlist', 'playlist-track', 'album-track']);
 
 function getCustomActions(id, lockedActions, filter, ignoreAllPlayerActions) {
+    if (undefined==id) {
+        return undefined;
+    }
+
     let actions = [];
     if (customActions) {
         if (undefined==id) {

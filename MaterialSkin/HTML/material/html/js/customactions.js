@@ -40,6 +40,7 @@ function initCustomActions() {
 }
 
 function getSectionActions(section, actions, lockedActions, filter) {
+    let used = new Set();
     let lists = [customActions, pluginCustomActions];
     for (let l=0, llen=lists.length; l<llen; ++l) {
         let list = lists[l];
@@ -47,12 +48,19 @@ function getSectionActions(section, actions, lockedActions, filter) {
             for (let i=0, sect=list[section], len=sect.length; i<len; ++i) {
                 if ((lockedActions || !sect[i].locked) && (!sect[i].command || !sect[i].localonly || 'localhost'==location.hostname || '127.0.0.1'==location.hostname) && (undefined==filter || undefined==sect[i].filter || filter.startsWith(sect[i].filter))) {
                     if (undefined!=sect[i].title) {
-                        translate(sect[i])
+                        translate(sect[i]);
+                        // Ensure we only use the same title once...
+                        if (used.has(sect[i].title)) {
+                            continue;
+                        }
                     }
                     if (undefined!=sect[i].toolbar && undefined!=sect[i].toolbar.title) {
                         translate(sect[i].toolbar);
                     }
                     actions.push(sect[i]);
+                    if (undefined!=sect[i].title) {
+                        used.add(sect[i].title);
+                    }
                 }
             }
         }

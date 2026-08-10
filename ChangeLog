@@ -3,6 +3,7 @@
 1. Fix add/play buttons missing in toolbar for YouTube Music plugin.
 2. Don't allow grid for YouTube Music track lists.
 3. Fix 'allplayers' custom actions appearing in app menus.
+4. Fix track sources protocols list handling - thanks to bungh0110
 
 6.4.5
 -----

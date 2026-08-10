@@ -14,7 +14,8 @@ sub initPlugin {
     
     $extra->{handler} = sub { $class->handleExtra(@_) }; 
 
-    Plugins::MaterialSkin::Plugin->registerHomeExtra($args{tag}, $extra); }
+    Plugins::MaterialSkin::Plugin->registerHomeExtra($args{tag}, $extra);
+}
 
 #  we don't want these menus to be shown anywhere but as Home Extras
 sub initJive {[]}

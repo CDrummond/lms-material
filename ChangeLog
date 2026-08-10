@@ -7,6 +7,7 @@
 5. Use iOS style back icons for Apple platforms.
 6. Fetch custom actions for toolbar menu when clicking on search results.
 7. Allow plugins to register custom actions.
+8. Fix getting custom actions for cached artist and albums lists.
 
 6.4.5
 -----

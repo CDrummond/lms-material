@@ -255,6 +255,9 @@ async function lmsList(playerid, command, params, start, batchSize, cancache, co
             }
             return new Promise(function(resolve, reject) {
                 val.id=undefined==commandId ? 0 : commandId;
+                if (command[0]=='artists' || command[0]=='albums') {
+                    val.itemCustomActions = getCustomActions(command[0]=='artists' ? 'artist' : 'album');
+                }
                 resolve({data:val});
             });
         });

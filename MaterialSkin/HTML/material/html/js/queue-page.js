@@ -304,7 +304,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else-if="searchActive">
-  <v-btn flat icon @click="searchActive=false" class="toolbar-button back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+  <v-btn flat icon @click="searchActive=false" class="toolbar-button back-button" :title="trans.goBack"><v-icon v-bind:class="{'apple-back':IS_APPLE}">{{BACK_ARROW}}</v-icon></v-btn>
    <lms-search-list @scrollTo="highlightItem" :view="this"></lms-search-list>
   </v-layout>
   <v-layout v-else>

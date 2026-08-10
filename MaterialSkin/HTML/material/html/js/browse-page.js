@@ -67,13 +67,13 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else-if="searchActive">
-   <v-btn flat icon @click="closeSearch" class="toolbar-button back-button" id="close-search-button" :title="trans.close"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon @click="closeSearch" class="toolbar-button back-button" id="close-search-button" :title="trans.close"><v-icon v-bind:class="{'apple-back':IS_APPLE}">{{BACK_ARROW}}</v-icon></v-btn>
    <lms-search-field v-if="searchActive==1" @results="handleListResponse"></lms-search-field>
    <lms-search-list v-else @scrollTo="highlightItem" :view="this" :msearch="true" :title="toolbarTitle"></lms-search-list>
   </v-layout>
   <v-layout v-else-if="history.length>0">
-   <v-btn v-if="IS_IOS" flat icon @click="backBtnPressed(false)" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
-   <v-btn v-else flat icon v-longpress:stop="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn v-if="IS_IOS" flat icon @click="backBtnPressed(false)" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon v-bind:class="{'apple-back':IS_APPLE}">{{BACK_ARROW}}</v-icon></v-btn>
+   <v-btn v-else flat icon v-longpress:stop="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon v-bind:class="{'apple-back':IS_APPLE}">{{BACK_ARROW}}</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" v-bind:class="{'dst-home':showDetailedSubtoolbar}" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <div v-if="wide>=WIDE_COVER && currentImages" @click="showHistory($event)" class="sub-cover pointer">
     <div class="mi" :class="'mi'+currentImages.length">

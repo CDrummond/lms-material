@@ -3150,6 +3150,10 @@ div.v-subheader {
  cursor:default;
 }
 
+.apple-back {
+ padding-left:10px;
+}
+
 .current-player {
  font-weight:var(--bold-weight);
 }

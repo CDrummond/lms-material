@@ -15,7 +15,7 @@ Vue.component('lms-ui-settings', {
    <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="uisettings-toolbar">
     <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='l'"></lms-windowcontrols>
     <div class="drag-area-left"></div>
-    <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon v-bind:class="{'apple-back':IS_APPLE}">{{BACK_ARROW}}</v-icon></v-btn>
     <v-toolbar-title>{{width>=600 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
     <v-list-tile style="margin-right:-5px!important">

@@ -729,8 +729,8 @@ Vue.component('lms-iframe-dialog', {
     <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="iframe-toolbar">
      <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='l'"></lms-windowcontrols>
      <div class="drag-area-left"></div>
-     <v-btn v-if="IS_IOS" flat icon @click="goBack(false)" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
-     <v-btn v-else flat icon v-longpress:stop="goBack" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn v-if="IS_IOS" flat icon @click="goBack(false)" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon v-bind:class="{'apple-back':IS_APPLE}">{{BACK_ARROW}}</v-icon></v-btn>
+     <v-btn v-else flat icon v-longpress:stop="goBack" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon v-bind:class="{'apple-back':IS_APPLE}">{{BACK_ARROW}}</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title v-if="playerId && numPlayers>1 && (page=='player' || page=='extras')" @click="openChoiceMenu" class="pointer">{{title}} <v-icon>arrow_drop_down</v-icon></v-toolbar-title>
      <v-toolbar-title v-else>{{title}}</v-toolbar-title>

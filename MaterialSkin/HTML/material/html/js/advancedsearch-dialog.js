@@ -494,8 +494,9 @@ Vue.component('lms-advancedsearch-dialog', {
         emitResults(results, total, command) {
             this.results = results;
             let item = {cancache:false, title:i18n("Advanced search results"), id:ADV_SEARCH_ID, type:"search", libsearch:true};
+            let resp = buildSearchResp(this);
             bus.$emit('advSearchResults', item, {command:command, params:[]},
-                      { items:buildSearchResp(this), baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
+                      { items:resp.items, itemCustomActions:resp.itemCustomActions, baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
             this.searching = false;
             this.results = undefined;
             this.close();

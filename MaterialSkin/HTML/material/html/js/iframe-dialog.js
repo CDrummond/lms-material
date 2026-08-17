@@ -13,7 +13,7 @@ const LMS_STD_SETTINGS_PAGES =  new Set(['server', 'player']);
 let useDefaultSkinForServerSettings = true;
 
 function remapClassicSkinIcons(doc, col) {
-    const ICONS = ["play", "add", "edit", "favorite", "favorite_remove", "delete", "delete_white", "first", "last", "up", "down", "mix", "mmix", "next", "prev", "queue"];
+    const ICONS = ["play", "add", "edit", "favorite", "favorite_remove", "delete", "delete_white", "first", "last", "up", "down", "mix", "mmix", "next", "prev", "queue", "mmmix"];
     const OTHER_EXT = [".png", ".gif"];
     var imgList = doc.getElementsByTagName('img');
     if (imgList) {

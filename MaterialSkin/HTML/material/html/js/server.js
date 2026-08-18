@@ -613,6 +613,23 @@ var lmsServer = Vue.component('lms-server', {
                 player.current.canseek = parseInt(data.can_seek);
                 player.current.remote_title = checkRemoteTitle(player.current);
                 player.current.replay_gain = data.replay_gain;
+
+                // if 'data.is_transcoded' is defined and set to '1', set the "transcoded" indicator for the technical display
+                // player.current.transcoded = parseInt(data.is_transcoded);
+
+                if (undefined!=data.bitrate) {
+                    player.current.bitrate = data.bitrate;
+                }
+                if (undefined!=data.type) {
+                    player.current.type = data.type;
+                }
+                if (undefined!=data.samplerate) {
+                    player.current.samplerate = data.samplerate;
+                }
+                if (undefined!=data.samplesize) {
+                    player.current.samplesize = data.samplesize;
+                }
+
                 //player.current.emblem = getEmblem(player.current.extid, player.current.url);
 
                 // BBC iPlayer Extras streams can change duration. *But* only the duration in data seems to

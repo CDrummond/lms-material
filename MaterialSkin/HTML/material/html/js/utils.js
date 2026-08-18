@@ -216,10 +216,7 @@ function formatTechInfo(item, source, isCurrent) {
             technical.push(type);
         }
     }
-    if (item.transcoded) {
-        technical.push('*');
-    }
-    return technical.length>0 ? technical.join(', ') : undefined;
+    return technical.length>0 ? (item.transcoded ? "* " : "") + technical.join(', ') : undefined;
 }
 
 function formatSeconds(secs, showDays) {

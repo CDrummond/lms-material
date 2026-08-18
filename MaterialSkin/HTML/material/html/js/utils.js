@@ -188,7 +188,7 @@ function replaceNewLines(str) {
 function formatTechInfo(item, source, isCurrent) {
     let technical = [];
     // Bit rate should be Xkbps, but sometimes LMS returns 0 (as num or string?)
-    // ...so only valid i fmore than 1 char
+    // ...so only valid if more than 1 char
     if (undefined!=item.bitrate && (""+item.bitrate).length>1) {
         technical.push(item.bitrate);
     }
@@ -215,6 +215,9 @@ function formatTechInfo(item, source, isCurrent) {
         if (technical.indexOf(type)<0 && (undefined==source || (type!=source.text && type!=source.text.replace(/ /g,'')))) {
             technical.push(type);
         }
+    }
+    if (item.transcoded) {
+        technical.push('*');
     }
     return technical.length>0 ? technical.join(', ') : undefined;
 }

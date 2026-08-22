@@ -3,7 +3,7 @@
 1. Fix advanced search results display.
 2. Map 'b_mmmix.gif' to a recolourable SVG.
 3. Update Spicefly SVG icon.
-4. Show transcoded tech info, and prefix '*' if so.
+4. Show transcoded tech info, and prefix '[*]' if so.
 5. Fix some simplified Chinese translations - thanks to SunDaSora
 
 6.4.6

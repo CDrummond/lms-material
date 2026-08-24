@@ -757,7 +757,7 @@ function nowplayingFetchTrackInfo(view) {
 
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
         if (undefined!=trk.origTech && trk.technicalInfo.startsWith(TRANSCODED_PREFIX)) {
-            let tc = formatTechInfo(trk.origTech, trk.source, true) + "<br/>🠊 " + trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "");
+            let tc = formatTechInfo(trk.origTech, trk.source, true) + "<br/>⮡ " + trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "");
             html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+tc+"</td></tr>";
         } else {
             html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";

@@ -291,6 +291,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
 
     let technical = formatTechInfo(playerStatus.current, source, true);
+    view.playerStatus.current.origTech = playerStatus.current.origTech;
     if (technical!=view.playerStatus.current.technicalInfo) {
         view.playerStatus.current.technicalInfo = technical;
     }
@@ -755,7 +756,12 @@ function nowplayingFetchTrackInfo(view) {
     }
 
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
-        html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
+        if (undefined!=trk.origTech && trk.technicalInfo.startsWith(TRANSCODED_PREFIX)) {
+            let tc = formatTechInfo(trk.origTech, trk.source, true) + "<br/>🠊 " + trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "");
+            html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+tc+"</td></tr>";
+        } else {
+            html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
+        }
     }
 
     if (undefined!=trk.comment) {

@@ -617,6 +617,12 @@ var lmsServer = Vue.component('lms-server', {
                 // if 'data.is_transcoded' is defined and set to '1', set the "transcoded" indicator for the technical display
                 player.current.transcoded = parseInt(data.is_transcoded);
 
+                player.current.origTech = player.current.transcoded ? {
+                        bitrate:player.current.bitrate,
+                        type:player.current.type,
+                        samplerate:player.current.samplerate,
+                        samplesize:player.current.samplesize
+                    } : undefined;
                 if (undefined!=data.bitrate) {
                     player.current.bitrate = data.bitrate;
                 }

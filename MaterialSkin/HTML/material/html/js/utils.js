@@ -216,7 +216,7 @@ function formatTechInfo(item, source, isCurrent) {
             technical.push(type);
         }
     }
-    return technical.length>0 ? (item.transcoded ? "[*] " : "") + technical.join(', ') : undefined;
+    return technical.length>0 ? (item.transcoded ? TRANSCODED_PREFIX : "") + technical.join(', ') : undefined;
 }
 
 function formatSeconds(secs, showDays) {

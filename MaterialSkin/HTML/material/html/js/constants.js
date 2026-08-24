@@ -294,3 +294,5 @@ const SEARCH_OTHER_CAT = 6;
 
 const HOME_SHORTCUT = "-h";
 const SEARCH_SHORTCUT = "-s";
+
+const TRANSCODED_PREFIX = "[*] ";

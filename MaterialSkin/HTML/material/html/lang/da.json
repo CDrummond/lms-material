@@ -360,6 +360,7 @@
 "On larger displays, attempt to move dialogs closer to the associated item.":"På større skærme, sæt dialogbokse så tæt som muligt på relevante sted",
 "On track change":"Ved skift til nyt nummer",
 "Only showing %1 items":"Viser kun %1 numre",
+"Original":"Original",
 "Other":"Andre",
 "Other settings":"Andre indstillinger",
 "Overwrite":"Overskriv",
@@ -634,6 +635,7 @@
 "Track gain":"Nummer lydstyrkejustering",
 "Track is not downloadable.":"Nummeret kan ikke hentes.",
 "Tracks":"Numre",
+"Transcoded":"Omkodet",
 "Transfer queue":"Flyt køen",
 "Transfer queue to another player":"Flyt køen til en anden afspiller",
 "Tues":"Tir",
@@ -764,7 +766,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Original":"",
-"Transcoded":""
+"%1 days":"%1 dage"
 }

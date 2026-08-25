@@ -1024,10 +1024,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             setLocalStorageVal("showTotal", this.showTotal);
         },
         showTranscode() {
-            bus.$emit('dlg.open', 'iteminfo', { list:[nowPlayingTechInfo(this.playerStatus.current)] }, 320);
+            let trk = this.playerStatus.current;
+            bus.$emit('dlg.open', 'iteminfo', { xlist:[{title:i18n("Original"), text:formatTechInfo(trk.origTech, trk.source, true)},
+                                                       {title:i18n("Transcoded"), text:trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "")}] }, 350);
         },
         setBgndCover() {
-            var url = this.coverUrl;nowPlayingTechInfo
+            var url = this.coverUrl;
             if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {
                 url=this.drawBackdrop || this.drawInfoBackdrop ? 'material/backdrops/nowplaying.jpg' : '';
             }

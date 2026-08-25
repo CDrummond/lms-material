@@ -64,6 +64,8 @@ Vue.component('lms-info-dialog', {
                 for (var i=0, len=item.list.length; i<len; ++i) {
                     this.details.push({text:item.list[i]});
                 }
+            } else if (item.xlist) {
+                this.details = item.xlist;
             }
             this.width = undefined==width ? 600 : width;
             this.show=true;

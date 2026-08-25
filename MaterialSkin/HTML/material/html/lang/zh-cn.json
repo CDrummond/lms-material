@@ -754,6 +754,7 @@
 "Long-press on image and select 'Share image'.":"",
 "Long-press on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
 "Medium":"",
+"Original":"",
 "Player list":"",
 "Right-click on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
 "Select favorite players, these will always be visible (if connected). Use drag'n'drop to change order.":"",
@@ -764,5 +765,6 @@
 "Show search button":"",
 "Sort alphabetically":"",
 "Split into categories":"",
-"Switch user":""
+"Switch user":"",
+"Transcoded":""
 }

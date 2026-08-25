@@ -228,6 +228,7 @@
 "Failed to retrieve listing. (%1)":"Ophalen van de lijst mislukt. (%1)",
 "Failed to save play queue!":"Opslaan van huidige wachtrij mislukt!",
 "Failed to save virtual library!":"Opslaan deelcollectie mislukt!",
+"Failed to set rating!":"Beoordeling instellen mislukt!",
 "Failed to unsubscribe podcast!":"Afmelden podcast mislukt!",
 "Favorites":"Favorieten",
 "Fetching...":"Bezig met ophalen ...",
@@ -764,5 +765,6 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Failed to set rating!":"Beoordeling instellen mislukt!"
+"Original":"",
+"Transcoded":""
 }

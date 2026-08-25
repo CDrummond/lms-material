@@ -711,6 +711,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('releaseSupportChanged', function() {
             this.initItems();
         }.bind(this));
+        bus.$on('npShowTranscode', function() {
+            this.showTranscode();
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -1025,8 +1028,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showTranscode() {
             let trk = this.playerStatus.current;
-            bus.$emit('dlg.open', 'iteminfo', { xlist:[{title:i18n("Original"), text:formatTechInfo(trk.origTech, trk.source, true)},
-                                                       {title:i18n("Transcoded"), text:trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "")}] }, 350);
+            if (undefined!=trk.origTech) {
+                bus.$emit('dlg.open', 'iteminfo', { xlist:[{title:i18n("Original"), text:formatTechInfo(trk.origTech, trk.source, true)},
+                                                           {title:i18n("Transcoded"), text:trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "")}] }, 350);
+            }
         },
         setBgndCover() {
             var url = this.coverUrl;

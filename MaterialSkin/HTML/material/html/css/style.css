@@ -2970,6 +2970,10 @@ div.v-subheader {
  font-size:var(--std-font-size);
 }
 
+.mfi {
+ font-family:'Material Icons';
+}
+
 .rstar {
  font-size:14px!important;
  font-family:'Material Icons';

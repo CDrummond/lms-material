@@ -220,7 +220,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-list-tile-action v-if="desktopLayout">
      <div v-if="playerStatus.playlist.count>1 && (npBarRatings || techInfo)" class="np-bar-time " v-bind:class="{'np-bar-time-r': techInfo || npBarRatings}"><obj v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="toggleTime()">{{formattedTime}}</obj>{{SEPARATOR}}<obj v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</obj></div>
      <div v-else class="np-bar-time" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'np-bar-time-r': techInfo || npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
-     <div v-if="techInfo" class="np-bar-tech ellipsis" v-html="technicalInfo"/>
+     <div v-if="techInfo && isTranscoded" class="np-bar-tech ellipsis" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="showTranscode" v-html="technicalInfo"/>
+     <div v-else-if="techInfo" class="np-bar-tech ellipsis" v-html="technicalInfo"/>
      <div v-else-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
      <v-rating v-else-if="showRatings" class="np-bar-rating" v-model="rating.value" :halfIncrements="maxRating>5" hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
      <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue" :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true,false)"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
@@ -265,7 +266,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div v-if="wide>1">
 
       <v-layout text-xs-center row wrap class="np-controls-wide">
-       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1"><obj v-if="techInfo" v-html="technicalInfo"/>{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
+       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1"><obj v-if="techInfo" class="link-item" v-html="technicalInfo" @click="showTranscode"/>{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
        <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
         <v-layout class="np-time-layout">
          <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
@@ -338,7 +339,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
-    <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1"><obj v-if="techInfo" v-html="technicalInfo"/>{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
+    <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1"><obj v-if="techInfo" class="link-item" v-html="technicalInfo" @click="showTranscode"/>{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
     <v-flex xs12><div class="np-portrait-thin-pad"></div></v-flex>
 
@@ -407,7 +408,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     current: { canseek:1, duration:0, time:undefined, title:undefined, liveEdge:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerWithContext:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, bufpc:100.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined},
-                               emblem: undefined, maiComposer:undefined, discsubtitle:undefined, grouping:undefined },
+                               emblem: undefined, maiComposer:undefined, discsubtitle:undefined, grouping:undefined, origTech:undefined },
                     playlist: { shuffle:0, repeat: 0, randomplay:0, current:0, count:0 },
                  },
                  mobileBarText: undefined,
@@ -1022,8 +1023,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.showTotal = !this.showTotal;
             setLocalStorageVal("showTotal", this.showTotal);
         },
+        showTranscode() {
+            bus.$emit('dlg.open', 'iteminfo', { list:[nowPlayingTechInfo(this.playerStatus.current)] }, 320);
+        },
         setBgndCover() {
-            var url = this.coverUrl;
+            var url = this.coverUrl;nowPlayingTechInfo
             if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {
                 url=this.drawBackdrop || this.drawInfoBackdrop ? 'material/backdrops/nowplaying.jpg' : '';
             }
@@ -1495,6 +1499,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 : undefined==this.playerStatus.current.source || this.playerStatus.current.source.other || undefined==this.playerStatus.current.source.text || this.playerStatus.current.source.text.length<1
                     ? this.playerStatus.current.technicalInfo
                     : (this.playerStatus.current.source.text+SEPARATOR+this.playerStatus.current.technicalInfo);
+        },
+        isTranscoded() {
+            return this.playerStatus && this.playerStatus.current && undefined!=this.playerStatus.current.origTech
         },
         formattedTime() {
             return this.playerStatus && this.playerStatus.current

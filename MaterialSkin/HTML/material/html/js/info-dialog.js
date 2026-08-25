@@ -8,7 +8,7 @@
 
 Vue.component('lms-info-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" scrollable width="600" style="z-index:10">
+<v-dialog v-model="show" v-if="show" scrollable :width="width" style="z-index:10">
  <v-card>
   <v-card-text>
   <template v-for="(item, index) in details">
@@ -29,11 +29,12 @@ Vue.component('lms-info-dialog', {
         return {
             show: false,
             title: undefined,
-            details: []
+            details: [],
+            width: 600
         }
     },
     mounted() {
-        bus.$on('iteminfo.open', function(item) {
+        bus.$on('iteminfo.open', function(item, width) {
             this.details = [];
             if (item.title) {
                 this.details.push({title: i18n("Title"), text: item.title});
@@ -64,6 +65,7 @@ Vue.component('lms-info-dialog', {
                     this.details.push({text:item.list[i]});
                 }
             }
+            this.width = undefined==width ? 600 : width;
             this.show=true;
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {

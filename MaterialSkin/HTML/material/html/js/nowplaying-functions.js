@@ -608,6 +608,14 @@ function nowplayingArtistEntry(trk, key, role) {
     return "";
 }
 
+function nowPlayingTechInfo(trk) {
+    if (undefined!=trk.origTech && trk.technicalInfo.startsWith(TRANSCODED_PREFIX)) {
+        return formatTechInfo(trk.origTech, trk.source, true) + "<br/><obj class=\"mfi\">\uE5Da</obj> " + trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "");
+    } else {
+        return trk.technicalInfo
+    }
+}
+
 function nowplayingFetchTrackInfo(view) {
     if (view.info.tabs[TRACK_TAB].artist!=view.infoTrack.artist || view.info.tabs[TRACK_TAB].tracktitle!=view.infoTrack.title ||
         view.info.tabs[TRACK_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[TRACK_TAB].artist_id!=view.infoTrack.artist_id ||
@@ -756,12 +764,7 @@ function nowplayingFetchTrackInfo(view) {
     }
 
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
-        if (undefined!=trk.origTech && trk.technicalInfo.startsWith(TRANSCODED_PREFIX)) {
-            let tc = formatTechInfo(trk.origTech, trk.source, true) + "<br/><obj class=\"mfi\">\uE5Da</obj> " + trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "");
-            html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+tc+"</td></tr>";
-        } else {
-            html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
-        }
+        html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+nowPlayingTechInfo(trk)+"</td></tr>";
     }
 
     if (undefined!=trk.comment) {

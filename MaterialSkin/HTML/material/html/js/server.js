@@ -638,6 +638,22 @@ var lmsServer = Vue.component('lms-server', {
                     player.current.type = display.type;
                     player.current.samplerate = display.samplerate;
                     player.current.samplesize = display.samplesize;
+                } else {
+                    // Use values in 'data' even if not transcoded. This caters for the case where the
+                    // user has favourited one verison of a track from a streaming service, but when played
+                    // the service provides another.
+                    if (undefined!=data.bitrate) {
+                        player.current.bitrate = data.bitrate;
+                    }
+                    if (undefined!=data.type) {
+                        player.current.bitrate = data.type;
+                    }
+                    if (undefined!=data.samplerate) {
+                        player.current.bitrate = data.samplerate;
+                    }
+                    if (undefined!=data.samplesize) {
+                        player.current.bitrate = data.samplesize;
+                    }
                 }
 
                 //player.current.emblem = getEmblem(player.current.extid, player.current.url);

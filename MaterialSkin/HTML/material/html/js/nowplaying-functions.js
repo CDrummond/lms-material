@@ -292,6 +292,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
 
     let technical = formatTechInfo(playerStatus.current, source, true);
     view.playerStatus.current.origTech = playerStatus.current.origTech;
+    view.playerStatus.current.transTech = playerStatus.current.transTech;
     if (technical!=view.playerStatus.current.technicalInfo) {
         view.playerStatus.current.technicalInfo = technical;
     }
@@ -756,8 +757,8 @@ function nowplayingFetchTrackInfo(view) {
     }
 
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
-        if (undefined!=trk.origTech && trk.technicalInfo.startsWith(TRANSCODED_PREFIX)) {
-            let tc = formatTechInfo(trk.origTech, trk.source, true) + "<br/><obj class=\"mfi\">\uE5Da</obj> " + trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "");
+        if (undefined!=trk.origTech && undefined!=trk.transTech && trk.technicalInfo.startsWith(TRANSCODED_PREFIX)) {
+            let tc = formatTechInfo(trk.origTech, trk.source, true) + "<br/><obj class=\"mfi\">\uE5Da</obj> " + formatTechInfo(trk.transTech, trk.source, true);
             html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td onclick=\"bus.$emit('npShowTranscode')\" class=\"link-item\">"+tc+"</td></tr>";
         } else {
             html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";

@@ -1,7 +1,9 @@
 6.4.8
 -----
 1. Show original and transcoded tech info in MAI view.
-2. Fix image url's rewrite when using https proxy - thanks to Andrew Jackson.
+2. When displaying tech in in now-playing, if trancoded is lossless, and
+   original is not lossless, then show original else show transcoded.
+3. Fix image url's rewrite when using https proxy - thanks to Andrew Jackson.
 
 6.4.7
 -----

@@ -9,6 +9,7 @@
 const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz124" : "") + "AABEGIKNPSTV";
 const STATUS_UPDATE_MAX_TIME = 4000;
 const SCAN_UPDATE_INTERVAL = 2000;
+const LOSSLESS_FORMATS = new Set(["flc", "wav", "FLC", "WAV"]);
 
 function logString(val) {
     return undefined==val ? "" : val;
@@ -613,27 +614,30 @@ var lmsServer = Vue.component('lms-server', {
                 player.current.canseek = parseInt(data.can_seek);
                 player.current.remote_title = checkRemoteTitle(player.current);
                 player.current.replay_gain = data.replay_gain;
+                player.current.transcoded = LMS_VERSION>=90200 && parseInt(data.is_transcoded);
 
-                // if 'data.is_transcoded' is defined and set to '1', set the "transcoded" indicator for the technical display
-                player.current.transcoded = parseInt(data.is_transcoded);
+                // If stream has been transcoded, save both original and transcoded tech info.
+                if (player.current.transcoded) {
+                    player.current.origTech = {
+                            bitrate:player.current.bitrate,
+                            type:player.current.type,
+                            samplerate:player.current.samplerate,
+                            samplesize:player.current.samplesize
+                    };
+                    player.current.transTech = {
+                            bitrate:data.bitrate,
+                            type:data.type,
+                            samplerate:data.samplerate,
+                            samplesize:data.samplesize
+                    };
+                    // If trancoded is lossless, and original is not lossless, then show original else show transcoded.
+                    let display = LOSSLESS_FORMATS.has(player.current.transTech.type) && !LOSSLESS_FORMATS.has(player.current.origTech.type)
+                        ? player.current.origTech : player.current.transTech;
 
-                player.current.origTech = player.current.transcoded ? {
-                        bitrate:player.current.bitrate,
-                        type:player.current.type,
-                        samplerate:player.current.samplerate,
-                        samplesize:player.current.samplesize
-                    } : undefined;
-                if (undefined!=data.bitrate) {
-                    player.current.bitrate = data.bitrate;
-                }
-                if (undefined!=data.type) {
-                    player.current.type = data.type;
-                }
-                if (undefined!=data.samplerate) {
-                    player.current.samplerate = data.samplerate;
-                }
-                if (undefined!=data.samplesize) {
-                    player.current.samplesize = data.samplesize;
+                    player.current.bitrate = display.bitrate;
+                    player.current.type = display.type;
+                    player.current.samplerate = display.samplerate;
+                    player.current.samplesize = display.samplesize;
                 }
 
                 //player.current.emblem = getEmblem(player.current.extid, player.current.url);

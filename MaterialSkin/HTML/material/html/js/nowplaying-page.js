@@ -1028,9 +1028,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showTranscode() {
             let trk = this.playerStatus.current;
-            if (undefined!=trk.origTech) {
+            if (undefined!=trk.origTech && undefined!=trk.transTech) {
                 bus.$emit('dlg.open', 'iteminfo', { xlist:[{title:i18n("Original"), text:formatTechInfo(trk.origTech, trk.source, true)},
-                                                           {title:i18n("Transcoded"), text:trk.technicalInfo.replaceAll(TRANSCODED_PREFIX, "")}] }, 350);
+                                                           {title:i18n("Transcoded"), text:formatTechInfo(trk.transTech, trk.source, true)}] }, 350);
             }
         },
         setBgndCover() {

@@ -211,9 +211,9 @@ function formatTechInfo(item, source, isCurrent) {
         if (type.length>4 && item.samplerate && type.indexOf("@")>2 && type.indexOf("Hz")>4) {
             type = type.split("@")[0];
         }
-        type = type.length<=4 ? type.toUpperCase() : type;
-        if (technical.indexOf(type)<0 && (undefined==source || (type!=source.text && type!=source.text.replace(/ /g,'')))) {
-            technical.push(type);
+        // Only want encoding types - not (e.g.) 'YouTube Music'
+        if (type<=4 && undefined==source || (type!=source.text && type!=source.text.replace(/ /g,''))) {
+            technical.push(type.toUpperCase());
         }
     }
     return technical.length>0 ? (item.transcoded ? TRANSCODED_PREFIX : "") + technical.join(', ') : undefined;

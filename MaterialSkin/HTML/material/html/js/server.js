@@ -646,13 +646,13 @@ var lmsServer = Vue.component('lms-server', {
                         player.current.bitrate = data.bitrate;
                     }
                     if (undefined!=data.type) {
-                        player.current.bitrate = data.type;
+                        player.current.type = data.type;
                     }
                     if (undefined!=data.samplerate) {
-                        player.current.bitrate = data.samplerate;
+                        player.current.samplerate = data.samplerate;
                     }
                     if (undefined!=data.samplesize) {
-                        player.current.bitrate = data.samplesize;
+                        player.current.samplesize = data.samplesize;
                     }
                 }
 

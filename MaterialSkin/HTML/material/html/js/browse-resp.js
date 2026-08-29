@@ -706,9 +706,13 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     // "<command>-<type>" (e.g. "listentolater-album"). If defined - even as an
                     // empty list - it takes precedence over the generic "online-*" category, so
                     // a plugin's own list can show different actions, or none (an empty category
-                    // suppresses the generic actions on that app's items).
+                    // suppresses the generic actions on that app's items). The category may
+                    // come from customactions.json or be registered by a plugin, so check both.
                     let appCat = (undefined!=command) ? command+"-"+btype : undefined;
-                    let oca = (undefined!=appCat && undefined!=customActions && (appCat in customActions))
+                    let haveAppCat = undefined!=appCat &&
+                                     ((undefined!=customActions && (appCat in customActions)) ||
+                                      (undefined!=pluginCustomActions && (appCat in pluginCustomActions)));
+                    let oca = haveAppCat
                                   ? getCustomActions(appCat, false, ocFilter, true)
                                   : getCustomActions("online-"+btype, false, ocFilter, true);
                     if (undefined!=oca && oca.length>0) {

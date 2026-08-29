@@ -8,10 +8,6 @@
     <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
     [% END %]
 
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD" desc="PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC" %]
-    <input type="checkbox" name="pref_allowDownload" id="allowDownload" [% IF prefs.allowDownload %] checked [% END %] value="1"/>
-    [% END %]
-
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC" %]
     <select class="stdedit" name="pref_respectFixedVol" id="respectFixedVol">
         [% FOREACH option = {

@@ -244,7 +244,7 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
                         actions.push(itemCustomActions[c]);
                     }
                 }
-            } else if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {
+            } else if (ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) {
                 weight++;
                 actions.push({action:loop[i], weight:ALBUM_SORTS_ACTION==loop[i] || TRACK_SORTS_ACTION==loop[i]
                                                 ? 10
@@ -1810,36 +1810,6 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         }
     } else if (BR_COPY_ACTION==act) {
         bus.$emit('queueGetSelectedUrls', index, originalId(item.id));
-    } else if (DOWNLOAD_ACTION==act) {
-        // See if we can get album-artist from current view / history
-        let aa = view.current && view.current.id && view.current.id.startsWith("artist_id:") ? view.current.title : undefined;
-        if (aa == undefined) {
-            let alb = item.id.startsWith("album_id:") ? item : view.current.id.startsWith("album_id:") ? view.current : undefined;
-            if (undefined!=alb) {
-                if (undefined!=alb.artists) {
-                    aa = alb.artists[0];
-                } else if (undefined!=alb.subtitle) {
-                    aa = alb.subtitle;
-                }
-            }
-        }
-        if (aa == undefined) {
-            for (let loop=view.history, len=loop.length, i=len-1; i>0 && aa==undefined; --i) {
-                let hi = loop[i].current;
-                if (undefined!=hi) {
-                    if (hi.id.startsWith("artist_id:")) {
-                        aa = hi.title;
-                    } else if (hi.id.startsWith("album_id:")) {
-                        if (undefined!=hi.artists) {
-                            aa = hi.artists[0];
-                        } else if (undefined!=hi.subtitle) {
-                            aa = hi.subtitle;
-                        }
-                    }
-                }
-            }
-        }
-        download(item, item.id.startsWith("album_id:") ? browseBuildCommand(view, item) : undefined, aa);
     } else if (SHOW_IMAGE_ACTION==act) {
         let images = [];
         let idx = 0;

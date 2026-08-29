@@ -82,7 +82,6 @@ my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
 my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
 my $USER_THEME_URL_PARSER_RE = qr{material/usertheme/.+}i;
 my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
-my $DOWNLOAD_PARSER_RE = qr{material/download/.+}i;
 my $BACKDROP_URL_PARSER_RE = qr{material/backdrops/.+}i;
 my $GENRE_URL_PARSER_RE = qr{material/genres/.+}i;
 my $PLAYLIST_URL_PARSER_RE = qr{material/playlists/.+}i;
@@ -105,7 +104,7 @@ my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', '
 
 my %RADIO_PROTOCOLS = map { $_ => 1 } ('http', 'https', 'accur', 'cplus', 'globalplayer', 'newsuk', 'pr', 'radioparadise', 'rnp', 'sounds', 'times', 'virgin', 'sxm');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping', 'setPlayerLibrary');
+my @BOOL_OPTS = ('playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping', 'setPlayerLibrary');
 
 my %ROLE_ICON_MAP = (
     'bass' => 'bassist',
@@ -216,7 +215,6 @@ sub initPlugin {
             showAllArtists => 1,
             artistFirst => 1,
             password => '',
-            allowDownload => 0,
             commentAsDiscTitle => 0,
             showComment => 0,
             pagedBatchSize => $lmsVersion>=80400 ? 250 : 100,
@@ -248,7 +246,6 @@ sub initPlugin {
             showAllArtists => 1,
             artistFirst => 1,
             password => '',
-            allowDownload => 0,
             commentAsDiscTitle => 0,
             showComment => 0,
             pagedBatchSize => $lmsVersion>=80400 ? 250 : 100,
@@ -284,7 +281,6 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComment');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'genreImages');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'playlistImages');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'setPlayerLibrary');
@@ -323,7 +319,6 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($MAIFEST_URL_PARSER_RE, \&_manifestHandler);
         Slim::Web::Pages->addRawFunction($USER_THEME_URL_PARSER_RE, \&_userThemeHandler);
         Slim::Web::Pages->addRawFunction($USER_COLOR_URL_PARSER_RE, \&_userColorHandler);
-        Slim::Web::Pages->addRawFunction($DOWNLOAD_PARSER_RE, \&_downloadHandler);
         Slim::Web::Pages->addRawFunction($BACKDROP_URL_PARSER_RE, \&_backdropHandler);
         Slim::Web::Pages->addRawFunction($GENRE_URL_PARSER_RE, \&_genreHandler);
         Slim::Web::Pages->addRawFunction($PLAYLIST_URL_PARSER_RE, \&_playlistHandler);
@@ -784,7 +779,6 @@ sub _cliCommand {
         $request->addResult('respectFixedVol', $prefs->get('respectFixedVol'));
         $request->addResult('showAllArtists', $prefs->get('showAllArtists'));
         $request->addResult('artistFirst', $prefs->get('artistFirst'));
-        $request->addResult('allowDownload', $prefs->get('allowDownload'));
         $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
         $request->addResult('showComment', $prefs->get('showComment'));
         $request->addResult('pagedBatchSize', $prefs->get('pagedBatchSize'));
@@ -3292,38 +3286,6 @@ sub _userColorHandler {
     }
     $response->code(RC_OK);
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
-}
-
-sub _downloadHandler {
-    my ( $httpClient, $response ) = @_;
-    return unless $httpClient->connected;
-
-    my $request = $response->request;
-    my $id = undef;
-
-    if ($request->uri->can('query_param')) {
-        $id = $request->uri->query_param('id');
-    } else { # Manually extract "id=trackid" query parameter...
-        my $uri = $request->uri->as_string;
-        my $start = index($uri, "id=");
-
-        if ($start > 0) {
-            $start += 3;
-            $id = "#" . substr($uri, $start+3);
-        }
-    }
-
-    my $obj = Slim::Schema->find('Track', $id);
-
-    if (blessed($obj) && Slim::Music::Info::isSong($obj) && Slim::Music::Info::isFile($obj->url)) {
-        $response->code(RC_OK);
-        $response->headers->remove_content_headers;
-        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/octet-stream', Slim::Utils::Misc::pathFromFileURL($obj->url), $obj, 1 );
-    } else {
-        $response->code(RC_NOT_FOUND);
-        $httpClient->send_response($response);
-        Slim::Web::HTTP::closeHTTPSocket($httpClient);
-    }
 }
 
 sub _backdropHandler {

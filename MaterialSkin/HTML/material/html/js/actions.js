@@ -64,7 +64,8 @@ const PQ_COPY_ACTION          = 47;
 const ADV_SEARCH_ACTION       = 48;
 const SAVE_VLIB_ACTION        = 49;
 
-const DOWNLOAD_ACTION         = 50;
+const PQ_REMOVE_WORK_ACTION   = 50;
+
 const PQ_REMOVE_DISC_ACTION   = 51;
 const PLAY_DISC_ACTION        = 52;
 const PLAY_PLAYLIST_ACTION    = 53;
@@ -92,13 +93,11 @@ const PQ_REMOVE_ARTIST_ACTION = 72;
 
 const USE_ALT_GRID_ACTION     = 73;
 
-const PQ_REMOVE_WORK_ACTION   = 74;
-
 const HIDE_FOR_PARTY = new Set([
     DIVIDER, PLAY_ACTION, PLAY_ALBUM_ACTION, PLAY_ALL_ACTION, INSERT_ACTION, MORE_ACTION, MORE_LIB_ACTION, RENAME_ACTION, REMOVE_ACTION,
     EDIT_ACTION, ADD_FAV_ACTION, DELETE_ACTION, ADD_TO_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION, RATING_ACTION,
     ADD_FAV_FOLDER_ACTION, DELETE_FAV_FOLDER_ACTION, MOVE_FAV_TO_PARENT_ACTION, UNSUB_PODCAST_ACTION, MOVE_HERE_ACTION, INSERT_ALL_ACTION,
-    ADD_TO_PLAYLIST_ACTION, REMOVE_DUPES_ACTION, ADV_SEARCH_ACTION, SAVE_VLIB_ACTION, DOWNLOAD_ACTION, PLAY_DISC_ACTION,
+    ADD_TO_PLAYLIST_ACTION, REMOVE_DUPES_ACTION, ADV_SEARCH_ACTION, SAVE_VLIB_ACTION, PLAY_DISC_ACTION,
     PLAY_PLAYLIST_ACTION, PQ_SORT_ACTION, PLAYLIST_SORT_ACTION, PQ_SAVE_ACTION, PLAY_SHUFFLE_ACTION, PLAY_SHUFFLE_ALL_ACTION,
     PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, PQ_REMOVE_TRACK_ACTION, PQ_REMOVE_ARTIST_ACTION, PQ_REMOVE_WORK_ACTION]);
 
@@ -160,7 +159,8 @@ var ACTIONS=[
     {cmd:"adv-search",   svg:"database-search"},
     {cmd:"save-vlib",    icon:"library_add"},
 
-    {cmd:"download",     icon:"cloud_download"},
+    {cmd:"rm-wrk",       svg:"classical-work"},
+
     {cmd:"pq-rmdisc",    svg:"album-multi"},
     {cmd:"play-disc",    svg:"album-multi"},
     {cmd:"pl-track",     icon:"playlist_play"},
@@ -184,9 +184,7 @@ var ACTIONS=[
     {cmd:"nrm",          svg:"dice-plus"},
     {cmd:"pq-rmt",       icon:"music_note"},
     {cmd:"pq-rmar",      svg:"artist"},
-    {cmd:"use-sl",       svg:"grid-plus"},
-    {cmd:"rm-wrk",       svg:"classical-work"}
-
+    {cmd:"use-sl",       svg:"grid-plus"}
 ];
 
 var PMGR_EDIT_GROUP_ACTION       = {cmd:"edit",     icon:"edit"};
@@ -267,7 +265,6 @@ function updateActionStrings() {
     ACTIONS[ADV_SEARCH_ACTION].title=i18n("Advanced search");
     ACTIONS[SAVE_VLIB_ACTION].title=i18n("Save as virtual library");
 
-    ACTIONS[DOWNLOAD_ACTION].title=i18n("Download");
     ACTIONS[PQ_REMOVE_DISC_ACTION].title=i18n("Disc");
     ACTIONS[PQ_REMOVE_WORK_ACTION].title=i18n("Work");
     ACTIONS[PLAY_DISC_ACTION].title=i18n("Play disc starting at track");

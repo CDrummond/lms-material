@@ -5,6 +5,8 @@
 3. When displaying tech in in now-playing, if transcoded is lossless, and
    original is not lossless, then show original else show transcoded.
 4. Fix image URL rewrite when using https proxy - thanks to Andrew Jackson.
+5. Remove download support, as only really useful in APK where it no longer
+   seems to work.
 
 6.4.7
 -----

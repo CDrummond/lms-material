@@ -77,7 +77,7 @@ var app = new Vue({
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false,
                             iteminfo: false, iframe: false, dstm: false, savequeue: false, icon: false, prompt:false,
-                            addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false,
+                            addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false,
                             gallery: false, choice: false, playersettingsplugin: false, playerlist: false, npshare: false
                           },
                  loaded: false,
@@ -167,9 +167,6 @@ var app = new Vue({
             lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
         }
 
-        if (lmsOptions.allowDownload && queryParams.download!='browser' && queryParams.download!='native') {
-            lmsOptions.allowDownload = false;
-        }
         if (undefined!=queryParams.hidePlayers) {
             setLocalStorageVal('hidePlayers', queryParams.hidePlayers);
             lmsOptions.hidePlayers = new Set(queryParams.hidePlayers.split(','));
@@ -197,10 +194,6 @@ var app = new Vue({
                         lmsOptions[SKIN_INT_OPTS[i]] = parseInt(data.result[SKIN_INT_OPTS[i]]);
                         setLocalStorageVal(SKIN_INT_OPTS[i], lmsOptions[SKIN_INT_OPTS[i]]);
                     }
-                }
-                if (lmsOptions.allowDownload && queryParams.download!='browser' && queryParams.download!='native') {
-                    lmsOptions.allowDownload = false;
-                    setLocalStorageVal('allowDownload', false);
                 }
                 if (undefined!=data.result['releaseTypeOrder']) {
                     let arr = splitConfigString(data.result['releaseTypeOrder']);

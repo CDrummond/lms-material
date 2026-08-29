@@ -30,9 +30,8 @@ Vue.component('lms-toolbar', {
  </v-toolbar-title>
 </v-layout>
  <v-spacer class="drag-area" style="flex-grow:1000!important"></v-spacer>
- <div v-if="updateProgress.show && showUpdateProgress && downloadCount<=0" class="ellipsis subtext">{{updateProgress.text}}</div>
- <v-btn v-if="downloadCount>0" icon flat @click="bus.$emit('dlg.open', 'downloadstatus')" :title="trans.downloading"><v-icon class="dimmed">cloud_download</v-icon></v-btn>
- <v-btn v-else-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="dimmed">refresh</v-icon></v-btn>
+ <div v-if="updateProgress.show && showUpdateProgress" class="ellipsis subtext">{{updateProgress.text}}</div>
+ <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="dimmed">refresh</v-icon></v-btn>
  <v-btn v-show="playerStatus.synced && showVolumeSlider" icon flat class="toolbar-button hide-for-mini" id="vol-group-btn" :title="trans.groupVol" @click="bus.$emit('dlg.open', 'groupvolume', playerStatus)"><v-icon>speaker_group</v-icon></v-btn>
  <volume-control class="vol-full-slider" v-if="showVolumeSlider" :value="playerVolume" :muted="playerMuted" :playing="playerStatus.isplaying" :dvc="playerDvc" :layout="1" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @toggleMute="toggleMute"></volume-control>
  <v-btn v-else-if="playerDvc!=VOL_HIDDEN" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-btn" :title="trans.showVol">
@@ -79,7 +78,7 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0, alarm: undefined, alarmStr: undefined },
                  npInfo: "...",
                  queueInfo: "...",
-                 trans:{nothingplaying:undefined, info:undefined, showLarge:undefined, hideLarge:undefined, showVol:undefined, downloading:undefined,
+                 trans:{nothingplaying:undefined, info:undefined, showLarge:undefined, hideLarge:undefined, showVol:undefined,
                         play:undefined, pause:undefined, toggleQueue:undefined, groupVol:undefined, browse:undefined, queue:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
@@ -229,8 +228,8 @@ Vue.component('lms-toolbar', {
         initItems() {
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), info:i18n("Show current track information"),
                           showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"), showVol:i18n("Show volume"), play:i18n("Play"), 
-                          pause:i18n("Pause"), toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
-                          groupVol:i18n('Adjust volume of associated players'), browse:i18n('Browse'), queue:i18n('Queue')};
+                          pause:i18n("Pause"), toggleQueue:i18n('Toggle queue'), groupVol:i18n('Adjust volume of associated players'),
+                          browse:i18n('Browse'), queue:i18n('Queue')};
         },
         updateWindowControlsOverlay() {
             let val = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue('--window-area-right').replace('px', ''));
@@ -462,9 +461,6 @@ Vue.component('lms-toolbar', {
         showClock() {
             return this.$store.state.nowPlayingClock && (this.$store.state.desktopLayout
                                                             ? (this.nowPlayingExpanded && this.width>=1300) : (this.$store.state.page == 'now-playing' && this.width>=500))
-        },
-        downloadCount() {
-            return this.$store.state.downloadStatus.length
         },
         coloredToolbars() {
             return this.$store.state.coloredToolbars

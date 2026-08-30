@@ -544,11 +544,13 @@ sub registerHomeExtra {
 
 sub registerCustomAction {
     my ($section, $action) = @_;
-    main::DEBUGLOG && $log->debug("Registering " . Data::Dump::dump($action) . " for ${section} section");
+    main::DEBUGLOG && $log->debug("Registering " . (defined $action ? Data::Dump::dump($action) : "empty section") . " for ${section} section");
     if (! exists($PLUGIN_CUSTOM_ACTIONS->{$section})) {
         $PLUGIN_CUSTOM_ACTIONS->{$section} = [];
     }
-    push(@{$PLUGIN_CUSTOM_ACTIONS->{$section}}, $action);
+    # $action is optional. Registering a section with no action declares an EMPTY category,
+    # which is how a plugin suppresses the generic "online-*" actions on its own items.
+    push(@{$PLUGIN_CUSTOM_ACTIONS->{$section}}, $action) if defined $action;
 }
 
 sub getHomeExtra {

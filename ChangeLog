@@ -8,6 +8,7 @@
 5. Remove download support, as only really useful in APK where it no longer
    seems to work.
 6. Osmium player icon added - thanks to adri641.
+7. Fix emblem position in lists.
 
 6.4.7
 -----

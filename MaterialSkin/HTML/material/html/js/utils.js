@@ -212,7 +212,7 @@ function formatTechInfo(item, source, isCurrent) {
             type = type.split("@")[0];
         }
         // Only want encoding types - not (e.g.) 'YouTube Music'
-        if (type<=4 && undefined==source || (type!=source.text && type!=source.text.replace(/ /g,''))) {
+        if (type.length<=4 && (undefined==source || undefined==source.text || (type!=source.text && type!=source.text.replace(/ /g,'')))) {
             technical.push(type.toUpperCase());
         }
     }

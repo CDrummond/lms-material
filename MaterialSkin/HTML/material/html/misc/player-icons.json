@@ -90,6 +90,9 @@
         },
         "WiiM Player":{
             "svg":"wiim"
+        },
+        "Osmium":{
+            "svg":"osmium"
         }
     },
     "squeezelite-c":{

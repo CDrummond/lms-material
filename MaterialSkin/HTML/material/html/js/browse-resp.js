@@ -708,7 +708,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     // a plugin's own list can show different actions, or none (an empty category
                     // suppresses the generic actions on that app's items). The category may
                     // come from customactions.json or be registered by a plugin, so check both.
-                    let appCat = (undefined!=command) ? command+"-"+btype : undefined;
+                    let appCat = undefined!=command ? command+"-"+btype : undefined;
                     let haveAppCat = undefined!=appCat &&
                                      ((undefined!=customActions && (appCat in customActions)) ||
                                       (undefined!=pluginCustomActions && (appCat in pluginCustomActions)));
@@ -718,10 +718,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (undefined!=oca && oca.length>0) {
                         if (isAppItem) {
                             if (undefined==i.album) {
-                                i.album   = i.title;
+                                i.album = i.title;
                             }
                             if (undefined==i.artist) {
-                                i.artist  = i.subtitle;
+                                i.artist = i.subtitle;
                             }
                             i.service = command;
                         }

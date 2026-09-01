@@ -3580,14 +3580,8 @@ div.v-subheader {
 }
 
 .icon-grid .v-btn {
- width:48px !important;
- height:48px !important;
-}
-
-.icon-grid .v-btn .svg-img, .icon-grid .v-btn .v-icon {
- font-size:32px !important;
- width:32px !important;
- height:32px !important;
+ width:44px !important;
+ height:44px !important;
 }
 
 .wrapper {

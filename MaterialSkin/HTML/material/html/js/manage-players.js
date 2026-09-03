@@ -163,13 +163,13 @@ Vue.component('lms-manage-players', {
           </v-list-tile-avatar>
           <v-list-tile-content v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">
            <v-list-tile-title class="ellipsis cursor link-item" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
-           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon dimmed">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSleep(player)">hotel</v-icon><v-icon v-if="undefined!=player.alarm" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openAlarms(player)">alarm</v-icon>
+           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">&nbsp;{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon dimmed">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSleep(player)">hotel</v-icon><v-icon v-if="undefined!=player.alarm" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openAlarms(player)">alarm</v-icon>
            </v-list-tile-title>
            <v-list-tile-sub-title class="ellipsis">{{player.track}}</v-list-tile-sub-title>
           </v-list-tile-content>
           <v-list-tile-content v-else v-bind:class="{'dimmed': !player.ison}">
            <v-list-tile-title class="ellipsis cursor link-item" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
-           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon dimmed">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="undefined!=player.alarm" class="player-status-icon dimmed">alarm</v-icon></v-list-tile-title>
+           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">&nbsp;{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon dimmed">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="undefined!=player.alarm" class="player-status-icon dimmed">alarm</v-icon></v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack, 'dimmed':!player.ison}" @click="prevTrack(player)" :title="trans.prev + ' ('+player.name+')'">
            <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
@@ -211,7 +211,7 @@ Vue.component('lms-manage-players', {
        <v-list-tile @click="movePlayer(player)" class="pmgr-other-player">
         <v-list-tile-content>
          <v-list-tile-title><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
-         {{player.name}}</v-list-tile-title>
+         &nbsp;{{player.name}}</v-list-tile-title>
         </v-list-tile-content>
        </v-list-tile>
        </v-list>

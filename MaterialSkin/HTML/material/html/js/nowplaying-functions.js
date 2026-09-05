@@ -15,6 +15,15 @@ const NP_ALBUM_TRACKS = 2;
 const NP_ALBUM_FILES = 3;
 const NP_TRACK_DETAILS = 0;
 
+const NP_JIVESTYLE_ICONS = {
+    thumbsDown: "thumb_down",
+    thumbsDownDisabled: "thumb_down_off_alt",
+    thumbsUp: "thumb_up",
+    thumbsUpDisabled: "thumb_up_off_alt",
+    love: "favorite",
+    hate: "favorite_border"
+};
+
 function  nowPlayingHeader(s) {
     return isEmpty(s) ? "" : ("<b>"+s+"</b><br/>");
 }
@@ -347,13 +356,13 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     let rb = btns ? btns.repeat : undefined;
     if (sb && sb.command) {
         view.shuffAltBtn={show:true, command:sb.command, tooltip:sb.tooltip, image:sb.icon,
-                          icon:sb.jiveStyle == "thumbsDown" ? "thumb_down" : sb.jiveStyle == "thumbsUp" ? "thumb_up" : sb.jiveStyle == "love" ? "favorite" : undefined};
+                          icon:NP_JIVESTYLE_ICONS[sb.jiveStyle]};
     } else if (view.shuffAltBtn.show) {
         view.shuffAltBtn.show=false;
     }
     if (rb && rb.command) {
         view.repAltBtn={show:true, command:rb.command, tooltip:rb.tooltip, image:rb.icon,
-                        icon:rb.jiveStyle == "thumbsDown" ? "thumb_down" : rb.jiveStyle == "thumbsUp" ? "thumb_up" : rb.jiveStyle == "love" ? "favorite" : undefined};
+                        icon:NP_JIVESTYLE_ICONS[rb.jiveStyle]};
     } else if (view.repAltBtn.show) {
         view.repAltBtn.show=false;
     }

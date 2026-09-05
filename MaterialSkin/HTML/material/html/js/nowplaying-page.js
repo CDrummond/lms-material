@@ -1172,7 +1172,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         doCommand(command, msg) {
             lmsCommand(this.$store.state.player.id, command).then(({data}) => {
-                if (undefined!=msg) {
+                let result = data && data.result;
+                let text = result && result.item_loop && result.item_loop[0] && result.item_loop[0].text;
+                if (undefined!=text) {
+                    bus.$emit('showMessage', text);
+                } else if (undefined!=msg) {
                     bus.$emit('showMessage', msg);
                 }
             });

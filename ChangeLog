@@ -4,8 +4,8 @@
    Sirkarovski.
 2. Respect LMS 9.1's artist picture setting.
 3. Fix image sizes in SlimBrowse items.
-4. Add new keyboard shortcuts - shift + left/right arrows for seek -/+ seconds
-   - thanks to Gorancho Sirkarovski.
+4. Add keyboard shortcuts to skip forward/backward by configured amount - thanks
+   to Gorancho Sirkarovski.
 5. Let a plugin show a row of tiles on a list page - thanks to Simon Arnold.
 
 6.4.10

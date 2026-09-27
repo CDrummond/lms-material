@@ -81,7 +81,7 @@ Vue.component('lms-search-list', {
         this.currentIndex = -1;
 
         this.indexes = [];
-        if (this.view.items.length>0 && undefined!=this.view.items[0].searchcat) {
+        if (this.view.items.length>0 && (undefined!=this.view.items[0].searchcat || this.view.items[0].pageHasStrips)) {
             for (let i=0, loop=this.view.items, len=loop.length; i<len; ++i) {
                 if (undefined!=loop[i].items) {
                     for (let j=0, jlen=loop[i].items.length; j<jlen; ++j) {

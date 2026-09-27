@@ -1214,7 +1214,7 @@ div.v-subheader {
  height:var(--small-icon-size) !important;
 }
 
-.np-grid-item .emblem img, .np-emblem img, .lms-image-grid .emblem img {
+.np-grid-item .emblem img, .np-emblem img, .lms-image-grid .emblem img, .grid-scroll .emblem img {
  width:calc(var(--small-icon-size) + 4px)!important;
  height:calc(var(--small-icon-size) + 4px)!important;
 }

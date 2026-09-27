@@ -1039,6 +1039,8 @@ Vue.component('lms-ui-settings', {
                          shortcutStr("down", false, true)+SEPARATOR+i18n("Decrease volume"),
                          shortcutStr("left", false, true)+SEPARATOR+i18n("Previous track"),
                          shortcutStr("right", false, true)+SEPARATOR+i18n("Next track"),
+                         shortcutStr("left", false, false, true)+SEPARATOR+i18n("Skip backward")+" ("+this.skipBSeconds+"s)",
+                         shortcutStr("right", false, false, true)+SEPARATOR+i18n("Skip forward")+" ("+this.skipFSeconds+"s)",
                          shortcutStr("space")+SEPARATOR+i18n("Play/pause"),
                          shortcutStr("home")+SEPARATOR+i18n("Go to homescreen"),
                          shortcutStr("esc")+SEPARATOR+i18n("Go back"),

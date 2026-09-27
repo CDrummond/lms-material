@@ -286,6 +286,9 @@ function decodeShortcutEvent(e) {
         s.modifier = e.shiftKey ? 'alt+shift' : 'alt';
     } else if (e.ctrlKey || e.metaKey) {
         s.modifier = e.shiftKey ? 'mod+shift' : 'mod';
+    } else if (e.shiftKey && e.key.length>1) {
+        // Only treat shift as a modifier for non-character keys (e.g. arrows), as shift+char is an uppercase char
+        s.modifier = 'shift';
     }
     if (e.code && e.code.startsWith('Digit')) {
         s.key = e.code.substring(5);

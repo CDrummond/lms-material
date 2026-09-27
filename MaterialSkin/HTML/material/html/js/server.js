@@ -1286,6 +1286,8 @@ var lmsServer = Vue.component('lms-server', {
             bindKey('incvolfirefox', undefined, true);
             bindKey('left', 'alt', true);
             bindKey('right', 'alt', true);
+            bindKey('left', 'shift', true);
+            bindKey('right', 'shift', true);
             bus.$on('keyboard', function(key, modifier) {
                 if (!this.$store.state.player || this.$store.state.visibleMenus.size>0 || (this.$store.state.openDialogs.length>0 && this.$store.state.openDialogs[0]!='info-dialog'))  {
                     return;
@@ -1312,6 +1314,12 @@ var lmsServer = Vue.component('lms-server', {
                         command=['button', 'jump_rew'];
                     } else if (key=='right' && !queryParams.party) {
                         command=['playlist', 'index', '+1'];
+                    }
+                } else if ('shift'==modifier && !queryParams.party) {
+                    if (key=='left') {
+                        command=['time', '-'+this.$store.state.skipBSeconds];
+                    } else if (key=='right') {
+                        command=['time', '+'+this.$store.state.skipFSeconds];
                     }
                 }
 

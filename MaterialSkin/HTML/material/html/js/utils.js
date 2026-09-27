@@ -939,13 +939,27 @@ function handleShortcut(e) {
 
 function handleRepeatingShortcut(e) {
     if (store.state.keyboardControl) {
-        e.preventDefault();
         let s = decodeShortcutEvent(e);
+        // Shift+arrows are used to alter text selection, so let the browser handle these
+        if ('shift'==s.modifier && (isTextEntryFocused() || hasTextSelection())) {
+            return;
+        }
+        e.preventDefault();
         if (s.key!=lastShortcut.key || s.modifier!=lastShortcut.modifier || undefined==lastShortcut.time || s.time-lastShortcut.time>=300) {
             bus.$emit('keyboard', s.key, s.modifier);
             lastShortcut=s;
         }
     }
+}
+
+function isTextEntryFocused() {
+    let elem = document.activeElement;
+    return undefined!=elem && null!=elem && ("INPUT"==elem.tagName || "TEXTAREA"==elem.tagName || elem.isContentEditable);
+}
+
+function hasTextSelection() {
+    let sel = window.getSelection ? window.getSelection() : undefined;
+    return undefined!=sel && null!=sel && !sel.isCollapsed && sel.toString().length>0;
 }
 
 function bindKey(key, modifier, canRepeat) {
@@ -956,7 +970,7 @@ function unbindKey(key, modifier) {
     Mousetrap.unbind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase());
 }
 
-function shortcutStr(key, shift, alt) {
+function shortcutStr(key, shift, alt, shiftOnly) {
     if (key.length>1) {
         if (key=="left") {
             key = "◁";
@@ -978,6 +992,9 @@ function shortcutStr(key, shift, alt) {
     }
     if (alt) {
         return IS_APPLE ? ("⌥+"+key) : i18n("Alt+%1", key);
+    }
+    if (shiftOnly) {
+        return IS_APPLE ? ("⇧+"+key) : i18n("Shift+%1", key);
     }
     if (shift) {
         return IS_APPLE ? i18n("⌘+Shift+%1", key) : i18n("Ctrl+Shift+%1", key);

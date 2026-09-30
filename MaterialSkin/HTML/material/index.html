@@ -156,6 +156,7 @@
   my $youTube=Slim::Utils::PluginManager->isEnabled('Plugins::YouTube::Plugin') ? 1 : 0;
   my $mai=Slim::Utils::PluginManager->isEnabled('Plugins::MusicArtistInfo::Plugin') ? 1 : 0;
   my $dstm=Slim::Utils::PluginManager->isEnabled('Slim::Plugin::DontStopTheMusic::Plugin') ? 1 : 0;
+  my $audioMuseMixer=Slim::Utils::PluginManager->isEnabled('Plugins::AudioMuseMixer::Plugin') ? 1 : 0;
   my $blissMixer=Slim::Utils::PluginManager->isEnabled('Plugins::BlissMixer::Plugin') ? 1 : 0;
   my $lastMix=Slim::Utils::PluginManager->isEnabled('Plugins::LastMix::Plugin') ? 1 : 0;
   my $artistPics=$mai && Plugins::MaterialSkin::Plugin->readIntPref('plugin.musicartistinfo', 'browseArtistPictures', 1);
@@ -194,6 +195,7 @@
   print("const LMS_P_YT=$youTube;");
   print("const LMS_P_MAI=$mai;");
   print("const LMS_P_DSTM=$dstm;");
+  print("const LMS_P_AMMIX=$audioMuseMixer;");
   print("const LMS_P_BMIX=$blissMixer;");
   print("const LMS_P_LMIX=$lastMix;");
   print("const LMS_P_RMIX=$rndMix;");

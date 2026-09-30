@@ -1,9 +1,47 @@
+6.4.11
+------
+1. Render string/text new line as html break line - thanks to Gorancho
+   Sirkarovski.
+2. Respect LMS 9.1's artist picture setting.
+3. Fix image sizes in SlimBrowse items.
+4. Add keyboard shortcuts to skip forward/backward by configured amount - thanks
+   to Gorancho Sirkarovski.
+5. Let a plugin show a row of tiles on a list page - thanks to Simon Arnold.
+6. Add twitch emblem - thanks to bunghOI10
+
+6.4.10
+------
+1. Fix inconsistent sizing in player icon dialog.
+2. Add icon for HQPlayer - thanks to crystalgipsy.
+3. Show command result text for now playing alt buttons - thanks to Alasdair
+   Campbell.
+4. Add outline/disabled jiveStyle icon mappings - thanks to Alasdair Campbell.
+5. Show 'type' field of technical info as is, unless 'type' is same as
+6. Don't fire 'Rescan album' twice if it needed to be scrolled into view.
+7. If SlimBrowse item has an 'extid' field, then map to emblem.
+
+6.4.9
+-----
+1. Fix browsing with tech info.
+
+6.4.8
+-----
+1. Show original and transcoded tech info in MAI track view.
+2. Always show tech info in MAI track view.
+3. When displaying tech in in now-playing, if transcoded is lossless, and
+   original is not lossless, then show original else show transcoded.
+4. Fix image URL rewrite when using https proxy - thanks to Andrew Jackson.
+5. Remove download support, as only really useful in APK where it no longer
+   seems to work.
+6. Osmium player icon added - thanks to adri641.
+7. Fix emblem position in lists.
+
 6.4.7
 -----
 1. Fix advanced search results display.
 2. Map 'b_mmmix.gif' to a recolourable SVG.
 3. Update Spicefly SVG icon.
-4. Show transcoded tech info, and prefix '*' if so.
+4. Show transcoded tech info, and prefix '[*]' if so.
 5. Fix some simplified Chinese translations - thanks to SunDaSora
 
 6.4.6
@@ -11,7 +49,7 @@
  1. Fix add/play buttons missing in toolbar for YouTube Music plugin.
  2. Don't allow grid for YouTube Music track lists.
  3. Fix 'allplayers' custom actions appearing in app menus.
- 4. Fix track sources protocols list handling - thanks to bungh0110
+ 4. Fix track sources protocols list handling - thanks to bunghOI10
  5. Use iOS style back icons for Apple platforms.
  6. Fetch custom actions for toolbar menu when clicking on search results.
  7. Allow plugins to register custom actions.

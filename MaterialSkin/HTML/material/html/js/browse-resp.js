@@ -280,6 +280,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.header = true;
                         resp.numHeaders++;
                         i.actions = undefined;
+                    } else if (i.type=="header-strip") {
+                        i.header = true;
+                        i.stripHeader = true;
+                        resp.numHeaders++;
+                        resp.haveStrips = true;
                     }
                 }
 
@@ -706,18 +711,22 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     // "<command>-<type>" (e.g. "listentolater-album"). If defined - even as an
                     // empty list - it takes precedence over the generic "online-*" category, so
                     // a plugin's own list can show different actions, or none (an empty category
-                    // suppresses the generic actions on that app's items).
-                    let appCat = (undefined!=command) ? command+"-"+btype : undefined;
-                    let oca = (undefined!=appCat && undefined!=customActions && (appCat in customActions))
+                    // suppresses the generic actions on that app's items). The category may
+                    // come from customactions.json or be registered by a plugin, so check both.
+                    let appCat = undefined!=command ? command+"-"+btype : undefined;
+                    let haveAppCat = undefined!=appCat &&
+                                     ((undefined!=customActions && (appCat in customActions)) ||
+                                      (undefined!=pluginCustomActions && (appCat in pluginCustomActions)));
+                    let oca = haveAppCat
                                   ? getCustomActions(appCat, false, ocFilter, true)
                                   : getCustomActions("online-"+btype, false, ocFilter, true);
                     if (undefined!=oca && oca.length>0) {
                         if (isAppItem) {
                             if (undefined==i.album) {
-                                i.album   = i.title;
+                                i.album = i.title;
                             }
                             if (undefined==i.artist) {
-                                i.artist  = i.subtitle;
+                                i.artist = i.subtitle;
                             }
                             i.service = command;
                         }
@@ -815,6 +824,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.actions = undefined;
                     i.addAction = undefined;
                 }
+                i.emblem = getEmblem(i.extid);
                 if (i.isListItemInMenu) {
                     resp.actionItems.push(i);
                 } else {
@@ -877,8 +887,61 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
             }
+            // Fold only when this response holds the whole list: a later batch would start at the wrong offset
+            // and could carry a strip's tiles without its header. Past one batch the items stay as plain rows.
+            // Uses LMS's own count: data.result.count is reduced for skipped items, and -1 means unknown.
+            if (resp.haveStrips && 0==startIndex && origCount>=0 && origCount<=data.result.item_loop.length) {
+                let items = [];
+                let rowOf = []; // original position -> row after folding (a tile maps to its strip's row)
+                let stripHeader = undefined;
+                let strip = undefined;
+                let haveStrip = false;
+                // Show as many tiles in a strip as search does for the screen width; the header's More opens the rest.
+                let browseView = document.getElementById("browse-view");
+                let maxTiles = undefined==browseView ? 10 : numScrollItems({$store:store}, browseView);
+                for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                    let itm = loop[i];
+                    if (itm.header) {
+                        stripHeader = itm.stripHeader ? i : undefined;
+                        strip = undefined;
+                        items.push(itm);
+                    } else if (undefined!=stripHeader) {
+                        if (undefined==strip) { // added with its first tile, so an empty strip never becomes a row
+                            strip = {id:"strip."+stripHeader, strip:true, items:[]};
+                            items.push(strip);
+                            haveStrip = true;
+                        }
+                        if (strip.items.length<maxTiles) {
+                            strip.items.push(itm);
+                        }
+                    } else {
+                        items.push(itm);
+                    }
+                    rowOf.push(items.length-1);
+                }
+                let folded = resp.items.length - items.length;
+                resp.items = items;
+                // Flag the page on its first row, so checks for strips need not scan every row.
+                if (haveStrip) {
+                    items[0].pageHasStrips = true;
+                }
+                // listSize counts every item LMS sent, but a strip's tiles are now one row. Without this the
+                // list looks unfinished, so scrolling fetches (and appends) items it already has.
+                resp.listSize -= folded;
+                // The item count shown in the subtitle is taken from the rows, so add the folded tiles back.
+                resp.foldedItems = folded;
+                // Jumplist positions were recorded against the unfolded items.
+                for (let j=0, loop=resp.jumplist, len=loop.length; j<len; ++j) {
+                    let pos = loop[j].index - startIndex;
+                    if (pos>=0 && pos<rowOf.length) {
+                        loop[j].index = startIndex + rowOf[pos];
+                    }
+                }
+                resp.canUseGrid = false; // the page is a list; the strips are its tiles
+            }
             if (1==resp.items.length && 'text'==resp.items[0].type && 'itemNoAction'==resp.items[0].style && msgIsEmpty(resp.items[0].title)) {
                 resp.items=[];
+                resp.listSize=0;
             }
 
             if (isAppsTop) {
@@ -980,7 +1043,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.items.unshift({
                                         title: text.startsWith("<") ? text : ("<div>"+text+"</div>"),
                                         type: "html",
-                                        id: parent.id+".textarea"
+                                        id: parent.id+".textarea",
+                                        // Keep the strips flag on the first row
+                                        pageHasStrips: resp.items.length>0 ? resp.items[0].pageHasStrips : undefined
                                        });
                         resp.canUseGrid = false;
                     }
@@ -1067,7 +1132,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     // TODO: If using paging/infinite-scroll and pervious chunk had headers then itemCount wil be wrong!
                     //       Likewise if this was all tracks/albums/artists this will also be broken.
-                    let itemCount = startIndex + (resp.items.length-((categories.size>1 ? categories.size : 0) + resp.numHeaders));
+                    let itemCount = startIndex + (resp.items.length-((categories.size>1 ? categories.size : 0) + resp.numHeaders)) +
+                                    (undefined==resp.foldedItems ? 0 : resp.foldedItems);
                     if (0==itemCount) {
                         resp.subtitle=i18n("Empty");
                     } else if (isAppsTop) {
@@ -1141,8 +1207,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     resp.jumplist.push({key: key, index: startIndex+resp.items.length});
                     textKeys.add(key);
                 }
-                let image = undefined!=i.portraitid && "/contributor/" + i.portraitid + "/image" + LMS_LIST_IMAGE_SIZE;
-                image = image || (LMS_P_MAI && lmsOptions.showArtistImages) && "/imageproxy/mai/artist/" + originalId(i.id) + "/image" + LMS_LIST_IMAGE_SIZE;
+                let image = undefined;
+                if (LMS_VERSION<90100 || !lmsOptions.noContributorPictures) {
+                    image = undefined!=i.portraitid && "/contributor/" + i.portraitid + "/image" + LMS_LIST_IMAGE_SIZE;
+                    image = image || (LMS_P_MAI && lmsOptions.showArtistImages) && "/imageproxy/mai/artist/" + originalId(i.id) + "/image" + LMS_LIST_IMAGE_SIZE;
+                }
                 var artist = {
                             id: "artist_id:"+i.id,
                             title: replaceHtmlBrackets(i.artist),

@@ -40,7 +40,7 @@ function remapClassicSkinIcons(doc, col) {
                             let url = undefined;
                             let path = imgList[i].src;
                             let pluginPath = "";
-                            if (imgList[i].src.startsWith("http:")) {
+                            if (imgList[i].src.startsWith("http:") || imgList[i].src.startsWith("https:")) {
                                 url = new URL(path);
                                 path = url.pathname;
                                 pluginPath = "plugins/"+url.search.split("=")[1]+(path.startsWith("/html/images/") ? "/" : "/html/images/");

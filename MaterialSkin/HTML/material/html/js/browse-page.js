@@ -342,7 +342,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title v-html="item.title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="undefined!=item.searchcat && undefined!=item.items" class="grid-scroll list-grid icon-only" v-bind:class="{'grid-scroll-s':undefined==item.items[0].subtitle}" :id="'gridscroll-'+index">
+    <v-list-tile v-else-if="(undefined!=item.searchcat || item.strip) && undefined!=item.items" class="grid-scroll list-grid icon-only" v-bind:class="{'grid-scroll-s':undefined==item.items[0].subtitle}" :id="'gridscroll-'+index">
 
      <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, undefined, $event)"  :id="'gridscroll-'+index+'.'+col">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
@@ -497,7 +497,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile role="menuitem" v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || showRating)" @click="menuItemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || showRating)" @click="menuItemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -674,7 +674,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.homeButton==1 || (this.$store.state.homeButton==2 && this.$store.state.autoShowHomeButton)
         },
         useRecyclerForLists() {
-            return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS && undefined==this.items[0].searchcat
+            return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS && undefined==this.items[0].searchcat &&
+                   !this.items[0].pageHasStrips
         },
         currentImage() {
             if (this.current) {

@@ -26,6 +26,10 @@ function initCustomActions() {
     lmsCommand("", ["material-skin", "plugin-actions"]).then(({data}) => {
         if (data && data.result && data.result.actions) {
             pluginCustomActions = JSON.parse(data.result.actions);
+            // Re-emit, as this and the customactions.json fetch below race. "track" and
+            // "queue-track" are resolved once, on this event, so whichever lands second
+            // needs to trigger it or those two miss whatever it brought.
+            bus.$emit('customActions');
         }
     }).catch(err => {
         window.console.error(err);

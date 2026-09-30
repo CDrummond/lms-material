@@ -90,6 +90,9 @@
         },
         "WiiM Player":{
             "svg":"wiim"
+        },
+        "Osmium":{
+            "svg":"osmium"
         }
     },
     "squeezelite-c":{
@@ -142,6 +145,9 @@
     },
     "Squeeze connect":{
         "svg":"eversolo"
+    },
+    "hqplayer":{
+        "svg":"hqplayer"
     }
 }
 

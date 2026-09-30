@@ -9,6 +9,7 @@
 const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz124" : "") + "AABEGIKNPSTV";
 const STATUS_UPDATE_MAX_TIME = 4000;
 const SCAN_UPDATE_INTERVAL = 2000;
+const LOSSLESS_FORMATS = new Set(["flc", "wav", "FLC", "WAV"]);
 
 function logString(val) {
     return undefined==val ? "" : val;
@@ -613,21 +614,46 @@ var lmsServer = Vue.component('lms-server', {
                 player.current.canseek = parseInt(data.can_seek);
                 player.current.remote_title = checkRemoteTitle(player.current);
                 player.current.replay_gain = data.replay_gain;
+                player.current.transcoded = LMS_VERSION>=90200 && parseInt(data.is_transcoded);
 
-                // if 'data.is_transcoded' is defined and set to '1', set the "transcoded" indicator for the technical display
-                player.current.transcoded = parseInt(data.is_transcoded);
+                // If stream has been transcoded, save both original and transcoded tech info.
+                if (player.current.transcoded) {
+                    player.current.origTech = {
+                            bitrate:player.current.bitrate,
+                            type:player.current.type,
+                            samplerate:player.current.samplerate,
+                            samplesize:player.current.samplesize
+                    };
+                    player.current.transTech = {
+                            bitrate:data.bitrate,
+                            type:data.type,
+                            samplerate:data.samplerate,
+                            samplesize:data.samplesize
+                    };
+                    // If trancoded is lossless, and original is not lossless, then show original else show transcoded.
+                    let display = LOSSLESS_FORMATS.has(player.current.transTech.type) && !LOSSLESS_FORMATS.has(player.current.origTech.type)
+                        ? player.current.origTech : player.current.transTech;
 
-                if (undefined!=data.bitrate) {
-                    player.current.bitrate = data.bitrate;
-                }
-                if (undefined!=data.type) {
-                    player.current.type = data.type;
-                }
-                if (undefined!=data.samplerate) {
-                    player.current.samplerate = data.samplerate;
-                }
-                if (undefined!=data.samplesize) {
-                    player.current.samplesize = data.samplesize;
+                    player.current.bitrate = display.bitrate;
+                    player.current.type = display.type;
+                    player.current.samplerate = display.samplerate;
+                    player.current.samplesize = display.samplesize;
+                } else {
+                    // Use values in 'data' even if not transcoded. This caters for the case where the
+                    // user has favourited one verison of a track from a streaming service, but when played
+                    // the service provides another.
+                    if (undefined!=data.bitrate) {
+                        player.current.bitrate = data.bitrate;
+                    }
+                    if (undefined!=data.type) {
+                        player.current.type = data.type;
+                    }
+                    if (undefined!=data.samplerate) {
+                        player.current.samplerate = data.samplerate;
+                    }
+                    if (undefined!=data.samplesize) {
+                        player.current.samplesize = data.samplesize;
+                    }
                 }
 
                 //player.current.emblem = getEmblem(player.current.extid, player.current.url);
@@ -738,7 +764,7 @@ var lmsServer = Vue.component('lms-server', {
                             parseTitleFormat(data.result.titleFormat, data.result.titleFormatWeb);
                         }
                     });
-                } else if (data[2]=="noGenreFilter" || data[2]=="noRoleFilter" || data[2]=="groupdiscs") {
+                } else if (data[2]=="noGenreFilter" || data[2]=="noRoleFilter" || data[2]=="groupdiscs" || data[2]=="noContributorPictures") {
                     lmsOptions[data[2]] = 1==parseInt(data[3]);
                 } else if (data[2]=="variousArtistsString") {
                     lmsOptions[data[2]] = data[3];
@@ -1260,6 +1286,8 @@ var lmsServer = Vue.component('lms-server', {
             bindKey('incvolfirefox', undefined, true);
             bindKey('left', 'alt', true);
             bindKey('right', 'alt', true);
+            bindKey('left', 'shift', true);
+            bindKey('right', 'shift', true);
             bus.$on('keyboard', function(key, modifier) {
                 if (!this.$store.state.player || this.$store.state.visibleMenus.size>0 || (this.$store.state.openDialogs.length>0 && this.$store.state.openDialogs[0]!='info-dialog'))  {
                     return;
@@ -1286,6 +1314,12 @@ var lmsServer = Vue.component('lms-server', {
                         command=['button', 'jump_rew'];
                     } else if (key=='right' && !queryParams.party) {
                         command=['playlist', 'index', '+1'];
+                    }
+                } else if ('shift'==modifier && !queryParams.party) {
+                    if (key=='left') {
+                        command=['time', '-'+this.$store.state.skipBSeconds];
+                    } else if (key=='right') {
+                        command=['time', '+'+this.$store.state.skipFSeconds];
                     }
                 }
 

@@ -474,34 +474,6 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	HU	Ha egy zeneszámnak több előadója, albumm előadója, zeneszerzője stb. van, Akkor mutassa meg mind, amikor albumokat böngész, most játszik és a lejátszási listában. Ellenkező esetben csak az elsőt.
 	SV	Om ett spår har flera artister, albumartister, kompositörer etc. visa då all vid bläddring av album, i "Nu spelas" och i spellistan. Visa annars bara den först av varje.
 
-PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
-	CS	Povolení stahování
-	DA	Tillad downloading
-	DE	Herunterladen erlauben
-	EN	Allow downloading
-	ES	Permitir descargas
-	IT	Permetti il download
-	FR	Autoriser le téléchargement
-	NL	Downloaden toestaan
-	ZH_TW	允許下載
-	ZH_CN	允许下载
-	HU	Letöltés engedélyezése
-	SV	Tillåt nerladdning
-
-PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
-	CS	Přidejte akce stahování ke skladbám, albům a seznamům skladeb a umožněte uživatelům stahovat skladby.
-	DA	Tilføj en handling for download af numre, albums og afspillelister for at gøre det muligt for brugere at downloade numre.
-	DE	Füge eine Aktion zum Herunterladen von Titeln, Alben oder Wiedergabelisten hinzu, die Nutzern das Herunterladen von Titeln ermöglicht.
-	EN	Add download actions to tracks, albums, and playlists to allow users to download tracks.
-	ES	Añadir acciones de descarga a pistas, álbumes y listas de reproducción para permitir a los usuarios descargar pistas.
-	IT	Aggiungi l'azione download ai brani, album e playlist per permettere agli utenti di scaricare i brani.
-	FR	Ajouter des commandes de téléchargement aux morceaux, albums et listes de lecture pour permettre aux utilisateurs de télécharger des morceaux.
-	NL	Voeg download acties toe aan nummers, albums en afspeellijsten zodat gebruikers ze kunnen downloaden.
-	ZH_TW	在曲目、專輯和播放清單新增下載動作，以允許用戶下載曲目。
-	ZH_CN	为曲目、专辑和播放列表添加下载动作，允许用户下载。
-	HU	Adja hozzá letöltési lehetőséget a zeneszámokhoz, az albumokhoz és a lejátszási listákhoz, hogy a felhasználók letölthessék a számokat.
-	SV	Lägg till ett val för att ladda ner spår, album och spellistor. för att göra det möjligt för användaren att ladda ner spår.
-
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	CS	Použití komentáře pro název disku
 	DA	Benyt kommentarmærke for titler på fysiske medier (diske)

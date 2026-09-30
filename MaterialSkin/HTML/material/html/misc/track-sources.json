@@ -128,6 +128,24 @@
     "ibcst:":{
         "name":"iBroadcast",
         "extid":"ibcst"
+    },
+    "twitch:":{
+        "name":"Twitch",
+        "url":{
+            "useextid":true,
+            "from":"twitch:",
+            "to":"https://www.twitch.tv/"
+        },
+        "extid":"twitch"
+    },
+    "twitchhls:":{
+        "name":"Twitch",
+        "url":{
+            "useextid":true,
+            "from":"twitch:",
+            "to":"https://www.twitch.tv/"
+        },
+        "extid":"twitch"
     }
   },
   "includes":{

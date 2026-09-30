@@ -15,6 +15,15 @@ const NP_ALBUM_TRACKS = 2;
 const NP_ALBUM_FILES = 3;
 const NP_TRACK_DETAILS = 0;
 
+const NP_JIVESTYLE_ICONS = {
+    thumbsDown: "thumb_down",
+    thumbsDownDisabled: "thumb_down_off_alt",
+    thumbsUp: "thumb_up",
+    thumbsUpDisabled: "thumb_up_off_alt",
+    love: "favorite",
+    hate: "favorite_border"
+};
+
 function  nowPlayingHeader(s) {
     return isEmpty(s) ? "" : ("<b>"+s+"</b><br/>");
 }
@@ -291,6 +300,8 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
 
     let technical = formatTechInfo(playerStatus.current, source, true);
+    view.playerStatus.current.origTech = playerStatus.current.origTech;
+    view.playerStatus.current.transTech = playerStatus.current.transTech;
     if (technical!=view.playerStatus.current.technicalInfo) {
         view.playerStatus.current.technicalInfo = technical;
     }
@@ -345,13 +356,13 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     let rb = btns ? btns.repeat : undefined;
     if (sb && sb.command) {
         view.shuffAltBtn={show:true, command:sb.command, tooltip:sb.tooltip, image:sb.icon,
-                          icon:sb.jiveStyle == "thumbsDown" ? "thumb_down" : sb.jiveStyle == "thumbsUp" ? "thumb_up" : sb.jiveStyle == "love" ? "favorite" : undefined};
+                          icon:NP_JIVESTYLE_ICONS[sb.jiveStyle]};
     } else if (view.shuffAltBtn.show) {
         view.shuffAltBtn.show=false;
     }
     if (rb && rb.command) {
         view.repAltBtn={show:true, command:rb.command, tooltip:rb.tooltip, image:rb.icon,
-                        icon:rb.jiveStyle == "thumbsDown" ? "thumb_down" : rb.jiveStyle == "thumbsUp" ? "thumb_up" : rb.jiveStyle == "love" ? "favorite" : undefined};
+                        icon:NP_JIVESTYLE_ICONS[rb.jiveStyle]};
     } else if (view.repAltBtn.show) {
         view.repAltBtn.show=false;
     }
@@ -755,7 +766,12 @@ function nowplayingFetchTrackInfo(view) {
     }
 
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
-        html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
+        if (undefined!=trk.origTech && undefined!=trk.transTech && trk.technicalInfo.startsWith(TRANSCODED_PREFIX)) {
+            let tc = formatTechInfo(trk.origTech, trk.source, true) + "<br/><obj class=\"mfi\">\uE5Da</obj> " + formatTechInfo(trk.transTech, trk.source, true);
+            html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td onclick=\"bus.$emit('npShowTranscode')\" class=\"link-item\">"+tc+"</td></tr>";
+        } else {
+            html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
+        }
     }
 
     if (undefined!=trk.comment) {

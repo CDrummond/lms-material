@@ -123,7 +123,6 @@
     <lms-addtoplaylist-dialog v-if="dialogs.addtoplaylist"></lms-addtoplaylist-dialog>
     <lms-file-dialog v-if="dialogs.file"></lms-file-dialog>
     <lms-advancedsearch-dialog v-if="dialogs.advancedsearch"></lms-advancedsearch-dialog>
-    <lms-downloadstatus v-if="dialogs.downloadstatus"></lms-downloadstatus>
     <lms-gallery v-if="dialogs.gallery"></lms-gallery>
     <lms-npshare-dialog v-if="dialogs.npshare"></lms-npshare-dialog>
     <lms-screensaver></lms-screensaver>
@@ -157,6 +156,7 @@
   my $youTube=Slim::Utils::PluginManager->isEnabled('Plugins::YouTube::Plugin') ? 1 : 0;
   my $mai=Slim::Utils::PluginManager->isEnabled('Plugins::MusicArtistInfo::Plugin') ? 1 : 0;
   my $dstm=Slim::Utils::PluginManager->isEnabled('Slim::Plugin::DontStopTheMusic::Plugin') ? 1 : 0;
+  my $audioMuseMixer=Slim::Utils::PluginManager->isEnabled('Plugins::AudioMuseMixer::Plugin') ? 1 : 0;
   my $blissMixer=Slim::Utils::PluginManager->isEnabled('Plugins::BlissMixer::Plugin') ? 1 : 0;
   my $lastMix=Slim::Utils::PluginManager->isEnabled('Plugins::LastMix::Plugin') ? 1 : 0;
   my $artistPics=$mai && Plugins::MaterialSkin::Plugin->readIntPref('plugin.musicartistinfo', 'browseArtistPictures', 1);
@@ -167,6 +167,7 @@
   my $groupArtistAlbumsByReleaseType=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupArtistAlbumsByReleaseType', 1);
   my $noGenreFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noGenreFilter', 0);
   my $noRoleFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noRoleFilter', 0);
+  my $noContributorPictures=$lmsVersion>=90100 ? Plugins::MaterialSkin::Plugin->readIntPref('server', 'noContributorPictures', 0) : 0;
   my $browseagelimit=Plugins::MaterialSkin::Plugin->readIntPref('server', 'browseagelimit', 100);
   my $groupdiscs=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupdiscs', 0);
   my $variousArtistsString=Plugins::MaterialSkin::Plugin->readStringPref('server', 'variousArtistsString', 'Various Artists');
@@ -194,6 +195,7 @@
   print("const LMS_P_YT=$youTube;");
   print("const LMS_P_MAI=$mai;");
   print("const LMS_P_DSTM=$dstm;");
+  print("const LMS_P_AMMIX=$audioMuseMixer;");
   print("const LMS_P_BMIX=$blissMixer;");
   print("const LMS_P_LMIX=$lastMix;");
   print("const LMS_P_RMIX=$rndMix;");
@@ -202,6 +204,7 @@
   print("const LMS_DEF_SRV_EMBLEM=$srvEmblem;");
   print("const LMS_DEF_NO_GENRE_FILTER=$noGenreFilter;");
   print("const LMS_DEF_NO_ROLE_FILTER=$noRoleFilter;");
+  print("const LMS_DEF_NO_CONTRIB_PICS=$noContributorPictures;");
   print("const LMS_NEW_MUSIC_LIMIT=$browseagelimit;");
   print("const LMS_DEF_GROUP_DISCS=$groupdiscs;");
   print("const LMS_DEF_VA_STRING=\"$variousArtistsString\";");
@@ -295,7 +298,7 @@
      }
    }
    function loadOtherFiles() {
-     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "choice-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "player-settings-plugin", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "playerlist-dialog", "favorite-dialog", "sleep-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "npshare-dialog", "download", "gallery", "utils-deferred"],
+     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "choice-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "player-settings-plugin", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "playerlist-dialog", "favorite-dialog", "sleep-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "npshare-dialog", "gallery", "utils-deferred"],
      [% PERL %]
      my $version=Plugins::MaterialSkin::Plugin->getPluginVersion();
      print("                \"$version\", )");

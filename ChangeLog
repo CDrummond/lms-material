@@ -7,6 +7,7 @@
 4. Add keyboard shortcuts to skip forward/backward by configured amount - thanks
    to Gorancho Sirkarovski.
 5. Let a plugin show a row of tiles on a list page - thanks to Simon Arnold.
+6. Add twitch emblem - thanks to bunghOI10
 
 6.4.10
 ------
@@ -48,7 +49,7 @@
  1. Fix add/play buttons missing in toolbar for YouTube Music plugin.
  2. Don't allow grid for YouTube Music track lists.
  3. Fix 'allplayers' custom actions appearing in app menus.
- 4. Fix track sources protocols list handling - thanks to bungh0110
+ 4. Fix track sources protocols list handling - thanks to bunghOI10
  5. Use iOS style back icons for Apple platforms.
  6. Fetch custom actions for toolbar menu when clicking on search results.
  7. Allow plugins to register custom actions.

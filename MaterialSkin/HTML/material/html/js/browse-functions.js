@@ -178,12 +178,14 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:102});
             }
         }
-        if ((LMS_P_BMIX || LMS_P_LMIX) && !queryParams.party && undefined!=args['artist']) {
+        if ((LMS_P_AMMIX || LMS_P_BMIX || LMS_P_LMIX) && !queryParams.party && undefined!=args['artist']) {
             actions.push({title:i18n('Start artist mix'), svg:'music-mix', stdItem:STD_ITEM_MIX,
                            command:["playlist", "play",
-                                     LMS_P_BMIX
-                                         ? "blissmixer://?count=10&dstm=1&artist="+encodeURIComponent(args['artist'])
-                                         : "lastmix://play?artist="+encodeURIComponent(args['artist'])
+                                     LMS_P_AMMIX
+                                        ? "audiomusemixer://?count=10&dstm=1" + (undefined!=args['artist_id'] ? "&artist_id="+args['artist_id'] : "") + "&artist="+encodeURIComponent(args['artist'])
+                                   : LMS_P_BMIX
+                                        ? "blissmixer://?count=10&dstm=1&artist="+encodeURIComponent(args['artist'])
+                                        : "lastmix://play?artist="+encodeURIComponent(args['artist'])
                                    ], weight:103});
         }
 

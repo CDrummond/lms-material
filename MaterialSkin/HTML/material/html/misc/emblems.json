@@ -68,5 +68,10 @@
     "name":"ibroadcast",
     "bgnd":"#356dfe",
     "color":"#fff"
+  },
+  "twitch":{
+    "name":"twitch",
+    "bgnd":"#9146ff",
+    "color":"#fff"
   }
 }

@@ -8,6 +8,10 @@
    to Gorancho Sirkarovski.
 5. Let a plugin show a row of tiles on a list page - thanks to Simon Arnold.
 6. Add twitch emblem - thanks to bunghOI10
+7. Fix settings categories background when opened standalone - thanks to S
+   Brownrigg.
+8. For tech info, update lossless formats list and compare case insensitively
+   - thanks to Sam Y.
 
 6.4.10
 ------

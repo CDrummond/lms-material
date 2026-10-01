@@ -727,8 +727,15 @@ function resetDialogPos() {
 
 function dialogPosition(state) {
     resetDialogPos();
-    if (state && !state.moveDialogs) {
-        return;
+    if (state) {
+        if (!state.moveDialogs) {
+            return;
+        }
+        for (let loop=state.openDialogs, len=loop.length, i=0; i<len; ++i) {
+            if (loop[i]=='iframe') {
+                return;
+            }
+        }
     }
     if (window.innerWidth>=MIN_DLG_MOVE_WIDTH && window.innerHeight>=MIN_DLG_MOVE_HEIGHT) {
         document.documentElement.style.setProperty('--dialog-opacity', '0');

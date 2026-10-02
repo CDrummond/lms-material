@@ -634,6 +634,7 @@
 "Track gain":"Normalisation du volume par morceau",
 "Track is not downloadable.":"Le morceau n'est pas téléchargeable.",
 "Tracks":"Morceaux",
+"Transcoded":"Transcodé",
 "Transfer queue":"Transférer la liste de lecture",
 "Transfer queue to another player":"Transférer la liste de lecture vers une autre platine",
 "Tues":"Ma",
@@ -764,6 +765,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Transcoded":""
+"%1 days":"%1 jours"
 }

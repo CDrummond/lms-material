@@ -636,6 +636,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         numTracks++;
                         isOnlineTrack = true;
                     }
+                } else if ("artist-link"==i.type) {
+                    // A plugin row that opens an artist page but has nothing to play. Not "artist", as Material
+                    // offers Play on an "artist" row whose go action carries an artist or id parameter.
+                    i.stdItem = STD_ITEM_ONLINE_ARTIST;
                 } else if (parent && parent.stdItem==STD_ITEM_ONLINE_ARTIST) {
                     i.stdItem = STD_ITEM_ONLINE_ARTIST_CATEGORY;
                 }

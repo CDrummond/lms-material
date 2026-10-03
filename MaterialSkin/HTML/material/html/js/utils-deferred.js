@@ -704,7 +704,7 @@ function handleNumeric(dlg, func, itemKey) {
 let mskinLastClickOrTouch = undefined;
 let mskinDialogWindowResize = false;
 function storeClickOrTouchPos(event, menu) {
-    if (event) {
+    if (!IS_MOBILE && event) {
         let now = new Date().getTime();
         let pos = undefined!=menu && (menu.show || (undefined!=menu.closed && now-menu.closed<100)) ? {x:menu.x, y:menu.y} : getTouchOrClickPos(event);
         mskinLastClickOrTouch={ time:now, x:pos.x, y:pos.y };
@@ -726,6 +726,9 @@ function resetDialogPos() {
 }
 
 function dialogPosition(state) {
+    if (IS_MOBILE) {
+        return;
+    }
     resetDialogPos();
     if (state) {
         if (!state.moveDialogs) {
@@ -755,6 +758,9 @@ function dialogPosition(state) {
 }
 
 function setDialogPos() {
+    if (IS_MOBILE) {
+        return;
+    }
     const MARGIN = 32;
     let elems = document.getElementsByClassName('v-dialog');
     if (undefined!=elems) {

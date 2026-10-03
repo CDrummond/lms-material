@@ -1421,7 +1421,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act.custom) {
                 let browseCmd = performCustomAction(act, this.$store.state.player, item);
                 if (undefined!=browseCmd) {
-                    this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+item.title});
+                    this.fetchItems(browseCmd, customActionPage(act, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+item.title}, item.image ? item.image : this.currentImage));
                 }
             } else if (undefined!=act.do) {
                 let title = item.origTitle ? item.origTitle : item.title;
@@ -1452,7 +1452,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         itemCustomAction(act, item, index) {
             let browseCmd = performCustomAction(act, this.$store.state.player, item);
             if (undefined!=browseCmd) {
-                this.fetchItems(browseCmd, {cancache:false, id:"itemCustomAction:"+item.id+"-"+index, title:act.title+SEPARATOR+item.title});
+                this.fetchItems(browseCmd, customActionPage(act, {cancache:false, id:"itemCustomAction:"+item.id+"-"+index, title:act.title+SEPARATOR+item.title}, item.image));
             }
         },
         linkAction(item) {

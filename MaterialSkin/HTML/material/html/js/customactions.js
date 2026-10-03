@@ -210,6 +210,18 @@ function doReplacements(string, player, item) {
     return val;
 }
 
+// A plugin's lmsbrowse action can ask for the page it opens to be an online artist's page ("type":"artist"
+// in its lmsbrowse), so the page gets the artist header and image as one opened from an "artist-link" row does.
+function customActionPage(action, page, image) {
+    if (action.lmsbrowse && "artist"==action.lmsbrowse.type) {
+        page.stdItem = STD_ITEM_ONLINE_ARTIST;
+        if (undefined!=image) {
+            page.image = image;
+        }
+    }
+    return page;
+}
+
 function doCustomAction(action, player, item) {
     if (action.iframe) {
         let title = action.title;

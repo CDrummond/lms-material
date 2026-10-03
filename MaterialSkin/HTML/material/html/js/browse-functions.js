@@ -7,6 +7,8 @@
 
 const ROLES_PLACEHOLDER = 200000000;
 const SERVICES_PLACEHOLDER = 300000000;
+// Control which apps can have add/play/append entries in toolbar
+const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'youtubemusic', 'spotty', 'spoton', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 
 function browseCanSelect(item) {
     return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
@@ -728,7 +730,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             let trackLimit = resp.items.length>0 && (""+resp.items[0].id).startsWith("track_id:") ? 0 : 2000;
             if (view.tbarActions.length==0 && (trackLimit==0 || (resp.numAudioItems>0 && resp.numAudioItems<=trackLimit)) &&
                 (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
-                ((view.command.command.length>0 && ALLOW_ADD_ALL.has(view.command.command[0])) ||
+                ((view.command.command.length>0 && (ALLOW_ADD_ALL.has(view.command.command[0]) || MIXER_APPS.has(view.command.command[0]))) ||
                  (resp.items[0].presetParams && resp.items[0].presetParams.favorites_url && ALLOW_ADD_ALL.has(resp.items[0].presetParams.favorites_url.split(':')[0]))) ) {
                 view.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
             }

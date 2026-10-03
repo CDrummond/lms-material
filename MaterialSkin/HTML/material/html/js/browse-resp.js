@@ -11,6 +11,8 @@ const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity", "audiomu
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
 const RELEASE_TYPES = ["ALBUM", "EP", "BOXSET", "BESTOF", "COMPILATION", "SINGLE", "APPEARANCE"];
+// Add a fake 'all tracks' entry in track list response, allowing a single command to add all tracks - rather than adding 1 by 1
+const ALLOW_FAKE_ALL_TRACKS_ITEM = new Set(['youtube', 'youtubemusic', 'qobuz']); // Allow using 'fake' add all item
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;

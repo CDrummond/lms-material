@@ -9,7 +9,7 @@
 const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz124" : "") + "AABEGIKNPSTV";
 const STATUS_UPDATE_MAX_TIME = 4000;
 const SCAN_UPDATE_INTERVAL = 2000;
-const LOSSLESS_FORMATS = new Set(["flc", "ogf", "wav", "dsf", "dff", "flc radio"]);
+const LOSSLESS_FORMATS = new Set(["flc", "ogf", "wav", "pcm", "dsf", "dff", "flc radio"]);
 
 function logString(val) {
     return undefined==val ? "" : val;

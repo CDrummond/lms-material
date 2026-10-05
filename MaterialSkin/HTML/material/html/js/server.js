@@ -9,7 +9,7 @@
 const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz124" : "") + "AABEGIKNPSTV";
 const STATUS_UPDATE_MAX_TIME = 4000;
 const SCAN_UPDATE_INTERVAL = 2000;
-const LOSSLESS_FORMATS = new Set(["flc", "wav", "FLC", "WAV"]);
+const LOSSLESS_FORMATS = new Set(["flc", "ogf", "wav", "dsf", "dff", "flc radio"]);
 
 function logString(val) {
     return undefined==val ? "" : val;
@@ -631,7 +631,7 @@ var lmsServer = Vue.component('lms-server', {
                             samplesize:data.samplesize
                     };
                     // If trancoded is lossless, and original is not lossless, then show original else show transcoded.
-                    let display = LOSSLESS_FORMATS.has(player.current.transTech.type) && !LOSSLESS_FORMATS.has(player.current.origTech.type)
+                    let display = LOSSLESS_FORMATS.has(player.current.transTech.type.toLowerCase()) && !LOSSLESS_FORMATS.has(player.current.origTech.type.toLowerCase())
                         ? player.current.origTech : player.current.transTech;
 
                     player.current.bitrate = display.bitrate;

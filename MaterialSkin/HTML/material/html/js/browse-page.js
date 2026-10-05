@@ -8,10 +8,7 @@
 
 var B_ALBUM_SORTS=[ ];
 var B_TRACK_SORTS=[ ];
-// Control which apps can have add/play/append entries in toolbar
-const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'youtubemusic', 'spotty', 'spoton', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
-// Add a fake 'all tracks' entry in track list response, allowing a single command to add all tracks - rather than adding 1 by 1
-const ALLOW_FAKE_ALL_TRACKS_ITEM = new Set(['youtube', 'youtubemusic', 'qobuz']); // Allow using 'fake' add all item
+
 const MIN_WIDTH_FOR_DETAILED_SUB = 350;
 const MIN_WIDTH_FOR_HBTNS = 500;
 const MIN_WIDTH_INDENT_LEFT = 550;
@@ -1421,7 +1418,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act.custom) {
                 let browseCmd = performCustomAction(act, this.$store.state.player, item);
                 if (undefined!=browseCmd) {
-                    this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+item.title});
+                    this.fetchItems(browseCmd, customActionPage(act, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+item.title}, item.image ? item.image : this.currentImage));
                 }
             } else if (undefined!=act.do) {
                 let title = item.origTitle ? item.origTitle : item.title;
@@ -1452,7 +1449,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         itemCustomAction(act, item, index) {
             let browseCmd = performCustomAction(act, this.$store.state.player, item);
             if (undefined!=browseCmd) {
-                this.fetchItems(browseCmd, {cancache:false, id:"itemCustomAction:"+item.id+"-"+index, title:act.title+SEPARATOR+item.title});
+                this.fetchItems(browseCmd, customActionPage(act, {cancache:false, id:"itemCustomAction:"+item.id+"-"+index, title:act.title+SEPARATOR+item.title}, item.image));
             }
         },
         linkAction(item) {

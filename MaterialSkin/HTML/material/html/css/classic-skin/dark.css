@@ -13,6 +13,8 @@ select:not([multiple]) {
 
 :root {
  --range-trough-color:#5a5a5a;
+ --list-hover-color:rgba(255, 255, 255, 0.04);
+ --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.4);
  --border-color:#5a5a5a;
  --text-color:#edece7;
 }

@@ -1,6 +1,7 @@
 6.4.12
 ------
 1. Fix MediaSession issues on Windows wake up - thanks to Gorancho Sirkarovski.
+2. Fix some broken lists (e.g. 'Radios' on home screen).
 
 6.4.11
 ------

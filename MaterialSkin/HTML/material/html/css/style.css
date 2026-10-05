@@ -2750,7 +2750,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 @media screen and (min-width:600px) and (min-height:600px) {
- .v-dialog:not(.v-dialog--fullscreen)  {
+ .msk-is-non-touch .v-dialog:not(.v-dialog--fullscreen)  {
   position:absolute;
   top:var(--dialog-top);
   left:var(--dialog-left);

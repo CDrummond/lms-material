@@ -6,6 +6,8 @@
  */
 'use strict';
 
+const MEDIA_SESSION_PAUSE_DELAY = 1000;
+
 /*
 Enable auto play in Chrome via:
 
@@ -78,7 +80,20 @@ Vue.component('lms-mediasession', {
                     }
                 });
                 navigator.mediaSession.setActionHandler('pause', function() {
-                    bus.$emit('playerCommand', ['pause']);
+                    if (!document.hidden) {
+                        bus.$emit('playerCommand', ['pause']);
+                        return;
+                    }
+                    // When the system suspends, the browser/OS sends a 'pause' action to the media
+                    // session. So, if hidden, delay the pause and ignore it if the system slept
+                    // in the meantime (i.e. the timer fired much later than requested).
+                    let requested = new Date().getTime();
+                    setTimeout(function() {
+                        let elapsed = new Date().getTime() - requested;
+                        if (elapsed<MEDIA_SESSION_PAUSE_DELAY+2000) {
+                            bus.$emit('playerCommand', ['pause']);
+                        }
+                    }, MEDIA_SESSION_PAUSE_DELAY);
                 });
                 navigator.mediaSession.setActionHandler('previoustrack', function() {
                     bus.$emit('playerCommand', ['button', 'jump_rew']);

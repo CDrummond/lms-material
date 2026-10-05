@@ -226,7 +226,7 @@ function mapIcon(item, app, fallback) {
     if (item.menuIcon) {
         item.image=item.menuIcon;
         item.icon=undefined;
-    } else if (item.icon && (item.icon.startsWith("http"))) {
+    } else if (item.icon) {
         item.image=item.icon;
         item.icon=undefined;
     }

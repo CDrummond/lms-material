@@ -496,7 +496,7 @@ function nowplayingMenuAction(view, item) {
             if (view.$store.state.techInfo && undefined!=view.playerStatus.current.technicalInfo && 0!=view.playerStatus.current.technicalInfo.length) {
                 text += " ("+(undefined==view.playerStatus.current.source || view.playerStatus.current.source.local
                                 ? "" : (view.playerStatus.current.source.text+SEPARATOR))+
-                        view.playerStatus.current.technicalInfo+")";
+                        view.playerStatus.current.technicalInfo.replace(TRANSCODED_PREFIX, "")+")";
                 if (undefined!=view.playerStatus.current.source && undefined!=view.playerStatus.current.source.url) {
                     text += "\n" + view.playerStatus.current.source.url;
                 }

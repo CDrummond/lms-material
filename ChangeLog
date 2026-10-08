@@ -1,6 +1,7 @@
 6.4.13
 ------
 1. Add 'pcm' to lossless formats - thanks to Sam Y.
+2. Remove transcoded indicator when copy now-palying details to clipboard.
 
 6.4.12
 ------

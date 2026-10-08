@@ -1,3 +1,7 @@
+6.4.13
+------
+1. Add 'pcm' to lossless formats - thanks to Sam Y.
+
 6.4.12
 ------
 1. Fix MediaSession issues on Windows wake up - thanks to Gorancho Sirkarovski.

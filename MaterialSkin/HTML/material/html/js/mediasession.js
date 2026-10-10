@@ -12,7 +12,7 @@ const MEDIA_SESSION_PAUSE_DELAY = 1000;
 Enable auto play in Chrome via:
 
     Settings / Privacy and security / Additional content settings (expand) / Sound / Allowed to play sounds / Add
-    
+
     chrome://settings/content/siteDetails?site=http://hostname:9000
 */
 Vue.component('lms-mediasession', {
@@ -70,7 +70,7 @@ Vue.component('lms-mediasession', {
             if (this.mediaAudio == undefined) {
                 this.mediaAudio = document.createElement('audio');
                 this.mediaAudio.loop = true;
-                this.mediaAudio.volume = 0;
+                this.mediaAudio.volume = 0.000001;
 
                 navigator.mediaSession.setActionHandler('play', () => {
                     if (this.playerStatus && this.playerStatus.isplaying) {

@@ -2,6 +2,7 @@
 ------
 1. Add 'pcm' to lossless formats - thanks to Sam Y.
 2. Remove transcoded indicator when copy now-playing details to clipboard.
+3. Fix Firefox media keys - thanks to czodroid
 
 6.4.12
 ------

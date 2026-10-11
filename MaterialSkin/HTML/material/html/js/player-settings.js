@@ -101,7 +101,11 @@ Vue.component('lms-player-settings', {
      <v-header class="alarm-sched-header" v-if="showAlarms">{{i18n('Scheduled alarms')}}</v-header>
      <template v-for="(item, index) in alarms.scheduled" v-if="showAlarms">
       <v-list-tile class="alarm-entry">
-       <v-checkbox v-model="item.enabled" :label="item | formatAlarm(twentyFourHour)" @click.stop="toggleAlarm(item)"></v-checkbox>
+       <v-checkbox v-model="item.enabled" @click.stop="toggleAlarm(item)">
+        <template slot="label">
+         <div>{{item | formatAlarm(twentyFourHour)}}<div class="subtext" v-if="undefined!=item.usesdefaultvolume">{{item | formatAlarmVolume}}</div></div>
+        </template>
+       </v-checkbox>
        <v-btn flat icon @click.stop="editAlarm(item, $event)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
        <v-btn flat icon @click.stop="deleteAlarm(item, $event)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
       </v-list-tile>
@@ -236,6 +240,16 @@ Vue.component('lms-player-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="alarmDialog.repeat"></m3-switch></v-list-tile-action>
     </v-list-tile>
+    <v-list-tile v-if="alarmDialog.volumeControl">
+     <v-list-tile-content @click="alarmDialog.usesdefaultvolume = !alarmDialog.usesdefaultvolume" class="switch-label">
+      <v-list-tile-title>{{i18n('Use default volume')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Use the player's default alarm volume.")}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="alarmDialog.usesdefaultvolume"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-list-tile v-if="alarmDialog.volumeControl">
+     <v-slider :disabled="alarmDialog.usesdefaultvolume" :min="0" :max="100" step="1" v-model="alarmDialog.volume" :label="i18n('Volume (%)')" thumb-label></v-slider>
+    </v-list-tile>
    </v-list>
   </v-container>
   <div class="dialog-padding"></div>
@@ -307,7 +321,10 @@ Vue.component('lms-player-settings', {
                 dow: [],
                 repeat: true,
                 url: undefined,
-                shufflemode: undefined
+                shufflemode: undefined,
+                volumeControl: false,
+                usesdefaultvolume: true,
+                volume: 0
             },
             wide:1,
             trans:{dstm:undefined},
@@ -717,6 +734,11 @@ Vue.component('lms-player-settings', {
                         i.origEnabled = 1 == i.enabled;
                         i.repeat = 1 == i.repeat;
                         i.shufflemode = undefined==i.shufflemode ? 0 : parseInt(i.shufflemode);
+                        i.volume = parseInt(i.volume);
+                        // 'usesdefaultvolume' is only returned by LMS versions that can also reset it
+                        if (undefined!=i.usesdefaultvolume) {
+                            i.usesdefaultvolume = 1 == i.usesdefaultvolume;
+                        }
                         this.alarms.scheduled.push(i);
                     });
                 }
@@ -738,13 +760,17 @@ Vue.component('lms-player-settings', {
         },
         addAlarm(event) {
             storeClickOrTouchPos(event);
+            // No alarms to check for 'usesdefaultvolume', so go by version
+            let volumeControl = this.alarms.scheduled.length>0 ? undefined!=this.alarms.scheduled[0].usesdefaultvolume : LMS_VERSION>=90200;
             this.alarmDialog = { show: true, id: undefined, time: "00:00", dow:["1", "2", "3", "4", "5"], repeat: false,
-                                 url: CURRENT_PLAYLIST, shufflemode: this.alarmShuffeItems[0].key };
+                                 url: CURRENT_PLAYLIST, shufflemode: this.alarmShuffeItems[0].key,
+                                 volumeControl: volumeControl, usesdefaultvolume: true, volume: parseInt(this.alarms.volume) };
         },
         editAlarm(alarm, event) {
             storeClickOrTouchPos(event);
             this.alarmDialog = { show: true, id: alarm.id, time: formatTime(alarm.time, true), dow: alarm.dow.split(","),
-                                 repeat: alarm.repeat, url: alarm.url, shufflemode: alarm.shufflemode, enabled: alarm.enabled };
+                                 repeat: alarm.repeat, url: alarm.url, shufflemode: alarm.shufflemode, enabled: alarm.enabled,
+                                 volumeControl: undefined!=alarm.usesdefaultvolume, usesdefaultvolume: alarm.usesdefaultvolume, volume: alarm.volume };
         },
         saveAlarm() {
             var parts = this.alarmDialog.time.split(":");
@@ -764,6 +790,9 @@ Vue.component('lms-player-settings', {
             cmd.push("url:"+(CURRENT_PLAYLIST==this.alarmDialog.url ? "0" : this.alarmDialog.url));
             cmd.push("repeat:"+(this.alarmDialog.repeat ? 1 : 0));
             cmd.push("shufflemode:"+this.alarmDialog.shufflemode);
+            if (this.alarmDialog.volumeControl) {
+                cmd.push(this.alarmDialog.usesdefaultvolume ? "usedefaultvolume:1" : "volume:"+this.alarmDialog.volume);
+            }
             lmsCommand(this.playerId, cmd).then(({data}) => {
                 this.loadAlarms();
             });
@@ -937,6 +966,9 @@ Vue.component('lms-player-settings', {
             }
             return formatTime(value.time, twentyFourHour)+" "+days.join(", ")+(value.repeat ? " (" + i18n("Repeat") + ")" : "");
         },
+        formatAlarmVolume: function (value) {
+            return i18n("Volume: %1", value.usesdefaultvolume ? i18n("Default") : value.volume);
+        },
         displayTime: function (value) {
             if (undefined==value) {
                 return '';
@@ -953,6 +985,12 @@ Vue.component('lms-player-settings', {
         },
         'alarmDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'alarm', shown:val});
+        },
+        'alarmDialog.usesdefaultvolume': function(val) {
+            // Show the volume the alarm will actually use
+            if (val) {
+                this.alarmDialog.volume = parseInt(this.alarms.volume);
+            }
         },
         'showMenu': function(val) {
             this.$store.commit('menuVisible', {name:'playersettings', shown:val});

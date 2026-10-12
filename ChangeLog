@@ -1,6 +1,7 @@
 6.4.14
 ------
 1. Add support for AudioMuseAI plugn with 'Start artist mix' button.
+2. Only send album name in MAI requests if defined.
 
 6.4.13
 ------

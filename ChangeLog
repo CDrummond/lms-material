@@ -1,3 +1,7 @@
+6.4.14
+------
+1. Add support for AudioMuseAI plugn with 'Start artist mix' button.
+
 6.4.13
 ------
 1. Add 'pcm' to lossless formats - thanks to Sam Y.

@@ -2,6 +2,7 @@
 ------
 1. Add support for AudioMuseAI plugn with 'Start artist mix' button.
 2. Only send album name in MAI requests if defined.
+3. Check that 'type' of tech info is defined before converting case.
 
 6.4.13
 ------

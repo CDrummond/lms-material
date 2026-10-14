@@ -631,7 +631,8 @@ var lmsServer = Vue.component('lms-server', {
                             samplesize:data.samplesize
                     };
                     // If trancoded is lossless, and original is not lossless, then show original else show transcoded.
-                    let display = LOSSLESS_FORMATS.has(player.current.transTech.type.toLowerCase()) && !LOSSLESS_FORMATS.has(player.current.origTech.type.toLowerCase())
+                    let display = undefined==player.current.transTech.type || undefined==player.current.origTech.type ||
+                                  (LOSSLESS_FORMATS.has(player.current.transTech.type.toLowerCase()) && !LOSSLESS_FORMATS.has(player.current.origTech.type.toLowerCase()))
                         ? player.current.origTech : player.current.transTech;
 
                     player.current.bitrate = display.bitrate;

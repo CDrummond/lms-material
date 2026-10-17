@@ -756,9 +756,9 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Default":"",
-"Shift+%1":"",
-"Use default volume":"",
-"Use the player's default alarm volume.":"",
-"Volume: %1":""
+"Default":"Standaard",
+"Shift+%1":"Shift+%1",
+"Use default volume":"Gebruik standaard volume",
+"Use the player's default alarm volume.":"Gebruik standaard wekker volume van de muziekspeler",
+"Volume: %1":"Volume: %1"
 }

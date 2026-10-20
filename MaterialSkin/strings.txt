@@ -1004,13 +1004,13 @@ PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	SV	Spelkön kan inte bytas med en spelare som den nuvarande spelaren redan är synkroniserad med.
 
 PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB
-	DE Bibliothek des Players anpassen
+	DE	Bibliothek des Players anpassen
 	EN	Set player's library
 	FR	Modifier la bibliothèque de la platine
 	NL	Muziekbibliotheek gebruik van muziekspelers
 
 PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB_DESC
-	DE Beim Hinzufügen von Titeln zu einer leeren Warteschlange wird die Bibliothek des Players so eingestellt, dass sie mit der aktuellen Browser-Bibliothek übereinstimmt. Beim Löschen der Warteschlange wird die Bibliothek des Players auf ihre vorherige Einstellung zurückgesetzt.
+	DE	Beim Hinzufügen von Titeln zu einer leeren Warteschlange wird die Bibliothek des Players so eingestellt, dass sie mit der aktuellen Browser-Bibliothek übereinstimmt. Beim Löschen der Warteschlange wird die Bibliothek des Players auf ihre vorherige Einstellung zurückgesetzt.
 	EN	When adding track's to an empty player queue first set player's library to match that currently browsing with. When clearing queue reset player's library to its previous setting.
 	FR	Lors de l'ajout de morceaux à une liste de lecture vide d'une platine, configurer d'abord la bibliothèque de la platine pour qu'elle corresponde à celle actuellement consultée. Lors de la suppression de la liste de lecture, rétablir la bibliothèque de la platine à sa configuration précédente.
 	NL	Wanneer je nummers toevoegt aan een lege wachtrij, stel dan eerst de muziekbibliotheek van de muziekspeler in op de bibliotheek waarmee hij momenteel aan het browsen is. Wanneer je de wachtrij leegt, wordt de muziekbibliotheek van de muziekspeler teruggezet naar de vorige instellingen.

@@ -1,7 +1,12 @@
+6.5.0
+-----
+1. Show/set an alarm's own volume - thanks to michalstrelec.
+
 6.4.14
 ------
-1. Add support for AudioMuseAI plugn with 'Start artist mix' button.
+1. Add support for AudioMuseAI plugin with 'Start artist mix' button.
 2. Only send album name in MAI requests if defined.
+3. Check that 'type' of tech info is defined before converting case.
 
 6.4.13
 ------

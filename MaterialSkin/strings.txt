@@ -442,7 +442,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	ZH_TW	如果曲目有作曲家、指揮家或樂團，並且都被設定為顯示，則在這些之前顯示演出者，否則在之後顯示。
 	ZH_CN	如果曲目有作曲家、指挥家或乐团标签，并且这些都设置为显示，则在这些之前显示艺术家，否则在之后显示。
 	HU	Ha egy zeneszámnak van zeneszerzője, karmestere vagy zenekara, és ezek be vanak állítva, hogy megjelenjenek, akkor elsőnek az előadó jelenjen meg, utána a többi.
-	SV	Om ett spår har en tag för kompositör, dirigent eller orkester, och dessa skall visas, då visas artisten först, annars visas artisten sist.
+	SV	Om ett spår har en tag för kompositör, dirigent eller orkester, och dessa skall visas, visa då artisten först, visa annars artisten sist.
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	CS	Zobrazení všech interpretů
@@ -472,7 +472,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	ZH_TW	如果一首曲目有多個演出者、專輯演出者、作曲家等，則在瀏覽專輯、目前播放和佇列時顯示所有演出者。 否則只顯示每首曲目的第一位演出者。
 	ZH_CN	如果一首曲目有多个艺术家、专辑艺术家、作曲家等，则在浏览专辑、当前播放和队列时显示所有艺术家。否则只显示每首曲目的第一位艺术家
 	HU	Ha egy zeneszámnak több előadója, albumm előadója, zeneszerzője stb. van, Akkor mutassa meg mind, amikor albumokat böngész, most játszik és a lejátszási listában. Ellenkező esetben csak az elsőt.
-	SV	Om ett spår har flera artister, albumartister, kompositörer etc. visa då all vid bläddring av album, i "Nu spelas" och i spellistan. Visa annars bara den först av varje.
+	SV	Om ett spår har flera artister, albumartister, kompositörer etc. visa då alla vid bläddring av album, i "Nu spelas" och i spellistan. Visa annars bara den första av varje.
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	CS	Použití komentáře pro název disku
@@ -929,7 +929,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
 	HU	A munka és a csoportosítás előnyben részesítése
 	NL	Prefereer de gegevens in de WORK en GROUPING tags
 	ZH_CN	首选作品和分组
-	SV	Föredra verk och gruppering (GROUPING).
+	SV	Föredra verk (WORK) och gruppering (GROUPING).
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 	CS	Zobrazení díla interpreta
@@ -971,7 +971,7 @@ PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
 	FR	Utiliser des images lors de l'affichage des listes de lecture. Cette fonctionnalité (facultative) nécessite la création d'images JPEG 600x600 dans un sous-dossier "material-skin/playlists" du dossier des préférences de Lyrion. Les noms des fichiers doivent être constitués uniquement de lettres minuscules ou de chiffres. Par exemple : "R&B" devient "rb.jpg", "Folk/Rock" devient "folkrock.jpg". Si aucune image n'est trouvée, la première pochette des morceaux de la liste de lecture est utilisée. Cela peut impacter la vitesse de parcours des listes de lecture car chaque liste de lecture devra être interrogée pour connaître sa liste de morceaux.
 	NL	Afbeeldingen tonen bij het weergeven van afspeellijsten. Hiervoor kan je 600x600 JPEG-afbeeldingen aanmaken in de submap "material-skin/playlists" van jouw voorkeurenmap van Lyrion. Afbeeldingen in afspeellijsten moeten allemaal uit kleine letters of cijfers bestaan. Alle andere tekens moeten worden verwijderd. bijv. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg". Als er geen afbeelding wordt gevonden, wordt de eerstvolgende gevonden afbeelding van de nummers in de afspeellijst gebruikt. Houd er echter rekening mee dat dit (het gebruik van een afbeelding van een nummer) effect kan hebben op de snelheid waarmee je door de afspeellijst bladert (aangezien voor elke afspeellijst de bijbehorende lijst met nummers moet worden opgevraagd, enz.).
 	ZH_CN	列出播放列表时显示图像。这（可选）需要在LMS首选项文件夹的“material-skin/playlists”子文件夹中创建600x600的JPEG图像。播放列表图像文件名应全部为小写字母或数字，并删除所有其他字符。例如，“R&B”是“rb.jpg”，“Folk/Rock”是“folkrock.jpg”。如果没有找到图像，则使用播放列表曲目列表中的第一个有效图像。但是请注意，这（使用曲目图像）可能会对播放列表浏览速度产生影响（因为需要查询每个播放列表的曲目列表等）。
-	SV	Visa bilder när du listar spellistor. För detta måste 600x600 stora JPEG bilder skapas i en undermapp material-skin/playlists i Lyrions inställningsmapp. Filnamnen kan bara använda små bokstäver eller siffror ([a-z0-9]) alla andra tecken i ett genrenamn tas bort, t.ex. för R&B -> rb.jpg, Folk/Rock -> folkrock.jpg. Om ingen bild hittas används den första giltiga bilden från spellistan. Observera att om du använder spellistebilder kan bläddringshastigheten av spellistor påverkas.
+	SV	Visa bilder när du listar spellistor. För detta måste 600x600 stora JPEG bilder skapas i en undermapp material-skin/playlists i Lyrions inställningsmapp. Filnamnen kan bara använda små bokstäver eller siffror ([a-z0-9]) alla andra tecken i ett namn skall tas bort, t.ex. för R&B -> rb.jpg, Folk/Rock -> folkrock.jpg. Om ingen bild hittas används den första giltiga bilden från spellistan. Observera att om du använder spellistebilder kan bläddringshastigheten av spellistor påverkas.
 
 PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
 	CS	Nelze přesunout frontu do přehrávače, se kterým je již synchronizována.
@@ -1007,9 +1007,10 @@ PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB
 	EN	Set player's library
 	FR	Modifier la bibliothèque de la platine
 	NL	Muziekbibliotheek gebruik van muziekspelers
+	SV	Välj spelarens musikbibliotek
 
 PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB_DESC
 	EN	When adding track's to an empty player queue first set player's library to match that currently browsing with. When clearing queue reset player's library to its previous setting.
 	FR	Lors de l'ajout de morceaux à une liste de lecture vide d'une platine, configurer d'abord la bibliothèque de la platine pour qu'elle corresponde à celle actuellement consultée. Lors de la suppression de la liste de lecture, rétablir la bibliothèque de la platine à sa configuration précédente.
 	NL	Wanneer je nummers toevoegt aan een lege wachtrij, stel dan eerst de muziekbibliotheek van de muziekspeler in op de bibliotheek waarmee hij momenteel aan het browsen is. Wanneer je de wachtrij leegt, wordt de muziekbibliotheek van de muziekspeler teruggezet naar de vorige instellingen.
-
+	SV	När du lägger till spår i en tom uppspelningskö, ställ först in spelarens bibliotek så att det matchar det du för närvarande bläddrar i. När kön rensas, återställ spelarens bibliotek till dess tidigare inställning.

@@ -1,6 +1,8 @@
 6.5.0
 -----
 1. Show/set an alarm's own volume - thanks to michalstrelec.
+2. When adding a favourite, set type to 'link' if path ends with .xml, .opml,
+   or .rss
 
 6.4.14
 ------

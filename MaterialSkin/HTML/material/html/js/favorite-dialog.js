@@ -98,6 +98,10 @@ Vue.component('lms-favorite', {
         cancel() {
             this.show=false;
         },
+        urlType(url) {
+            let path = new URL(url).pathname;
+            return path.endsWith(".xml") || path.endsWith(".opml") || path.endsWith(".rss") ? "link" : "audio";
+        },
         update() {
             var url = this.url ? this.url.trim() : "";
             var name = this.name ? this.name.trim() : "";
@@ -116,7 +120,7 @@ Vue.component('lms-favorite', {
                 });
             } else {
                 lmsCommand(this.playerId, ["favorites", "delete", originalId(this.item.id)]).then(({data})=> {
-                    var command = ["favorites", "add", "url:"+url, "title:"+name, originalId(this.item.id)];
+                    var command = ["favorites", "add", "url:"+url, "title:"+name, originalId(this.item.id), "type:"+this.urlType(url)];
                     if (this.item.presetParams) {
                         if (icon) {
                             command.push("icon:"+icon);
@@ -142,8 +146,8 @@ Vue.component('lms-favorite', {
             this.show=false;
         },
         add() {
-            var url = this.url ? this.url.trim() : "";
-            var name = this.name ? this.name.trim() : "";
+            let url = this.url ? this.url.trim() : "";
+            let name = this.name ? this.name.trim() : "";
             if (url.length<1 || name.length<1) {
                 return;
             }
@@ -151,8 +155,9 @@ Vue.component('lms-favorite', {
                 if (data && data.result && data.result.exists==1) {
                     bus.$emit('showMessage', i18n("Already in favorites"));
                 } else {
-                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, originalId(this.item.id)]).then(({data})=> {
+                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, originalId(this.item.id), "type:"+this.urlType(url)]).then(({data})=> {
                         bus.$emit('refreshFavorites');
+                        bus.$emit('refreshList', SECTION_FAVORITES);
                     });
                 }
             });

@@ -64,15 +64,34 @@ Vue.component('lms-favorite', {
             if ('edit'==mode) {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
                 this.name = item.title;
+                this.originalUrl = item.presetParams && item.presetParams.favorites_url ? ""+item.presetParams.favorites_url : "";
                 this.url = item.presetParams ? item.presetParams.favorites_url : undefined;
+                this.icon = item.presetParams ? item.presetParams.icon : undefined;
+                this.originalIcon = item.presetParams && item.presetParams.icon ? ""+item.presetParams.icon : "";
+                this.isAdd=false;
                 if (this.url) {
                     var lib = this.url.indexOf("libraryTracks.library=");
                     if (lib>0) {
                         this.url=this.url.substring(0, lib-1);
                     }
+                } else if ("link"==item.type) {
+                    let id = originalId(this.item.id).split("item_id:")[1].split(".");
+                    id.pop();
+                    lmsCommand(this.playerId, ["favorites", "items", "item_id:" + id.join("."), "want_url:1"]).then(({data})=> {
+                        if (data && data.result && data.result.loop_loop) {
+                            for (let i=0, loop=data.result.loop_loop, len=loop.length; i<len; ++i) {
+                                let want = originalId(this.item.id);
+                                if (("item_id:"+loop[i].id)==want) {
+                                    this.originalUrl = ""+loop[i].url;
+                                    this.url = loop[i].url;
+                                    this.show=true;
+                                    focusEntry(this);
+                                }
+                            }
+                        }
+                    });
+                    return;
                 }
-                this.icon = item.presetParams ? item.presetParams.icon : undefined;
-                this.isAdd=false;
                 this.show=true;
                 focusEntry(this);
             } else if ('add'==mode) {
@@ -109,8 +128,7 @@ Vue.component('lms-favorite', {
             if (url.length<1 || name.length<1) {
                 return;
             }
-            if ((url == (this.item.presetParams ? this.item.presetParams.favorites_url : undefined)) &&
-                (icon == (this.item.presetParams ? this.item.presetParams.icon : undefined)) )  {
+            if ((url == this.originalUrl) && (icon == this.originalIcon) )  {
                 if (name == this.item.title) {
                     return;
                 }

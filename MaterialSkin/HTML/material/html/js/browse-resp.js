@@ -369,7 +369,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     if (i.isFavFolder) {
                         i.menu.push(RENAME_ACTION);
-                    } else if (i.presetParams) {
+                    } else if (i.presetParams || "link"==i.type) {
                         i.menu.push(EDIT_ACTION);
                     }
                     i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);

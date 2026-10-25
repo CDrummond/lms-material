@@ -453,6 +453,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.image=undefined;
                     } else {
                         mapIcon(i);
+                        if ("radio"==i.svg && "link"==i.type) {
+                            i.svg = "podcast";
+                        }
                     }
                 } else if (i.presetParams && allowPinning) {
                     addedDivider = addDivider(i, addedDivider);

@@ -2331,7 +2331,7 @@ sub _addExtraHomeItem {
 
 sub _isRadio {
     my $url = shift;
-    if (defined $url) {
+    if (defined $url && $url !~ /\.(xml|opml|rss)$/) {
         my @parts = split(/:/, $url);
         my $protocol = shift(@parts);
         if (exists($RADIO_PROTOCOLS{$protocol})) {

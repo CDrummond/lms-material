@@ -3,6 +3,7 @@
 1. Show/set an alarm's own volume - thanks to michalstrelec.
 2. When adding a favourite, set type to 'link' if path ends with .xml, .opml,
    or .rss
+3. Don't add podcast feeds to 'Radios' scrolled list.
 
 6.4.14
 ------

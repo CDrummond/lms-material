@@ -173,7 +173,12 @@ Vue.component('lms-favorite', {
                 if (data && data.result && data.result.exists==1) {
                     bus.$emit('showMessage', i18n("Already in favorites"));
                 } else {
-                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, originalId(this.item.id), "type:"+this.urlType(url)]).then(({data})=> {
+                    let icon = this.icon ? this.icon.trim() : "";
+                    let command = ["favorites", "add", "url:"+url, "title:"+name, originalId(this.item.id), "type:"+this.urlType(url)];
+                    if (icon) {
+                        command.push("icon:"+icon);
+                    }
+                    lmsCommand(this.playerId, command).then(({data})=> {
                         bus.$emit('refreshFavorites');
                         bus.$emit('refreshList', SECTION_FAVORITES);
                     });

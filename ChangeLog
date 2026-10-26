@@ -1,10 +1,10 @@
 6.5.0
 -----
 1. Show/set an alarm's own volume - thanks to michalstrelec.
-2. When adding a favourite, set type to 'link' if path ends with .xml, .opml,
+2. When adding a favourite, set type to 'feed' if path ends with .xml, .opml,
    or .rss
 3. Don't add podcast feeds to 'Radios' scrolled list.
-4. Use 'podcast' icon for 'link' types in favourites.
+4. Use 'rss_feed' icon for 'feed' types in favourites.
 
 6.4.14
 ------

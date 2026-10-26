@@ -369,7 +369,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     if (i.isFavFolder) {
                         i.menu.push(RENAME_ACTION);
-                    } else if (i.presetParams || "link"==i.type) {
+                    } else if (i.presetParams || "feed"==i.type || "link"==i.type) {
                         i.menu.push(EDIT_ACTION);
                     }
                     i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
@@ -453,8 +453,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.image=undefined;
                     } else {
                         mapIcon(i);
-                        if ("radio"==i.svg && "link"==i.type) {
-                            i.svg = "podcast";
+                        if ("radio"==i.svg && "feed"==i.type) {
+                            i.svg = undefined;
+                            i.icon = "rss_feed";
                         }
                     }
                 } else if (i.presetParams && allowPinning) {

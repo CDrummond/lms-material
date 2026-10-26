@@ -74,7 +74,7 @@ Vue.component('lms-favorite', {
                     if (lib>0) {
                         this.url=this.url.substring(0, lib-1);
                     }
-                } else if ("link"==item.type) {
+                } else if ("feed"==item.type || "link"==item.type) {
                     let id = originalId(this.item.id).split("item_id:")[1].split(".");
                     id.pop();
                     lmsCommand(this.playerId, ["favorites", "items", "item_id:" + id.join("."), "want_url:1"]).then(({data})=> {
@@ -119,7 +119,7 @@ Vue.component('lms-favorite', {
         },
         urlType(url) {
             let path = new URL(url).pathname;
-            return path.endsWith(".xml") || path.endsWith(".opml") || path.endsWith(".rss") ? "link" : "audio";
+            return path.endsWith(".xml") || path.endsWith(".opml") || path.endsWith(".rss") ? "feed" : "audio";
         },
         update() {
             var url = this.url ? this.url.trim() : "";

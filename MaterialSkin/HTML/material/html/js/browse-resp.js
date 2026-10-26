@@ -372,6 +372,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     } else if (i.presetParams || "feed"==i.type || "link"==i.type) {
                         i.menu.push(EDIT_ACTION);
                     }
+                    console.log(i.title, JSON.stringify());
                     i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
                     if (undefined!=parent && parent.id!=TOP_FAVORITES_ID) {
                         i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
@@ -435,7 +436,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             i.svg="dice-multiple";
                             i.image=undefined;
                         } else if (i['icon-id']=="html/images/favorites.png") {
-                            i.icon="favorite";
+                            i.icon="feed"==i.type ? "rss_feed" : "favorite";
                             i.image=undefined;
                         } else {
                             mapIcon(i);
@@ -449,7 +450,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
                         }
                     } else if (i['icon-id']=="html/images/favorites.png") {
-                        i.icon="favorite";
+                        i.icon="feed"==i.type ? "rss_feed" : "favorite";
                         i.image=undefined;
                     } else {
                         mapIcon(i);

@@ -22,15 +22,15 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
   </v-card-text>
   <v-card-actions v-if="queryParams.altBtnLayout">
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close(undefined==otherButton ? true : 1)">{{positiveButton}}</v-btn>
-   <v-btn v-if="undefined!=otherButton" flat @click.native="close(2)">{{otherButton}}</v-btn>
-   <v-btn flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButtons ? true : 1)">{{positiveButton}}</v-btn>
+   <v-btn v-for="(otherButton, i) in otherButtons" flat @click.native="close(i+2)">{{otherButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButtons ? false : 0)">{{negativeButton}}</v-btn>
   </v-card-actions>
   <v-card-actions v-else>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
-   <v-btn v-if="undefined!=otherButton" flat @click.native="close(2)">{{otherButton}}</v-btn>
-   <v-btn flat @click.native="close(undefined==otherButton ? true : 1)">{{positiveButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButtons ? false : 0)">{{negativeButton}}</v-btn>
+   <v-btn v-for="(otherButton, i) in otherButtons" flat @click.native="close(i+2)">{{otherButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButtons ? true : 1)">{{positiveButton}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>`,
@@ -49,7 +49,7 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
         }
     },
     mounted() {
-        bus.$on('prompt.open', function(type, title, text, extra, positiveButton, negativeButton, otherButton, fileTypes) {
+        bus.$on('prompt.open', function(type, title, text, extra, positiveButton, negativeButton, otherButtons, fileTypes) {
             this.text = text ? text : "";
             this.maxWidth = this.text.length>=50 || 'confirm'!=type ? 500 : 300;
             this.type = type;
@@ -64,7 +64,7 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             }
             this.positiveButton = undefined==positiveButton ? i18n('OK') : positiveButton;
             this.negativeButton = undefined==negativeButton ? i18n('Cancel') : negativeButton;
-            this.otherButton = otherButton;
+            this.otherButtons = otherButtons;
             this.show = true;
             if ('text'==type) {
                 focusEntry(this);
@@ -110,9 +110,9 @@ function confirm(text, positiveButton, negativeButton, otherButton) {
     });
 }
 
-function promptForText(title, hint, text, positiveButton, negativeButton, otherBottom, fileTypes) {
+function promptForText(title, hint, text, positiveButton, negativeButton, otherButtons, fileTypes) {
     return new Promise(function(response) {
-        bus.$emit('dlg.open', 'prompt', 'text', title, text, hint, positiveButton, negativeButton, otherBottom, fileTypes);
+        bus.$emit('dlg.open', 'prompt', 'text', title, text, hint, positiveButton, negativeButton, otherButtons, fileTypes);
         bus.$once('prompt.resp', function(resp, value) {
             response({ok:resp, value:value.trim()});
         });

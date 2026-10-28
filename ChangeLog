@@ -6,6 +6,7 @@
 3. Don't add podcast feeds to 'Radios' scrolled list.
 4. Use 'rss_feed' icon for 'feed' types in favourites.
 5. Send icon in favourites add command if defined in dialog.
+6. Fix font size of coloured log lines.
 
 6.4.14
 ------

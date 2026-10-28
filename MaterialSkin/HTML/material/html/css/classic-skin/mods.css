@@ -14,9 +14,14 @@
 
 body,
 body pre {
+ color:var(--text-color);
+}
+
+body,
+body pre,
+body pre span {
  font-size:var(--std-font-size)!important;
  background:var(--background-color);
- color:var(--text-color);
 }
 
 #log-header {

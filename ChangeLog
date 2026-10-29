@@ -7,6 +7,7 @@
 4. Use 'rss_feed' icon for 'feed' types in favourites.
 5. Send icon in favourites add command if defined in dialog.
 6. Fix font size of coloured log lines.
+7. Add a 'Next' option to 'Add URL to queue' - thank to Peter Oliver.
 
 6.4.14
 ------

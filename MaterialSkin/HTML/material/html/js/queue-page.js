@@ -1217,7 +1217,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             if (act==PQ_ADD_URL_ACTION) {
                 this.cancelCloseTimer(true);
-                promptForText(ACTIONS[PQ_ADD_URL_ACTION].title, i18n("URL"), undefined, i18n("Play"), undefined, [i18n("Append"), i18n("Next")]).then(resp => {
+                promptForText(ACTIONS[PQ_ADD_URL_ACTION].title, i18n("URL"), undefined, ACTIONS[PLAY_ACTION], IS_MOBILE ? { title: i18n("Cancel"), icon: 'cancel' } : undefined, [ACTIONS[ADD_ACTION], ACTIONS[INSERT_ACTION]]).then(resp => {
                     this.resetCloseTimer();
                     if (resp.ok && resp.value && resp.value.length>0) {
                         const commands = [undefined, "play", "add", "insert"];

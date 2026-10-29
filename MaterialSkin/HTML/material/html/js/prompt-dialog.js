@@ -20,17 +20,16 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
    <v-text-field v-else-if="type=='text'" single-line autocorrect="off" :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
    <div v-else v-html="text" class="clickable" ref="prompt-dlg-text"></div>
   </v-card-text>
-  <v-card-actions v-if="queryParams.altBtnLayout">
+  <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close(undefined==otherButtons ? true : 1)">{{positiveButton}}</v-btn>
-   <v-btn v-for="(otherButton, i) in otherButtons" flat @click.native="close(i+2)">{{otherButton}}</v-btn>
-   <v-btn flat @click.native="close(undefined==otherButtons ? false : 0)">{{negativeButton}}</v-btn>
-  </v-card-actions>
-  <v-card-actions v-else>
-   <v-spacer></v-spacer>
-   <v-btn flat @click.native="close(undefined==otherButtons ? false : 0)">{{negativeButton}}</v-btn>
-   <v-btn v-for="(otherButton, i) in otherButtons" flat @click.native="close(i+2)">{{otherButton}}</v-btn>
-   <v-btn flat @click.native="close(undefined==otherButtons ? true : 1)">{{positiveButton}}</v-btn>
+   <v-btn v-for="(button, i) in buttons" flat @click.native="close(buttonValues[i])" :icon="IS_MOBILE && (button.icon || button.svg)" :title="button.title">
+    <v-icon v-if="button.icon">{{button.icon}}</v-icon>
+    <img v-else-if="button.svg" :src="button.svg | svgIcon(darkUi)"></img>
+    <span v-else>{{button.short}}</span>
+    <template v-if="(!IS_MOBILE) && (button.icon || button.svg)">
+     &nbsp; {{button.short}}
+    <template>
+   </v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>`,
@@ -48,6 +47,11 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             slider:{step:1, min:0, max:100, value:0}
         }
     },
+    computed: {
+        darkUi () {
+            return this.$store.state.darkUi
+        }
+    },
     mounted() {
         bus.$on('prompt.open', function(type, title, text, extra, positiveButton, negativeButton, otherButtons, fileTypes) {
             this.text = text ? text : "";
@@ -62,9 +66,30 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
                 this.hint = extra;
                 this.slider = {step:1, min:0, max:100, value:0};
             }
-            this.positiveButton = undefined==positiveButton ? i18n('OK') : positiveButton;
-            this.negativeButton = undefined==negativeButton ? i18n('Cancel') : negativeButton;
-            this.otherButtons = otherButtons;
+            this.buttons = otherButtons || [];
+            this.buttonValues = [];
+            for (let i = 0; i < this.buttons.length; i++) {
+                this.buttonValues[i] = i + 2;
+            }
+            if (typeof(negativeButton) !== 'object') {
+                negativeButton = { short: undefined==negativeButton ? i18n('Cancel') : negativeButton };
+            }
+            if (typeof(positiveButton) !== 'object') {
+                positiveButton = { short: undefined==positiveButton ? i18n('OK') : positiveButton };
+            }
+            positiveButton.value = 1;
+            if (queryParams.altBtnLayout) {
+                this.buttons.unshift(positiveButton);
+                this.buttons.push(negativeButton);
+                this.buttonValues.unshift(undefined==otherButtons ? true : 1);
+                this.buttonValues.push(undefined==otherButtons ? false : 0);
+            }
+            else {
+                this.buttons.unshift(negativeButton);
+                this.buttons.push(positiveButton);
+                this.buttonValues.unshift(undefined==otherButtons ? false : 0);
+                this.buttonValues.push(undefined==otherButtons ? true : 1);
+            }
             this.show = true;
             if ('text'==type) {
                 focusEntry(this);

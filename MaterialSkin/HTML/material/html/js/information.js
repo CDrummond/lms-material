@@ -263,8 +263,13 @@ Vue.component('lms-information-dialog', {
                     }
                     this.players = [];
                     if (data.result.players_loop) {
+                        // if ?player=x&single is passed as a query param, then only show that player (as server.js does)
+                        var checkPlayer = queryParams.single && undefined!=queryParams.player ? queryParams.player : undefined;
                         for (var i=0, len=data.result.players_loop.length; i<len; ++i) {
                             var player = data.result.players_loop[i];
+                            if (undefined!=checkPlayer && checkPlayer!=player.playerid && checkPlayer!=player.name) {
+                                continue;
+                            }
                             var isgroup = 'group'===player.model;
                             var info = [ i18n("Model: %1", player.modelname),
                                          i18n("Type: %1", player.model),

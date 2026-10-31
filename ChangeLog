@@ -8,6 +8,8 @@
 5. Send icon in favourites add command if defined in dialog.
 6. Fix font size of coloured log lines.
 7. Add a 'Next' option to 'Add URL to queue' - thank to Peter Oliver.
+8. Only show the controlled player in the information dialog when single is
+   set - thanks to networxnet.
 
 6.4.14
 ------

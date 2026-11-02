@@ -148,6 +148,9 @@
     },
     "hqplayer":{
         "svg":"hqplayer"
+    },
+    "platinbridge":{
+        "svg":"platin"
     }
 }
 

@@ -833,7 +833,11 @@ var lmsServer = Vue.component('lms-server', {
                 if (data[2]=='info' || data[2]=='error') {
                     // 3 = message, 4 = title (not used), 5 = client id, 6 = timeout (seconds)
                     if (data.length<6 || undefined==data[5] || data[5].length<1 || data[5]==this.$store.state.player.id) {
-                        bus.$emit(data[2]=='info' ? 'showMessage' : 'showError', data[3], data.length>6 ? parseInt(data[6]) : 0);
+                        if (data[2]=='info') {
+                            bus.$emit('showMessage', data[3], data.length>6 ? parseInt(data[6]) : 0);
+                        } else {
+                            bus.$emit('showError', undefined, data[3], data.length>6 ? parseInt(data[6]) : 0);
+                        }
                     }
                 } else if (data[2]=='internal') {
                     if (data[3]=='vlib') {

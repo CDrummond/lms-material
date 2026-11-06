@@ -400,6 +400,7 @@ function iframeInitInfo() {
     iframeInfo = {
         content:undefined,
         action:undefined,
+        actionContent:undefined,
         actionCheckInterval: undefined,
         actionChecks: 0,
         pbarHeight: 0,
@@ -410,7 +411,7 @@ function iframeInitInfo() {
       };
 }
 
-/* Check for file-entry fields, and sliders, each time form's action is changed */
+/* Check for file-entry fields, and sliders, when the document or form's action changes */
 function iframeActionCheck() {
     iframeInfo.actionChecks++;
     var iframe = document.getElementById("embeddedIframe");
@@ -419,8 +420,9 @@ function iframeActionCheck() {
         if (content) {
             var settingsForm = content.getElementById("settingsForm");
             if (settingsForm) {
-                if (settingsForm.action!=iframeInfo.action) {
+                if (settingsForm.action!=iframeInfo.action || content!=iframeInfo.actionContent) {
                     iframeInfo.action = settingsForm.action;
+                    iframeInfo.actionContent = content;
                     addFsSelectButtons(content);
                     iframeInfo.addedSliders = addSliders(content);
                     iframeInfo.sectionsHidden = hideSections(content);

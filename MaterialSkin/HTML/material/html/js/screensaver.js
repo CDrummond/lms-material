@@ -17,13 +17,17 @@ Vue.component('lms-screensaver', {
     template: `
 <v-dialog v-model="showClock" v-if="showClock" scrollable fullscreen>
  <v-card class="screensaver-bgnd" v-on:mousemove="resetTimers()" v-on:touchstart="resetTimers()" id="screensaver">
-  <div :style="{ marginLeft: marginLeft + 'px', marginTop: marginTop + 'px' }" id="screensaver-contents" v-if="screensaverType!=3">
+  <div :style="{ marginLeft: marginLeft + 'px', marginTop: marginTop + 'px' }" id="screensaver-contents" v-if="screensaverType!=3 && screensaverType!=4">
    <p class="screensaver-time ellipsis">{{time}}</p>
    <p class="screensaver-date ellipsis">{{date}}</p>
    <p v-if="undefined!=alarm" class="screensaver-alarm ellipsis"><v-icon>alarm</v-icon> {{alarm}}</p>
    <p v-else class="screensaver-alarm ellipsis">&nbsp;</p>
    <p class="screensaver-name ellipsis">{{playerName}}</p>
   </div>
+  <template v-if="screensaverType==4">
+   <iframe :src="pageUrl" :key="reloadCount" class="screensaver-page" frameborder="0" scrolling="no"></iframe>
+   <div class="screensaver-page-overlay"></div>
+  </template>
  </v-card>
 </v-dialog>
 `,
@@ -37,10 +41,15 @@ Vue.component('lms-screensaver', {
                  time: "time",
                  alarm: undefined,
                  marginLeft: 0,
-                 marginTop: 0
+                 marginTop: 0,
+                 reloadCount: 0
         }
     },
     computed: {
+        pageUrl () {
+            let url = (this.$store.state.screensaverUrl || '').trim();
+            return /^https?:\/\//i.test(url) ? url : 'about:blank';
+        },
         playerName () {
             return this.$store.state.player ? this.$store.state.player.name : "";
         }
@@ -61,6 +70,7 @@ Vue.component('lms-screensaver', {
             this.nowPlayingIsExpanded = val;
         }.bind(this));
         bus.$on('screensaverDisplayChanged', function() {
+            this.reloadCount++;
             if (this.screensaverType!=this.$store.state.screensaver || this.npSwitchEnabled!=this.$store.state.screensaverNp) {
                 this.screensaverType = this.$store.state.screensaver;
                 this.npSwitchEnabled = this.$store.state.screensaverNp;
@@ -114,7 +124,7 @@ Vue.component('lms-screensaver', {
             }
         },
         updateDateAndTime() {
-            if (this.screensaverType<=0 || this.screensaverType==3) {
+            if (this.screensaverType<=0 || this.screensaverType==3 || this.screensaverType==4) {
                 return;
             }
             let date = new Date();
@@ -153,7 +163,7 @@ Vue.component('lms-screensaver', {
             }
         },
         updateAlarm(status) {
-            if (this.screensaverType<=0 || this.screensaverType==3) {
+            if (this.screensaverType<=0 || this.screensaverType==3 || this.screensaverType==4) {
                 return;
             }
             if (this.alarmTime!=status.alarm) {
@@ -183,7 +193,11 @@ Vue.component('lms-screensaver', {
                 clearInterval(this.changePosInterval);
                 this.changePosInterval = undefined;
             }
-            if (doFade && this.state=='hidding') {
+            if (undefined!==this.reloadPageTimer) {
+                clearInterval(this.reloadPageTimer);
+                this.reloadPageTimer = undefined;
+            }
+            if (doFade &&this.state=='hidding') {
                 return;
             }
             if (undefined!==this.fadeInterval) {
@@ -265,6 +279,12 @@ Vue.component('lms-screensaver', {
         },
         startDisplay() {
             this.fade(document.getElementById('screensaver'), true);
+            if (this.screensaverType==4 && this.$store.state.screensaverRefresh>0) {
+                // Periodically re-create the iframe, so that the page is reloaded
+                this.reloadPageTimer = setInterval(function () {
+                    this.reloadCount++;
+                }.bind(this), this.$store.state.screensaverRefresh*60*1000);
+            }
             let e = document.getElementById('screensaver-contents');
             if (undefined!=e) {
                 let rect = e.getBoundingClientRect();

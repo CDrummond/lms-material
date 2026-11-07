@@ -398,6 +398,13 @@ Vue.component('lms-ui-settings', {
     <v-list-tile-sub-title v-else-if="advanced && screensaver==1" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.')}}</v-list-tile-sub-title>
     <v-list-tile-sub-title v-else-if="advanced && screensaver==2" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.')}}</v-list-tile-sub-title>
     <v-list-tile-sub-title v-else-if="advanced && screensaver==3" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen after a period of inactivity.')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="advanced && screensaver==4" style="padding-bottom:16px">{{i18n('When no track is playing on current player, show a web page (e.g. a dashboard) after a period of inactivity. Page is reloaded periodically. NOTE: The page must allow embedding, and must be http:// if Material is served via http://.')}}</v-list-tile-sub-title>
+    <v-list-tile v-if="advanced && screensaver==4">
+     <v-text-field :label="i18n('URL')" v-model="screensaverUrl" placeholder="http://"></v-text-field>
+    </v-list-tile>
+    <v-list-tile v-if="advanced && screensaver==4">
+     <v-text-field :label="i18n('Reload interval (minutes, 0 = never)')" v-model.number="screensaverRefresh" type="number" min="0"></v-text-field>
+    </v-list-tile>
     <v-divider v-if="advanced"></v-divider>
     <v-list-tile v-if="advanced">
      <v-list-tile-content @click="screensaverNp = !screensaverNp" class="switch-label">
@@ -546,6 +553,8 @@ Vue.component('lms-ui-settings', {
             screensaver: 0,
             screensavers:[],
             screensaverNp: false,
+            screensaverUrl: '',
+            screensaverRefresh: 0,
             serverName: "",
             showRating: false,
             homeButton: 0,
@@ -757,6 +766,8 @@ Vue.component('lms-ui-settings', {
             this.hidden = this.$store.state.hidden;
             this.screensaver = this.$store.state.screensaver;
             this.screensaverNp = this.$store.state.screensaverNp;
+            this.screensaverUrl = this.$store.state.screensaverUrl;
+            this.screensaverRefresh = this.$store.state.screensaverRefresh;
             this.homeButton = this.$store.state.homeButton;
             this.gridPerView = this.$store.state.gridPerView;
             this.browseSearch = this.$store.state.browseSearch;
@@ -811,7 +822,8 @@ Vue.component('lms-ui-settings', {
                 { key:0, label:i18n("Disabled")},
                 { key:1, label:i18n("Moving clock")},
                 { key:2, label:i18n("Fixed clock")},
-                { key:3, label:i18n("Blank screen")}
+                { key:3, label:i18n("Blank screen")},
+                { key:4, label:i18n("Web page")}
             ]
 
             this.initHomeItems();
@@ -921,6 +933,8 @@ Vue.component('lms-ui-settings', {
                       disabledBrowseModes:arrays ? Array.from(this.disabledBrowseModes()) : this.disabledBrowseModes(),
                       screensaver:this.screensaver,
                       screensaverNp:this.screensaverNp,
+                      screensaverUrl:(this.screensaverUrl || '').trim(),
+                      screensaverRefresh:Math.max(0, parseInt(this.screensaverRefresh) || 0),
                       homeButton:this.homeButton,
                       gridPerView:this.gridPerView,
                       browseSearch:this.browseSearch,

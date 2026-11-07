@@ -94,9 +94,9 @@ function addArtistLink(item, line, type, func, page, used, plain) {
                     vals.push(buildLink(func, item[type+"_ids"][i], loop[i], page));
                 }
             }
-            line=addPart(line, vals.join(", "));
+            line=addPart(line, vals.join(ARTIST_LIST_SEPARATOR_HTML));
         } else {
-            line=addPart(line, canUseVals.join(", "));
+            line=addPart(line, canUseVals.join(plain ? ", " : ARTIST_LIST_SEPARATOR_HTML));
         }
     } else {
         let val = item[type];

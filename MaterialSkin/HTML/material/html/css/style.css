@@ -4037,6 +4037,10 @@ div.v-subheader {
  font-size:75%;
 }
 
+.artist-list-sep {
+ opacity:var(--sub-opacity);
+}
+
 .np-bar .ext-details {
  font-size:100%!important;
 }

@@ -10,6 +10,7 @@
 7. Add a 'Next' option to 'Add URL to queue' - thank to Peter Oliver.
 8. Only show the controlled player in the information dialog when single is
    set - thanks to networxnet.
+9. Fix folder selection buttons after saving settings - thanks to chrober.
 
 6.4.14
 ------

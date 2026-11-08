@@ -17,8 +17,9 @@ function checkPlatform(platform) {
 
 const SEPARATOR = " \u2022 ";
 const SEPARATOR_HTML = "&nbsp;\u2022 ";
-// Between the names of one role (e.g. composers) in an artist line: names such as "Carter, Arlie" contain commas
-const ARTIST_LIST_SEPARATOR_HTML = "<obj class=\"artist-list-sep\">&nbsp;\u2022 </obj>";
+// Between the names of one role (e.g. composers) in an artist line. Not ", ", as names such as "Earth, Wind & Fire"
+// contain commas, and not SEPARATOR, which is between the roles.
+const ARTIST_LIST_SEPARATOR = "; ";
 const SECTION_JUMP = "\u2b24";
 
 const IS_MOBILE  = (undefined!=navigator && undefined!=navigator.userAgentData && navigator.userAgentData.mobile) ||

@@ -150,6 +150,16 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('screensaverNp', state.screensaverNp);
         screensaverChanged = true;
     }
+    if (undefined!=val.screensaverUrl && state.screensaverUrl!=val.screensaverUrl) {
+        state.screensaverUrl = val.screensaverUrl;
+        setLocalStorageVal('screensaverUrl', state.screensaverUrl);
+        screensaverChanged = true;
+    }
+    if (undefined!=val.screensaverRefresh && state.screensaverRefresh!=val.screensaverRefresh) {
+        state.screensaverRefresh = val.screensaverRefresh;
+        setLocalStorageVal('screensaverRefresh', state.screensaverRefresh);
+        screensaverChanged = true;
+    }
     if (screensaverChanged) {
         bus.$emit('screensaverDisplayChanged');
     }
@@ -383,6 +393,8 @@ const store = new Vuex.Store({
         skipFSeconds: 30,
         screensaver: 0,
         screensaverNp: false,
+        screensaverUrl: '',
+        screensaverRefresh: 0,
         homeButton: 0,
         autoShowHomeButton: window.innerWidth>=LMS_AUTO_SHOW_HOME_BUTTON_MIN_WIDTH,
         gridPerView: true,
@@ -645,12 +657,13 @@ const store = new Vuex.Store({
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'screensaver', 'homeButton'];
+            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'screensaver', 'screensaverRefresh', 'homeButton'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 let value = getLocalStorageVal(key, state[key]);
                 state[key] = isNaN(value) ? ("true"==value ? 1 : 0) : parseInt(value);
             }
+            state.screensaverUrl = getLocalStorageVal('screensaverUrl', state.screensaverUrl);
             if (!VALID_SKIP_SECONDS.has(state.skipBSeconds)) {
                 state.skipBSeconds = 10;
             }

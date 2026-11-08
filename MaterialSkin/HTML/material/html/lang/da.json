@@ -760,5 +760,8 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Reload interval (minutes, 0 = never)":"",
+"Web page":"",
+"When no track is playing on current player, show a web page (e.g. a dashboard) after a period of inactivity. Page is reloaded periodically. NOTE: The page must allow embedding, and must be http:// if Lyrion is accessed via http://.":""
 }

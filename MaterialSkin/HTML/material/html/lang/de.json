@@ -754,11 +754,14 @@
 "Long-press on image and select 'Share image'.":"",
 "Long-press on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
 "Medium":"",
+"Reload interval (minutes, 0 = never)":"",
 "Right-click on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
 "Share":"",
 "Shift+%1":"",
 "Transcoded":"",
 "Use default volume":"",
 "Use the player's default alarm volume.":"",
-"Volume: %1":""
+"Volume: %1":"",
+"Web page":"",
+"When no track is playing on current player, show a web page (e.g. a dashboard) after a period of inactivity. Page is reloaded periodically. NOTE: The page must allow embedding, and must be http:// if Lyrion is accessed via http://.":""
 }

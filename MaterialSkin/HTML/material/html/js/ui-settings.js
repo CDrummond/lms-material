@@ -398,7 +398,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile-sub-title v-else-if="advanced && screensaver==1" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.')}}</v-list-tile-sub-title>
     <v-list-tile-sub-title v-else-if="advanced && screensaver==2" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.')}}</v-list-tile-sub-title>
     <v-list-tile-sub-title v-else-if="advanced && screensaver==3" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen after a period of inactivity.')}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="advanced && screensaver==4" style="padding-bottom:16px">{{i18n('When no track is playing on current player, show a web page (e.g. a dashboard) after a period of inactivity. Page is reloaded periodically. NOTE: The page must allow embedding, and must be http:// if Material is served via http://.')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="advanced && screensaver==4" style="padding-bottom:16px">{{i18n('When no track is playing on current player, show a web page (e.g. a dashboard) after a period of inactivity. Page is reloaded periodically. NOTE: The page must allow embedding, and must be http:// if Lyrion is accessed via http://.')}}</v-list-tile-sub-title>
     <v-list-tile v-if="advanced && screensaver==4">
      <v-text-field :label="i18n('URL')" v-model="screensaverUrl" placeholder="http://"></v-text-field>
     </v-list-tile>

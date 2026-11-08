@@ -1,18 +1,19 @@
 6.5.0
 -----
-1. Show/set an alarm's own volume - thanks to michalstrelec.
-2. When adding a favourite, set type to 'feed' if path ends with .xml, .opml,
-   or .rss
-3. Don't add podcast feeds to 'Radios' scrolled list.
-4. Use 'rss_feed' icon for 'feed' types in favourites.
-5. Send icon in favourites add command if defined in dialog.
-6. Fix font size of coloured log lines.
-7. Add a 'Next' option to 'Add URL to queue' - thank to Peter Oliver.
-8. Only show the controlled player in the information dialog when single is
-   set - thanks to networxnet.
-9. Fix folder selection buttons after saving settings - thanks to chrober.
-10. Add a 'Web page' screensaver type, which shows a configurable URL (reloaded
-    optionally reloaded at an interval) in place of the clock.
+ 1. Show/set an alarm's own volume - thanks to michalstrelec.
+ 2. When adding a favourite, set type to 'feed' if path ends with .xml, .opml,
+    or .rss
+ 3. Don't add podcast feeds to 'Radios' scrolled list.
+ 4. Use 'rss_feed' icon for 'feed' types in favourites.
+ 5. Send icon in favourites add command if defined in dialog.
+ 6. Fix font size of coloured log lines.
+ 7. Add a 'Next' option to 'Add URL to queue' - thank to Peter Oliver.
+ 8. Only show the controlled player in the information dialog when single is
+    set - thanks to networxnet.
+ 9. Fix folder selection buttons after saving settings - thanks to chrober.
+10. Add a 'Web page' screensaver type, which shows a configurable URL
+    (optionally reloaded at an interval) in place of the clock - thanks to
+    Jeremy Daalder.
 
 6.4.14
 ------

@@ -745,6 +745,7 @@
 "Medium":"",
 "Player list":"",
 "Release review":"",
+"Reload interval (minutes, 0 = never)":"",
 "Right-click on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
 "Select favorite players, these will always be visible (if connected). Use drag'n'drop to change order.":"",
 "Select user profile":"",
@@ -760,5 +761,7 @@
 "Use default volume":"",
 "Use the player's default alarm volume.":"",
 "Volume: %1":"",
+"Web page":"",
+"When no track is playing on current player, show a web page (e.g. a dashboard) after a period of inactivity. Page is reloaded periodically. NOTE: The page must allow embedding, and must be http:// if Lyrion is accessed via http://.":"",
 "Work review":""
 }

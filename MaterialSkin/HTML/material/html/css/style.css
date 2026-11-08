@@ -3202,6 +3202,15 @@ div.v-subheader {
  color:var(--text-color) !important;
 }
 
+/* Work in front of a track title: coloured like the work group headers */
+.work-link {
+ color:var(--active-color) !important;
+}
+
+.msk-is-non-touch .link-item.work-link:hover {
+ color:var(--text-color) !important;
+}
+
 .browse-header .v-list__tile__sub-title, .browse-header .browse-time, .browse-header .np-list-time,
 .msk-is-touch .browse-header .menu-btn,
 .msk-is-touch .grid-header .menu-btn {

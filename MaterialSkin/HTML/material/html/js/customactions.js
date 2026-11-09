@@ -45,7 +45,7 @@ function initCustomActions() {
 
 function getSectionActions(section, actions, lockedActions, filter) {
     let used = new Set();
-    let lists = [customActions, pluginCustomActions];
+    let lists = "pinned"==section ? [customActions] : [customActions, pluginCustomActions];
     for (let l=0, llen=lists.length; l<llen; ++l) {
         let list = lists[l];
         if (list && list[section]) {

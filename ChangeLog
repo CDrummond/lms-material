@@ -18,6 +18,8 @@
 12. MAke work in from of track title clickable - thanks tro Ari.
 13. Try to use Material's album view for more SlimBrowse items - thanks to Ari.
 14. Add monochrome LyrionJS icon.
+15. Don't allow plugins to specify custom pinned actions - these are for users
+    only.
 
 6.4.14
 ------

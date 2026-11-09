@@ -2950,6 +2950,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .msk-is-non-touch .link-item:hover, .msk-is-non-touch .np-bar .link-item:hover {
   color:var(--active-color)!important;
  }
+ /* A link inside a clickable block (e.g. artists in the album header): only highlight the link */
+ .msk-is-non-touch .link-item:has(.link-item:hover) {
+  color:inherit!important;
+ }
  .msk-is-non-touch .link-item-ct:hover, .msk-is-non-touch .np-bar .link-item-ct:hover {
   opacity:var(--sub-opacity)!important;
  }

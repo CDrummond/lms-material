@@ -1196,6 +1196,8 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         // Year from 'More' menu?
         browseAddCategories(view, {id:'year:'+item.actions.go.params.year, title:item.title.split(': ')[1]}, false);
         browseCheckExpand(view);
+    } else if (SECTION_FAVORITES!=item.section && undefined==item.stdItem && undefined!=browseLibraryAlbumId(item)) {
+        browseOpenLibraryAlbum(view, item, index, event);
     } else if (item.weblink) {
         openWebLink(item);
     } else if (SECTION_FAVORITES==item.section && !item.isFavFolder && item.presetParams && item.presetParams.favorites_url &&
@@ -1252,6 +1254,51 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
     } else {
         browseDoClick(view, item, index, event);
     }
+}
+
+// Album ID of a plugin item (e.g. a 3rd party home row) whose 'go' action just lists the tracks of a library album.
+function browseLibraryAlbumId(item) {
+    let go = item.actions ? item.actions.go : undefined;
+    if (undefined==go || undefined==go.cmd || go.cmd.length!=2 || go.cmd[0]!="browselibrary" || go.cmd[1]!="items" ||
+        undefined==go.params || go.params.mode!="tracks" || undefined==go.params.album_id) {
+        return undefined;
+    }
+    // Any other parameter (artist, role, work, etc.) filters the tracks, so is not a plain album listing.
+    for (let key in go.params) {
+        if (key!="mode" && key!="album_id" && key!="library_id" && key!="menu") {
+            return undefined;
+        }
+    }
+    return go.params.album_id;
+}
+
+// Open such an item as if it came from Material's own album lists, so that it gets the same album view (header
+// with artists, genres, and year).
+function browseOpenLibraryAlbum(view, item, index, event) {
+    let albumId = "album_id:"+browseLibraryAlbumId(item);
+    let params = [albumId, lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS];
+    // LMS ignores library_id when looking up an album by its ID, but the album view lists only the tracks in the
+    // current library: count those, so that an album with none of its tracks in the library is not shown empty.
+    let trackParams = [albumId];
+    browseAddLibId(view, params);
+    browseAddLibId(view, trackParams);
+    view.fetchingItem = item.id;
+    let reqId = view.nextReqId();
+    Promise.all([lmsList(view.playerId(), ["albums"], params, 0, 1, false, reqId),
+                 lmsList(view.playerId(), ["tracks"], trackParams, 0, 1, false, reqId)]).then(([albums, tracks]) => {
+        view.fetchingItem = undefined;
+        if (!view.isCurrentReq(albums.data)) {
+            return;
+        }
+        let resp = parseBrowseResp(albums.data, undefined, view.options);
+        let inLibrary = undefined!=tracks.data && undefined!=tracks.data.result && parseInt(tracks.data.result.count)>0;
+        // Not in the current library? Use the item's own action.
+        browseDoClick(view, inLibrary && undefined!=resp && 1==resp.items.length && STD_ITEM_ALBUM==resp.items[0].stdItem ? resp.items[0] : item, index, event);
+    }).catch(err => {
+        view.fetchingItem = undefined;
+        logError(err, ["albums"], params);
+        browseDoClick(view, item, index, event);
+    });
 }
 
 function browseDoClick(view, item, index, event) {

@@ -1857,9 +1857,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     yearSet.add(year);
                     years.push(year);
                 }
+                let titleLinks = trackTitleLinks(i, title, "browse");
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: addSubtitle(title, i),
+                              titleLinks: undefined==titleLinks ? undefined : addSubtitle(titleLinks, i),
                               baseTitle: baseTitle,
                               plainTitle: isSearchResult ? i.title : undefined,
                               subtitle: subtitle,
@@ -2055,6 +2057,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.items[idx].gfilter = undefined;
                         resp.items[idx].disc = undefined;
                         resp.items[idx].title = resp.items[idx].baseTitle;
+                        resp.items[idx].titleLinks = undefined; // Work is in the group header
                     }
                     for (let k of groupings.keys()) {
                         let grouping = groupings.get(k);

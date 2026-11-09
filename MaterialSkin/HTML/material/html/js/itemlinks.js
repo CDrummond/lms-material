@@ -68,6 +68,22 @@ function show_userrole(event, id, title, page, role) {
     showArtistRole(event, id, title, page, role);
 }
 
+// Link to a work, as in the work line of a group header
+function buildWorkLink(i, page, cls) {
+    return "<obj class=\"link-item"+(cls ? " "+cls : "")+"\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+(i.composer ? escape(i.composer) : "")+"\',\'"+page+"\')\">"+i.work+"</obj>";
+}
+
+// Track title (as built by trackTitle) with the work in front of it as a link. Undefined if the title has no work in it,
+// or links are not shown.
+function trackTitleLinks(i, title, page) {
+    if (undefined==i.work || undefined==i.work_id || (IS_MOBILE && !lmsOptions.touchLinks)) {
+        return undefined;
+    }
+    let workPrefix = i.work+SEPARATOR;
+    let pos = title.indexOf(workPrefix);
+    return pos<0 ? undefined : title.substring(0, pos)+buildWorkLink(i, page, "work-link")+title.substring(pos+i.work.length);
+}
+
 function buildLink(func, id, str, page, extra) {
     return "<obj class=\"link-item\" onclick=\""+func+"(event, "+id+",\'"+escape(str)+"\', \'"+page+"\'"+
            (undefined==extra ? "" : ","+extra)+")\">" + str + "</obj>";
@@ -259,7 +275,7 @@ function buildWorkLine(i, page, plain) {
                 var composerId = i.composer_id || (i.composer_ids && i.composer_ids[0]);
                 composerPart = composerId ? buildLink('show_composer_works', composerId, i.composer, page) : i.composer;
             }
-            var workPart = "<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">"+i.work+"</obj>";
+            var workPart = buildWorkLink(i, page);
             if (i.grouping && i.grouping!=i.work) {
                 workPart += SEPARATOR + i.grouping;
             }

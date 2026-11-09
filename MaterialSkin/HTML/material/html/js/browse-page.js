@@ -786,7 +786,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (stdItem==STD_ITEM_ALBUM || (stdItem==STD_ITEM_ONLINE_ALBUM && this.current.sbMeta) ||
                 stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS || stdItem==STD_ITEM_MIX ||
                 stdItem==STD_ITEM_CLASSICAL_WORKS) {
-                let albumArtst = this.current.subIsYear ? undefined : this.current.subtitle;
+                // Artist links, except for a single artist album opened from an artist's page: that artist is where
+                // we came from, so (as before) clicking the header, artist included, opens the history to go back.
+                let prev = this.history.length>0 ? this.history[this.history.length-1].current : undefined;
+                let fromArtist = undefined!=prev && (STD_ITEM_ARTIST==prev.stdItem || STD_ITEM_WORK_COMPOSER==prev.stdItem);
+                let useLinks = undefined!=this.current.subtitleLinks &&
+                               !(fromArtist && (undefined==this.current.artist_ids || this.current.artist_ids.length<2));
+                let albumArtst = this.current.subIsYear ? undefined : useLinks ? this.current.subtitleLinks : this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
                 }
@@ -795,7 +801,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
-                        return loop[i].current.subtitle;
+                        return loop[i].current.subtitleLinks ? loop[i].current.subtitleLinks : loop[i].current.subtitle;
                     } else if (STD_ITEM_ARTIST==loop[i].current.stdItem || STD_ITEM_WORK_COMPOSER==loop[i].current.stdItem) {
                         return loop[i].current.title;
                     }

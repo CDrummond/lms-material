@@ -837,6 +837,15 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.current.subtitle = resp.listHeader.title_names.join(SEPARATOR)
             view.current.artists = resp.listHeader.title_names;
             view.current.artist_ids = resp.listHeader.title_ids;
+            view.current.subtitleLinks = undefined;
+            if ((!IS_MOBILE || lmsOptions.touchLinks) && undefined!=resp.listHeader.title_ids &&
+                resp.listHeader.title_ids.length==resp.listHeader.title_names.length) {
+                let links = [];
+                for (let i=0, names=resp.listHeader.title_names, ids=resp.listHeader.title_ids, len=names.length; i<len; ++i) {
+                    links.push(buildLink("show_artist", ids[i], names[i], "browse"));
+                }
+                view.current.subtitleLinks = links.join(SEPARATOR_HTML);
+            }
         }
         view.$nextTick(function () {
             view.setBgndCover();

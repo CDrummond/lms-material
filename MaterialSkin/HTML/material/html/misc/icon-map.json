@@ -75,6 +75,7 @@
     "/WalkWithMe/html/images/icon.png":{"icon":"directions_walk"},
     "/Wefunk/html/images/logo.png":{"svg":"radio-station"},
     "plugins/SqueezeSonic/html/images/random.png":{"svg":"dice-album"},
+    "plugins/LyrionJS/html/images/icon.png":{"svg":"lyrionjs"},
     "/SiriusXMLogo.png":{"svg":"siriusxm"},
     "/accuradio.png":{"icon":"volume_up"},
     "/accuradio.jpg":{"svg":"accuradio"},

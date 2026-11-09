@@ -1160,6 +1160,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         }
         return;
     }
+    let browseAlbumId = undefined; // Used in call to 'browseLibraryAlbumId' below...
     if (TOP_MYMUSIC_ID==item.id) {
         browseAddHistory(view);
         view.items = view.myMusic;
@@ -1196,8 +1197,8 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         // Year from 'More' menu?
         browseAddCategories(view, {id:'year:'+item.actions.go.params.year, title:item.title.split(': ')[1]}, false);
         browseCheckExpand(view);
-    } else if (SECTION_FAVORITES!=item.section && undefined==item.stdItem && undefined!=browseLibraryAlbumId(item)) {
-        browseOpenLibraryAlbum(view, item, index, event);
+    } else if (SECTION_FAVORITES!=item.section && undefined==item.stdItem && undefined!=(browseAlbumId=browseLibraryAlbumId(item))) {
+        browseOpenLibraryAlbum(view, item, index, browseAlbumId, event);
     } else if (item.weblink) {
         openWebLink(item);
     } else if (SECTION_FAVORITES==item.section && !item.isFavFolder && item.presetParams && item.presetParams.favorites_url &&
@@ -1274,8 +1275,8 @@ function browseLibraryAlbumId(item) {
 
 // Open such an item as if it came from Material's own album lists, so that it gets the same album view (header
 // with artists, genres, and year).
-function browseOpenLibraryAlbum(view, item, index, event) {
-    let albumId = "album_id:"+browseLibraryAlbumId(item);
+function browseOpenLibraryAlbum(view, item, index, browseAlbumId, event) {
+    let albumId = "album_id:"+browseAlbumId;
     let params = [albumId, lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS];
     // LMS ignores library_id when looking up an album by its ID, but the album view lists only the tracks in the
     // current library: count those, so that an album with none of its tracks in the library is not shown empty.

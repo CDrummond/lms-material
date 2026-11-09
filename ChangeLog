@@ -14,6 +14,9 @@
 10. Add a 'Web page' screensaver type, which shows a configurable URL
     (optionally reloaded at an interval) in place of the clock - thanks to
     Jeremy Daalder.
+11. Make multi-artist values in toolbar clickable - thanks to Ari.
+12. MAke work in from of track title clickable - thanks tro Ari.
+13. Try to use Material's album view for more SlimBrowse items - thanks to Ari.
 
 6.4.14
 ------

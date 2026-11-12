@@ -419,6 +419,7 @@
 "Release, Track Number":"Udgivelse, albumsnummer",
 "Releases":"Udgivelser",
 "Reload":"Genstart",
+"Reload interval (minutes, 0 = never)":"Genindlæsningsinterval (minutter, 0 = aldrig)",
 "Reloading":"Genindlæser",
 "Remaining duration of current track":"Indtil nuværende nummer er afsluttet",
 "Remote Libraries":"Eksterne musiksamlinger",
@@ -673,12 +674,14 @@
 "Volume gain":"Lydstyrkejustering",
 "Volume step":"Lydstyrketrin",
 "Volume: %1":"Lydstyrke: %1",
+"Web page":"Webside",
 "Wednesday":"Onsdag",
 "Weds":"Ons",
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":"Når der navigeres i lister, vis et hjemikon for hutigt at kunne gå til hovedforsiden. Hvis ikke, kan du klikke på titlen for at vise en menu der indeholder 'Hjem'.",
 "When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.":"Når intet nummer afspilles på den nuværende afspiller, dæmp lysstyrken på skærmen (og vis dato & tid) efter en periode med inaktivitet. Uret er fastgjort til midten af skærmen.",
 "When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.":"Når intet nummer afspilles på den nuværende afspiller, dæmp lysstyrken på skærmen (og vis dato & tid) efter en periode med inaktivitet. Uret flyttes hvert par minutter.",
 "When no track is playing on current player, darken screen after a period of inactivity.":"Når intet nummer afspilles på den nuværende afspiller, dæmp lysstyrken på skærmen efter en periode med inaktivitet.",
+"When no track is playing on current player, show a web page (e.g. a dashboard) after a period of inactivity. Page is reloaded periodically. NOTE: The page must allow embedding, and must be http:// if Lyrion is accessed via http://.":"Når intet nummer afspilles på den nuværende afspiller, vises en webside (f.eks. et dashboard) efter en periode med inaktivitet. Siden genindlæses periodisk. NB: Siden skal tillade indlejring og skal være http://, hvis Lyrion tilgås via http://.",
 "With":"Med",
 "Without":"Uden",
 "Work":"Værk",
@@ -760,8 +763,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Reload interval (minutes, 0 = never)":"",
-"Web page":"",
-"When no track is playing on current player, show a web page (e.g. a dashboard) after a period of inactivity. Page is reloaded periodically. NOTE: The page must allow embedding, and must be http:// if Lyrion is accessed via http://.":""
+"%1 days":"%1 dage"
 }

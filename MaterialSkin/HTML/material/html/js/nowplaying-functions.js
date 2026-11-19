@@ -973,6 +973,8 @@ function nowplayingFetchArtistInfo(view) {
             });
         }
 
+        /*
+        LastFM Key now needs a license? Disable the following...
         if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
             lmsCommand("", ["material-skin", "similar", "artist:"+revertHtmlBrackets(view.info.tabs[ARTIST_TAB].artist ? view.info.tabs[ARTIST_TAB].artist : view.info.tabs[ARTIST_TAB].albumartist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                 if (data && data.result && data.result.similar_loop) {
@@ -987,6 +989,7 @@ function nowplayingFetchArtistInfo(view) {
                 }
             });
         }
+        */
     } else if (undefined==artist && undefined==artist_id && undefined==artist_ids) {
         view.info.tabs[ARTIST_TAB].isMsg=true;
         view.info.tabs[ARTIST_TAB].text=undefined;

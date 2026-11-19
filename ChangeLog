@@ -20,6 +20,7 @@
 14. Add monochrome LyrionJS icon.
 15. Don't allow plugins to specify custom pinned actions - these are for users
     only.
+16. Remove 'Similar artists' due to Last.FM changes.
 
 6.4.14
 ------

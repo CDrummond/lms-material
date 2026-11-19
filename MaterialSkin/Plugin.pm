@@ -65,7 +65,7 @@ use constant NUM_HOME_ITEMS => 10;
 use constant PLAYLIST_IMAGE_TRACKS => 20;
 use constant MAX_PLAYER_AGE => 14 * 24 * 60 * 60;
 
-my $LASTFM_API_KEY = '5a854b839b10f8d46e630e8287c2299b';
+#my $LASTFM_API_KEY = '5a854b839b10f8d46e630e8287c2299b';
 my $MAX_CACHE_AGE = 90*24*60*60; # 90 days
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $CACHE_MAX_AGE = 60 * 60 * 24 * 31; # 1 month
@@ -761,7 +761,8 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra',
+                                                  #'similar',
+                                                  'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra',
                                                   'home-extra-3rdparty', 'player-list', 'plugin-actions']) ) {
         $request->setStatusBadParams();
         return;
@@ -1813,6 +1814,7 @@ sub _cliCommand {
         return;
     }
 
+=begin comment
     if ($cmd eq 'similar') {
         my $artist = $request->getParam('artist');
         if ($artist) {
@@ -1881,6 +1883,8 @@ sub _cliCommand {
             return;
         }
     }
+=end comment
+=cut
 
     if ($cmd eq 'apps') {
         my $combined = $prefs->get('combineAppsAndRadio');
@@ -2490,6 +2494,7 @@ sub _traverseFavoritesTree {
     return $cnt;
 }
 
+=begin comment
 sub _handleSimilarArtists {
     my $request = shift;
     my $content = shift;
@@ -2535,6 +2540,8 @@ sub _handleSimilarArtists {
     }
     return $cnt;
 }
+=end comment
+=cut
 
 sub _cliClientCommand {
     my $request = shift;

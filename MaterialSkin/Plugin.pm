@@ -1847,7 +1847,9 @@ sub _cliCommand {
 
             my $ua = Slim::Utils::Misc::userAgentString();
             $ua =~ s{iTunes/4.7.1}{Mozilla/5.0};
-            my %headers = ( 'User-Agent' => $ua, 'X-LMS-Plugin-ID' => PLUGIN_PACKAGE);
+            my %headers = Slim::Utils::Misc->can('apiHeaders')
+                ? Slim::Utils::Misc::apiHeaders()
+                : ( 'X-LMS-Plugin-ID' => __PACKAGE__ );
 
             $artist = URI::Escape::uri_escape_utf8($artist);
             my $url = "https://api.lms-community.org/music/artist/${artist}/relatedArtists";

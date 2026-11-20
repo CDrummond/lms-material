@@ -64,7 +64,6 @@ use constant RANDOM_MIX_EXT => '.mix';
 use constant NUM_HOME_ITEMS => 10;
 use constant PLAYLIST_IMAGE_TRACKS => 20;
 use constant MAX_PLAYER_AGE => 14 * 24 * 60 * 60;
-use constant PLUGIN_PACKAGE => __PACKAGE__ =~ s/\b(?:\w+)$/Plugin/r;
 
 my $MAX_CACHE_AGE = 90*24*60*60; # 90 days
 my $MAX_ADV_SEARCH_RESULTS = 1000;

@@ -64,8 +64,8 @@ use constant RANDOM_MIX_EXT => '.mix';
 use constant NUM_HOME_ITEMS => 10;
 use constant PLAYLIST_IMAGE_TRACKS => 20;
 use constant MAX_PLAYER_AGE => 14 * 24 * 60 * 60;
+use constant PLUGIN_PACKAGE => __PACKAGE__ =~ s/\b(?:\w+)$/Plugin/r;
 
-#my $LASTFM_API_KEY = '5a854b839b10f8d46e630e8287c2299b';
 my $MAX_CACHE_AGE = 90*24*60*60; # 90 days
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $CACHE_MAX_AGE = 60 * 60 * 24 * 31; # 1 month
@@ -761,8 +761,7 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  #'similar',
-                                                  'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra',
+                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra',
                                                   'home-extra-3rdparty', 'player-list', 'plugin-actions']) ) {
         $request->setStatusBadParams();
         return;
@@ -1814,7 +1813,6 @@ sub _cliCommand {
         return;
     }
 
-=begin comment
     if ($cmd eq 'similar') {
         my $artist = $request->getParam('artist');
         if ($artist) {
@@ -1844,14 +1842,15 @@ sub _cliCommand {
                     $request->setStatusDone();
                     return;
                 }
-                # ...to old? Call LastFM...
+                # ...to old? Call LMS API...
             }
 
             my $ua = Slim::Utils::Misc::userAgentString();
             $ua =~ s{iTunes/4.7.1}{Mozilla/5.0};
-            my %headers = ( 'User-Agent' => $ua );
+            my %headers = ( 'User-Agent' => $ua, 'X-LMS-Plugin-ID' => PLUGIN_PACKAGE);
+
             $artist = URI::Escape::uri_escape_utf8($artist);
-            my $url = "http://ws.audioscrobbler.com/2.0/?api_key=${LASTFM_API_KEY}&method=artist.getSimilar&autocorrect=1&format=json&limit=25&&artist=${artist}";
+            my $url = "https://api.lms-community.org/music/artist/${artist}/relatedArtists";
 
             Slim::Networking::SimpleAsyncHTTP->new(
                 sub {
@@ -2494,7 +2493,6 @@ sub _traverseFavoritesTree {
     return $cnt;
 }
 
-=begin comment
 sub _handleSimilarArtists {
     my $request = shift;
     my $content = shift;
@@ -2506,32 +2504,31 @@ sub _handleSimilarArtists {
     my @artists = ();
     my $cnt = 0;
     my $now = time();
-    if ($decoded->{'similarartists'}) {
-        if ($decoded->{'time'}) {
-            if ($ignoreAge==1 || ($now - $decoded->{'time'})<$MAX_CACHE_AGE) {
-                foreach my $artist (@{$decoded->{'similarartists'}}) {
-                    push(@artists, $artist);
-                    $request->addResultLoop("similar_loop", $cnt, "artist", $artist);
-                    $cnt+=1;
+    if ($decoded->{'similarArtists'}) {
+        foreach my $artist (@{$decoded->{'similarArtists'}}) {
+            if ($artist->{'artist'}) {
+                if ($save==1) {
+                    push(@artists, $artist->{'artist'});
                 }
-                return 1; # Even if empty don't make HTTP call
+                $request->addResultLoop("similar_loop", $cnt, "artist", $artist->{'artist'});
+                $cnt+=1;
             }
-        } elsif ($decoded->{'similarartists'}->{'artist'}) {
-            foreach my $artist (@{$decoded->{'similarartists'}->{'artist'}}) {
-                if ($artist->{'name'}) {
-                    if ($save ==1) {
-                        push(@artists, $artist->{'name'});
-                    }
-                    $request->addResultLoop("similar_loop", $cnt, "artist", $artist->{'name'});
-                    $cnt+=1;
-                }
+        }
+    } elsif ($decoded->{'similarartists'} && $decoded->{'time'}) {
+        if ($ignoreAge==1 || ($now - $decoded->{'time'})<$MAX_CACHE_AGE) {
+            foreach my $artist (@{$decoded->{'similarartists'}}) {
+                push(@artists, $artist);
+                $request->addResultLoop("similar_loop", $cnt, "artist", $artist);
+                $cnt+=1;
             }
+            return 1; # Even if empty don't make HTTP call
         }
     }
 
     if ($save==1) {
         my $filePath = $cacheDir . "/" . ${key} . ".json";
-        mkdir $cacheDir if ! -d $cacheDir;
+        main::DEBUGLOG && $log->debug("Saving to ${filePath}");
+        make_path($cacheDir) if ! -d $cacheDir;
         if (open(my $fh, '>', $filePath)) {
             my $data = {'time' => $now, 'similarartists' => \@artists};
             print $fh encode_json($data);
@@ -2540,8 +2537,6 @@ sub _handleSimilarArtists {
     }
     return $cnt;
 }
-=end comment
-=cut
 
 sub _cliClientCommand {
     my $request = shift;

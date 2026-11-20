@@ -3305,8 +3305,7 @@ function browseFetchExtra(view, fetchArtists) {
         }
         return;
     }
-    /*
-    LastFM Key now needs a license? Disable the following...
+
     let title = item.noReleaseGrouping ? item.title.split(SEPARATOR)[0] : item.title;
     lmsCommand("", ["material-skin", "similar", "artist:"+title]).then(({data}) => {
         let html = undefined;
@@ -3341,15 +3340,6 @@ function browseFetchExtra(view, fetchArtists) {
             }
         }
     });
-    */
-    // If above is re-enabled remove the following...
-    if (undefined!=infoHtml) {
-        if (undefined==view.fetchingItem) { // Have response alreadty so can append
-            browseAddExtra(view, infoHtml);
-        } else {
-            view.extra = { html:infoHtml, id: item.id };
-        }
-    }
 }
 
 function browseGoToItem(view, cmd, params, title, page, clearHistory, subtitle) {

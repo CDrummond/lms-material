@@ -1297,8 +1297,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (act==ALBUM_SORTS_ACTION || act==TRACK_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_ALT_GRID_ACTION || act==USE_LIST_ACTION) {
                 browseHeaderAction(this, act, event, true);
             } else {
-                // If this is from 'Radios' scrolled list, try to convert from URL to favourite ID
-                if (undefined!=item && item.ihe && item.id.startsWith("radio.")) {
+                // If this is from 'Radios' scrolled list, or a radio pinned to home screen, try to convert
+                // from URL to favourite ID. Playing via favourites lets LMS know the station's icon.
+                if (undefined!=item && ((item.ihe && item.id.startsWith("radio.")) ||
+                                        (item.isPinned && undefined!=item.url && "extra"!=item.type &&
+                                         (PLAY_ACTION==act || INSERT_ACTION==act || ADD_ACTION==act)))) {
                     lmsCommand("", ["favorites", "exists", item.url]).then(({data}) => {
                         if (data && data.result && 1==parseInt(data.result.exists)) {
                             let copy = JSON.parse(JSON.stringify(item));

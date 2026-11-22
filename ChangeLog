@@ -1,6 +1,8 @@
 6.5.1
 -----
 1. Fix missing system custom actions.
+2. Play pinned radios through favourites so their icon shows up - thanks to
+   arakeis.
 
 6.5.0
 -----

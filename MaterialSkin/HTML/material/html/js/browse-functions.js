@@ -1276,6 +1276,19 @@ function browseLibraryAlbumId(item) {
 // Open such an item as if it came from Material's own album lists, so that it gets the same album view (header
 // with artists, genres, and year).
 function browseOpenLibraryAlbum(view, item, index, browseAlbumId, event) {
+    view.fetchingItem = item.id;
+    browseFetchLibraryAlbum(view, browseAlbumId, album => {
+        // Not in the current library? Use the item's own action.
+        browseDoClick(view, undefined==album ? item : album, index, event);
+    }, () => {
+        view.fetchingItem = undefined;
+    });
+}
+
+// Look up a library album as Material's own album item, and call 'found' with it - or with undefined if it can't be
+// found, or none of its tracks are in the current library. 'found' is not called if a newer request has been made
+// meanwhile (the user has moved on). 'done', if given, is always called first.
+function browseFetchLibraryAlbum(view, browseAlbumId, found, done) {
     let albumId = "album_id:"+browseAlbumId;
     let params = [albumId, lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS];
     // LMS ignores library_id when looking up an album by its ID, but the album view lists only the tracks in the
@@ -1283,22 +1296,24 @@ function browseOpenLibraryAlbum(view, item, index, browseAlbumId, event) {
     let trackParams = [albumId];
     browseAddLibId(view, params);
     browseAddLibId(view, trackParams);
-    view.fetchingItem = item.id;
     let reqId = view.nextReqId();
     Promise.all([lmsList(view.playerId(), ["albums"], params, 0, 1, false, reqId),
                  lmsList(view.playerId(), ["tracks"], trackParams, 0, 1, false, reqId)]).then(([albums, tracks]) => {
-        view.fetchingItem = undefined;
+        if (undefined!=done) {
+            done();
+        }
         if (!view.isCurrentReq(albums.data)) {
             return;
         }
         let resp = parseBrowseResp(albums.data, undefined, view.options);
         let inLibrary = undefined!=tracks.data && undefined!=tracks.data.result && parseInt(tracks.data.result.count)>0;
-        // Not in the current library? Use the item's own action.
-        browseDoClick(view, inLibrary && undefined!=resp && 1==resp.items.length && STD_ITEM_ALBUM==resp.items[0].stdItem ? resp.items[0] : item, index, event);
+        found(inLibrary && undefined!=resp && 1==resp.items.length && STD_ITEM_ALBUM==resp.items[0].stdItem ? resp.items[0] : undefined);
     }).catch(err => {
-        view.fetchingItem = undefined;
+        if (undefined!=done) {
+            done();
+        }
         logError(err, ["albums"], params);
-        browseDoClick(view, item, index, event);
+        found(undefined);
     });
 }
 
@@ -1970,6 +1985,21 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         view.refreshList(false);
         bus.$emit('showMessage', i18n('Reloading'));
     } else {
+        // A plugin item that just lists the tracks of a library album, and shows the multi-disc or works icon? Act on
+        // Material's own album item instead, so that the user is asked which disc or work to use.
+        let browseAlbumId = undefined;
+        if (undefined==item.stdItem && undefined==item.multi && ("album-multi"==item.overlay || "group-multi"==item.overlay) &&
+            SECTION_FAVORITES!=(item.ihe ? item.section : view.current ? view.current.section : undefined) &&
+            (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act) &&
+            undefined!=(browseAlbumId=browseLibraryAlbumId(item))) {
+            browseFetchLibraryAlbum(view, browseAlbumId, album => {
+                // Not found? Use the item's own action - without the overlay, so that it is not looked up again.
+                browseItemAction(view, act, undefined==album ? Object.assign({}, item, {overlay:undefined}) : album,
+                                 index, event, slimBrowseBaseActions);
+            });
+            return;
+        }
+
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && (view.isTop || !view.current.id.startsWith("album_id:")) && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
             var command = browseBuildCommand(view, item);

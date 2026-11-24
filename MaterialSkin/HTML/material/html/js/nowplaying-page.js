@@ -28,6 +28,94 @@ const MAX_LYRICS_DURATION = 60 * 60; // 1hr?
 
 var currentPlayingTrackPosition = 0;
 
+// Player status can arrive before the deferred Now Playing functions are loaded.
+// Keep only the newest status and apply it when that script finishes executing,
+// instead of waiting one second and requesting the same status from LMS again.
+function nowplayingListenForPlayerStatus(view) {
+    let pendingStatus;
+    let fallbackTimer;
+
+    function refreshAfterFailure() {
+        setTimeout(function() {
+            const player = view.$store.state.player;
+            bus.$emit('refreshStatus', player ? player.id : undefined);
+        }, 1000);
+    }
+
+    function applyStatus(status) {
+        try {
+            nowplayingOnPlayerStatus(view, status);
+        } catch (e) {
+            // Preserve the existing recovery behavior for real processing errors.
+            refreshAfterFailure();
+        }
+    }
+
+    function clearFallback() {
+        if (undefined!=fallbackTimer) {
+            clearTimeout(fallbackTimer);
+            fallbackTimer = undefined;
+        }
+    }
+
+    function applyPendingStatus() {
+        if (undefined==pendingStatus || typeof nowplayingOnPlayerStatus!='function') {
+            return;
+        }
+        const status = pendingStatus;
+        pendingStatus = undefined;
+        clearFallback();
+        applyStatus(status);
+    }
+
+    // Dynamic script 'load' does not bubble, but is available in capture phase.
+    // The minified release loads all deferred functions in one script. Support
+    // the standalone nowplaying-functions.js as well for development builds.
+    function deferredScriptLoaded(event) {
+        const target = event.target;
+        if (!target || target.tagName!='SCRIPT' ||
+            !/\/(?:material-deferred\.min|nowplaying-functions)\.js(?:[?#]|$)/.test(target.src || '')) {
+            return;
+        }
+        applyPendingStatus();
+    }
+
+    function playerStatusReceived(status) {
+        if (typeof nowplayingOnPlayerStatus=='function') {
+            // A newer live status supersedes anything buffered during loading.
+            pendingStatus = undefined;
+            clearFallback();
+            applyStatus(status);
+        } else {
+            pendingStatus = status;
+            if (undefined==fallbackTimer) {
+                // Fail-safe if the deferred bundle never loads. Do not poll and
+                // do not generate the usual 1000-ms refresh on successful starts.
+                fallbackTimer = setTimeout(function() {
+                    fallbackTimer = undefined;
+                    if (typeof nowplayingOnPlayerStatus=='function') {
+                        applyPendingStatus();
+                    } else if (undefined!=pendingStatus) {
+                        pendingStatus = undefined;
+                        const player = view.$store.state.player;
+                        bus.$emit('refreshStatus', player ? player.id : undefined);
+                    }
+                }, 2000);
+            }
+        }
+    }
+
+    document.addEventListener('load', deferredScriptLoaded, true);
+    bus.$on('playerStatus', playerStatusReceived);
+
+    return function() {
+        document.removeEventListener('load', deferredScriptLoaded, true);
+        bus.$off('playerStatus', playerStatusReceived);
+        pendingStatus = undefined;
+        clearFallback();
+    };
+}
+
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div v-bind:class="{'np-mob-nonav':!desktopLayout && MBAR_REP_NAV==mobileBar}">
@@ -596,13 +684,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         this.info.sync=getLocalStorageBool("syncInfo", true);
-        bus.$on('playerStatus', function(playerStatus) {
-            try {
-                nowplayingOnPlayerStatus(this, playerStatus); // can be called before deferred JS is loaded...
-            } catch (e) { // If error, get status 1 second later...
-                setTimeout(function () { bus.$emit('refreshStatus', this.$store.state.player.id); }.bind(this), 1000);
-            }
-        }.bind(this));
+        this.stopDeferredStatusWait = nowplayingListenForPlayerStatus(this);
 
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
@@ -1625,6 +1707,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }
     },
     beforeDestroy() {
+        if (this.stopDeferredStatusWait) {
+            this.stopDeferredStatusWait();
+        }
         this.stopPositionInterval();
         this.stopLiveEdgeInterval();
         this.clearClickTimeout();

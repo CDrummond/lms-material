@@ -1147,6 +1147,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         getHomeExtra() {
+            // The dedicated /material/np-only display uses the full Material app,
+            // but does not show Browse. Avoid fetching and rendering its home lists.
+            // Do not modify detailedHomeItems: the normal UI retains user settings.
+            if (queryParams.single && queryParams.css === "msk--np-only") {
+                return;
+            }
             this.topExtraCfg.items=JSON.parse(JSON.stringify(this.$store.state.detailedHomeItems));
             if (this.$store.state.detailedHomeItems.length>0) {
                 let cmd = ["material-skin", "home-extra"];

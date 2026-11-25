@@ -28,6 +28,18 @@ const MAX_LYRICS_DURATION = 60 * 60; // 1hr?
 
 var currentPlayingTrackPosition = 0;
 
+// Player status may arrive before the deferred Now Playing handler is available.
+// Request it again as soon as the deferred script has finished loading.
+function nowplayingRefreshOnDeferredLoad(event) {
+    const target = event.target;
+    if (target && target.tagName=='SCRIPT' &&
+        /\/(?:material-deferred\.min|nowplaying-functions)\.js(?:[?#]|$)/.test(target.src || '')) {
+        document.removeEventListener('load', nowplayingRefreshOnDeferredLoad, true);
+        bus.$emit('refreshStatus');
+    }
+}
+document.addEventListener('load', nowplayingRefreshOnDeferredLoad, true);
+
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div v-bind:class="{'np-mob-nonav':!desktopLayout && MBAR_REP_NAV==mobileBar}">
@@ -597,8 +609,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         this.info.sync=getLocalStorageBool("syncInfo", true);
         bus.$on('playerStatus', function(playerStatus) {
+            // can be called before deferred JS is loaded...
+            if (typeof nowplayingOnPlayerStatus!='function') {
+                return; // A fresh status is requested when deferred JS has loaded.
+            }
             try {
-                nowplayingOnPlayerStatus(this, playerStatus); // can be called before deferred JS is loaded...
+                nowplayingOnPlayerStatus(this, playerStatus);
             } catch (e) { // If error, get status 1 second later...
                 setTimeout(function () { bus.$emit('refreshStatus', this.$store.state.player.id); }.bind(this), 1000);
             }
